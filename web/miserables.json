@@ -1,0 +1,26 @@
+{
+  "nodes":[
+    {"name":"Rain","group":1},
+    {"name":"Sprinkler","group":1},
+    {"name":"High Income","group":1},
+    {"name":"Wet Ground","group":2},
+    {"name":"Node5","group":2},
+    {"name":"Node6","group":2},
+    {"name":"Slipping Person","group":2},
+    {"name":"Node8","group":3},
+    {"name":"Node9","group":3},
+    {"name":"Node10","group":3}
+  ],
+  "links":[
+    {"source":0,"target":3,"value":1},
+    {"source":1,"target":3,"value":8},
+    {"source":2,"target":4,"value":10},
+    {"source":2,"target":5,"value":10},
+    {"source":3,"target":6,"value":10},
+    {"source":4,"target":6,"value":10},
+    {"source":4,"target":8,"value":10},
+    {"source":5,"target":6,"value":10},
+    {"source":5,"target":7,"value":10},
+    {"source":5,"target":9,"value":10}
+  ]
+}
