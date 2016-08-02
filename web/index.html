@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="scaffolded-by" content="https://github.com/google/stagehand">
   <title>CauseCade</title>
-  <link rel="stylesheet" href="styles.css">
+
 
   <!-- Dart Integration -->
-  <script defer src="main.dart" type="application/dart"></script>
+  <script defer src="src/main.dart" type="application/dart"></script>
   <script defer src="packages/browser/dart.js"></script>
   <script src="packages/d3/d3.min.js" charset="utf-8"></script>
 
@@ -21,6 +21,9 @@
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet">
+
+  <!--stylesheet-->
+  <link rel="stylesheet" href="styles.css">
 
 </head>
 <style>
@@ -39,38 +42,86 @@
 <body>
 
 <div class="mdl-layout mdl-js-layout">
-  <header class="mdl-layout__header mdl-color-text--grey-700 mdl-color--pink-500 mdl-shadow--4dp">
-    <!--<img class="mdl-layout-icon">-->
+  <header class="mdl-layout__header mdl-color-text--white mdl-color--pink-500 mdl-shadow--4dp">
+    <!--<img class="mdl-layout-icon">--><!--to be replaced with custom Icon?-->
     <div class="mdl-layout__header-row ">
       <span id="main_title" class="mdl-layout__title">CauseCade - PreAlpha</span>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation">
-        <a class="mdl-navigation__link  mdl-color-text--grey-700" id="button1" href="#">Click Button 1</a>
+        <a class="mdl-navigation__link  mdl-color-text--white" id="button1" href="#">HELP</a>
         <div id="about_ref" >
-          <a class="mdl-navigation__link  mdl-color-text--grey-700" id="button2" href="#">Click Button 2</a>
+          <a class="mdl-navigation__link  mdl-color-text--white" id="button2" href="#">BLOG</a>
           <div class="mdl-tooltip" for="about_ref">More information</div>
         </div>
       </nav>
 
     </div>
-    <div class="color_gradient_line"></div>
+
+    <!--<div>-->
+      <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs_menu">
+        <div id="MenuOptions" class="mdl-tabs__tab-bar">
+          <a href="#starks-panel" class="mdl-tabs__tab is-active">Value</a>
+          <a href="#lannisters-panel" class="mdl-tabs__tab">Alternate Info 1</a>
+          <a href="#targaryens-panel" class="mdl-tabs__tab">Alternate info 2</a>
+        </div>
+      </div>
+
+      <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs_menu">
+        <div id="DisplayModes" class="mdl-tabs__tab-bar">
+          <a href="#starks-panel" class="mdl-tabs__tab is-active">Network</a>
+          <a href="#lannisters-panel" class="mdl-tabs__tab">Histogram</a>
+          <a href="#targaryens-panel" class="mdl-tabs__tab">Alternate Canvas 2</a>
+        </div>
+      </div>
+    <!--</div>-->
   </header>
 
   <main class="mdl-layout__content">
-    <div id="MainInterface">
 
-      <div class="mdl-card mdl-shadow--4dp">
-        <div class="mdl-card__title  ">
-          <h2 class="mdl-card__title-text " >Glad you could make it!</h2>
+      <div class="mdl-card mdl-shadow--4dp" id="main_card">
+        <div class="mdl-card__supporting-text" id="controlmenu">
+          Controls
+          <div id="button_holder">
+
+            <button id="button_save" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-color--white">
+              Save
+            </button>
+
+            <button id="button_load" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--white">
+              Load
+            </button>
+
+            <button id="button_reset" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color --white">
+              Reset
+            </button>
+          </div>
+          <div id="input_main">
+            <form action="#">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="sample1">
+                <label class="mdl-textfield__label" for="sample1">Enter Node 1...</label>
+              </div>
+            </form>
+            <form action="#">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="sample2">
+                <label class="mdl-textfield__label" for="sample2">Enter Node 2...</label>
+              </div>
+            </form>
+          </div>
         </div>
-
         <div class="mdl-card__supporting-text">
-          This is some text.
+          <span class="header_card">Node Information</span>
+
+        </div>
+        <div class="mdl-card__supporting-text">
+          <span class="header_card">Node Information</span>
+
         </div>
       </div>
       <div id="GraphHolder"></div>
-    </div>
-    <footer class="mdl-mega-footer">
+
+    <!--<footer class="mdl-mega-footer">
       <div class="mdl-mega-footer__middle-section">
 
         <div class="mdl-mega-footer__drop-down-section">
@@ -108,7 +159,7 @@
         </div>
 
       </div>
-    </footer>
+    </footer>-->
 
 
   </main>

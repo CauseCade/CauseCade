@@ -1,7 +1,13 @@
 /*Theme colour: #E91E63 (Material design pink:500)*/
 
-.body{
+body{
     background-color: #fafafa;
+    height: 100%
+}
+
+main{
+    height:100%;
+    position: relative;
 }
 
 .mdl-layout__header-row{
@@ -9,16 +15,75 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.mdl-layout__header{
-    height:10%;
+.mdl-layout__header {
 }
+
 
 .mdl-card{
     float:left  ;
     margin: 1em ;
-    height: 80px;
+
 }
 
-#graphholder{
-    float: left;
+#main_card{
+    width: 22%;
+    align-items: stretch;
+    position: absolute;
+}
+
+#GraphHolder{
+    height:100%;
+    width: 100%;
+    position: absolute;
+}
+
+#controlmenu{
+    background: #E91E63;
+    width: 100%;
+    color: #fafafa;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+#button_holder{
+    padding-right: 16px ;
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+#button_holder button.mdl-button    {
+   padding-left: 32px;
+    padding-right: 32px ;
+}
+
+.header_card{
+    color: rgba(0,0,0,0.87);
+}
+
+/*other*/
+.mdl-tabs{
+    display: inline ;
+    padding-left: 3em;
+    padding-right: 3em;
+}
+
+.mdl-tabs__tab-bar{
+
+    display: inline ;
+}
+
+.tabs_menu .mdl-tabs__tab-bar{
+    border-bottom: none ;
+    -webkit-justify-content: inherit;
+}
+
+#DisplayModes.mdl-tabs__tab-bar {
+    margin-left: auto;
+    -webkit-justify-content:center;
+}
+
+.tabs_menu .mdl-tabs__tab-bar .mdl-tabs__tab, .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active{
+    color: #fafafa;
 }
