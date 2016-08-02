@@ -1,5 +1,6 @@
 
 import 'graph.dart';
+import 'card_barchart.dart';
 import 'dart:html';
 
 /*This should handle interactions with other dart files in NetworkElements*/
@@ -12,6 +13,7 @@ class BayesNetCanvas{
   BayesNetCanvas(){
     getScreenDimensions();
     new Graph(width,height);
+    GenerateBarchart();
   }
 
 

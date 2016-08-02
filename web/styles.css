@@ -29,6 +29,7 @@ main{
     width: 22%;
     align-items: stretch;
     position: absolute;
+
 }
 
 #GraphHolder{
@@ -47,6 +48,7 @@ main{
 }
 
 #button_holder{
+
     padding-right: 16px ;
     display: flex;
     justify-content: space-between;
@@ -54,8 +56,11 @@ main{
 }
 
 #button_holder button.mdl-button    {
-   padding-left: 32px;
+    padding-left: 32px;
     padding-right: 32px ;
+    background: #fafafa;
+   /* color: black;*/
+    font-weight: 600;
 }
 
 .header_card{
@@ -86,4 +91,22 @@ main{
 
 .tabs_menu .mdl-tabs__tab-bar .mdl-tabs__tab, .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active{
     color: #fafafa;
+}
+
+/*bar charts*/
+
+.bar{
+    fill: grey;
+}
+
+.bar:hover{
+    fill: #E91E63;
+}
+
+path.domain{
+    font-size: 14px;
+    height: 1px;
+    fill: none;
+    line-height:1px;
+
 }

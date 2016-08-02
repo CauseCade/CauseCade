@@ -8,7 +8,7 @@ While this may not be too hard of a project for a seasoned programmer, I am stil
 
 In the end, I hope this project will result in a page that can teach others about bayesian networks and allow for some basic use cases (on the go). While there are currently great programs that can be used to locally compute solutions and solve problems using bayesian networks, I feel there is still room for an easy to use, educational tool focussing on them.
 
-## TODO List for this Project ##
+## todo List for this Project ##
 
 * Develop an intuitive UI
 * Write/find a moderately efficient bayesian network algorithm (inference etc)
@@ -16,3 +16,8 @@ In the end, I hope this project will result in a page that can teach others abou
 * Allow for interactivity with the network
 * Create example cases
 * Create a sort of 'teaching' mode, that will explain the functioning of the network
+* Add search function
+* Add Greeting Screen
+* Create Help screen
+* Create Blog (gh-pages)
+* Find a way to host this project
