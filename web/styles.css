@@ -13,9 +13,17 @@ main{
 .mdl-layout__header-row{
     color: #fafafa;
     font-family: 'Roboto', sans-serif;
+    padding-left: 0;
 }
 
-.mdl-layout__header {
+.mdl-layout__header .mdl-layout-icon{
+    height: 60px;
+    width: 60px;
+}
+
+.mdl-layout__header-row img{
+    padding-left: 25px;
+    padding-right: 25px;
 }
 
 
@@ -23,6 +31,11 @@ main{
     float:left  ;
     margin: 1em ;
 
+}
+
+#main_title{
+    font-family: 'Monoton';
+    font-size: 50px;
 }
 
 #main_card{
