@@ -12,6 +12,7 @@ dependencies:
   dart_to_js_script_rewriter: '^1.0.1'
   d3: '^0.2.0'
   quiver: any
+  json: any
 
 transformers:
 - dart_to_js_script_rewriter

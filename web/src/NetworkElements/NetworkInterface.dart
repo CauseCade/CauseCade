@@ -1,5 +1,5 @@
 
-import 'graph.dart';
+import 'Network.dart';
 import 'card_barchart.dart';
 import 'dart:html';
 
@@ -11,9 +11,11 @@ class BayesNetCanvas{
 
 
   BayesNetCanvas(){
+
     getScreenDimensions();
-    new Graph(width,height);
+    var MyNet = new Network(width,height);
     GenerateBarchart();
+    MyNet.addNode();
   }
 
 

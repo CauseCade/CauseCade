@@ -29,7 +29,12 @@ main{
     width: 22%;
     align-items: stretch;
     position: absolute;
+}
 
+#node_adder{
+    position: absolute;
+    left:95%;
+    top: 90%;
 }
 
 #GraphHolder{
