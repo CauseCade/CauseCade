@@ -8,6 +8,7 @@ body{
 main{
     height:100%;
     position: relative;
+
 }
 
 .mdl-layout__header-row{
@@ -54,6 +55,13 @@ main{
     height:100%;
     width: 100%;
     position: absolute;
+
+   /* display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;*/
 }
 
 #controlmenu{
@@ -86,10 +94,19 @@ main{
 }
 
 /*other*/
+
+#MenuOptions{
+    float: left;
+}
+
+#DisplayModes{
+    float: right;
+}
+
 .mdl-tabs{
-    display: inline ;
     padding-left: 3em;
     padding-right: 3em;
+    width: auto;
 }
 
 .mdl-tabs__tab-bar{
