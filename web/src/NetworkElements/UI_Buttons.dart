@@ -1,7 +1,10 @@
-/*placeholder*//*
+/*placeholder*/
 
 import 'dart:html';
 import 'Network.dart';
+
+
+
 
 ButtonElement resetbutton;
 
@@ -12,4 +15,4 @@ setUpUIButtons(){
 
 resetAction(){
 
-}*/
+}

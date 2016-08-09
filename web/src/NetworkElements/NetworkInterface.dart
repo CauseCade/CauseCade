@@ -3,6 +3,7 @@ import 'Network.dart';
 import 'UI_Buttons.dart';
 import 'card_barchart.dart';
 import 'dart:html';
+/*import 'dart:svg';*/
 import 'package:d3/d3.dart';
 /*This should handle interactions with other dart files in NetworkElements*/
 
@@ -14,25 +15,38 @@ class BayesNetCanvas{
 
   var width = 900;
   var height =900;
+
   ButtonElement reset_button;
   ButtonElement load_button;
+  ButtonElement node_adder;
   Network MyNet;
   var NetworkHolder = querySelector('#GraphHolder');
   var svg = new Selection("#GraphHolder").append("svg"); /*svg file we draw on*/
+ /* SvgElement svg;*/
 
   BayesNetCanvas(){
+    window.console.debug(svg.runtimeType.toString()) ;
 
     GenerateBarchart();
     window.onResize.listen((_) => setScreenDimensions());
-    /*setScreenDimensions();*/
 
-    MyNet = new Network(svg,width,height);
+    json("Supplementary/EntryExample.json").then( (input_data) {
+      MyNet = new Network(svg,width,height,input_data);
+    }, onError: (err) => throw err);
 
     reset_button = querySelector("#button_reset");
-    reset_button.onClick.listen(updateNetForce);
+    reset_button.onClick.listen(clearNet);
 
     load_button = querySelector("#button_load");
-    load_button.onClick.listen(updateNodes);
+    load_button.onClick.listen(changeNetwork);
+
+    node_adder = querySelector("#node_adder");
+    node_adder.onClick.listen(updateNodes);
+  }
+
+
+  clearNet(Event q){
+    MyNet.reset();
   }
 
   updateNetForce(Event e){
@@ -40,8 +54,17 @@ class BayesNetCanvas{
     window.console.debug("called method updateNetForce") ;
   }
 
+
+  changeNetwork(Event g){
+
+    json("Supplementary/EntryExample.json").then( (input_data) {
+      MyNet = new Network(svg,width,height,input_data);
+    }, onError: (err) => throw err);
+  }
+
+
   updateNodes(Event f){
-    MyNet.addNode();
+   /* MyNet.addNode();*/
     window.console.debug("called method updateNodes") ;
   }
 

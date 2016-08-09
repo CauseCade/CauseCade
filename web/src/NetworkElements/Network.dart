@@ -1,74 +1,84 @@
 import 'dart:math' as math;
 import 'package:d3/d3.dart';
 import 'dart:html';
+import 'dart:js';
 
 class Network {
 
   var force = new Force();
+  var zoom = new Zoom();
   var color = new OrdinalScale.category20();
-  Map links;
-  Map nodes;
+  var links;
+  var nodes;
   var svg;
+  var link;
+  var node;
+  var g;
+
   /*constructor*/
-  Network(svgIn,width,height) {
+  Network(svgIn,width,height,input_data) {
+
     svg = svgIn;
+
+    g = svg.append('g');
 
     force
     ..charge = -120
     ..linkDistance = 60
     ..size = [width, height];
 
-    json("Supplementary/EntryExample.json").then( (input_data) {
+    /*json("Supplementary/EntryExample.json").then( (input_data) {*/
      links = input_data['links'];
      nodes = input_data['nodes'];
 
-      window.console.debug(nodes);
+     force
+       ..nodes = nodes
+       ..links = links
+       ..start();
 
-      force
-        ..nodes = nodes
-        ..links = links
-        ..start();
+     zoom
+       ..scaleExtent = [1, 10]
+       ..center = [width / 2, height / 2]
+       ..size = [width, height];
 
-      /*window.console.debug(input_data["nodes"].toString()) ;*/
+      svg
+        ..call(zoom);
 
-      var link = svg.selectAll(".link").data(links).enter().append("line")
-        ..attr["class"] = "link"
-        ..styleFn["stroke-width"] = (d) => math.sqrt(d['value']);
+      zoom.onZoom.listen((_) => rescale());
 
-      var node =
-      svg.selectAll(".node").data(nodes).enter().append("circle")
-        ..attr["class"] = "node"
-        ..attr["r"] = "8"
-        ..styleFn["fill"] = ((d) => color(d['group']))
-        ..call((_) => force.drag());
+     link = g.selectAll(".link").data(links).enter().append("line")
+         ..attr["class"] = "link"
+         ..styleFn["stroke-width"] = (d) => math.sqrt(d['value']);
 
-      node.append("title")
-        ..textFn = (d) => d['name'];
+     node =
+     g.selectAll(".node").data(nodes).enter().append("circle")
+       ..attr["class"] = "node"
+       ..attr["r"] = "8"
+       ..styleFn["fill"] = ((d) => color(d['group']))
+       ..call((_) => force.drag());
 
-      /*some force interactions*/
-      force.onTick.listen((_) {
-        link
-          ..attrFn["x1"] = ((d) => d['source']['x'])
-          ..attrFn["y1"] = ((d) => d['source']['y'])
-          ..attrFn["x2"] = ((d) => d['target']['x'])
-          ..attrFn["y2"] = ((d) => d['target']['y']);
+     node.append("title")
+       ..textFn = (d) => d['name'];
 
-        node
-          ..attrFn["cx"] = ((d) => d['x'])
-          ..attrFn["cy"] = ((d) => d['y']);
-      });
-    }, onError: (err) => throw err);
+     force.onTick.listen((_) {
+       link
+         ..attrFn["x1"] = ((d) => d['source']['x'])
+         ..attrFn["y1"] = ((d) => d['source']['y'])
+         ..attrFn["x2"] = ((d) => d['target']['x'])
+         ..attrFn["y2"] = ((d) => d['target']['y']);
+
+       node
+         ..attrFn["cx"] = ((d) => d['x'])
+         ..attrFn["cy"] = ((d) => d['y']);
+       });
   }
 
-  addNode(){
-    svg.selectAll(".node").data(nodes).enter().append("circle")
-      ..attr["class"] = "node"
-      ..attr["r"] = "8"
-      ..styleFn["fill"] = ((d) => color(d['group']))
-      ..call((_) => force.drag());
-  }
-
-  addConnection(var SelectedNode,var NodesToConnect ){
+  reset(){
+    /*svg.clear();
+    node.reset();
+    link.reset();*/
+    window.console.debug(svg.runtimeType.toString());
+    link.remove();
   }
 
   setForce(ChargeIn,LnkDistIn){
@@ -81,8 +91,13 @@ class Network {
   setSize(widthIn,heightIn){
     force.size = [widthIn, heightIn];
     force.start();
+    /*zoom.size = [widthIn, heightIn];*/ /*im not sure if this is actually useful, will revisit this later FIX*/
   }
 
+  rescale(){ /*handles the panning and zooming of the svg*/
+    window.console.debug("zoomevent triggered");
+    g.attr["transform"] = "translate(" + zoom.translate.elementAt(0).toString() + "," + zoom.translate.elementAt(1).toString() + ")" + "scale(" + zoom.scale.toString() + ")" ;
+  }
 }
 
 
