@@ -1,11 +1,17 @@
 {
   "nodes":[
-    {"name":"Entered Website","group":2},
-    {"name":"Loves Learning","group":2},
-    {"name":"Internet Connection","group":1},
-    {"name":"Uses Internet Explorer","group":1},
-    {"name":"Operational Website","group":2},
-    {"name":"Enjoys website","group":3}
+    {
+      "id":"Entered Website","group":2},
+    {
+      "id":"Loves Learning","group":2},
+    {
+      "id":"Internet Connection","group":1},
+    {
+      "id":"Uses Internet Explorer","group":1},
+    {
+      "id":"Operational Website","group":2},
+    {
+      "id":"Enjoys website","group":3}
   ],
   "links":[
     {"source":0,"target":5,"value":16},

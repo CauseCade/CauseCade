@@ -145,3 +145,21 @@ path.domain{
     line-height:1px;
 
 }
+
+/*network (svg)*/
+g > .node{
+   stroke: #fafafa;
+}
+
+/*modals*/
+
+#modalContent {
+    font-family: 'Roboto', sans-serif;
+    display: block;
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    width: 50%;
+
+    z-index:1002;
+}

@@ -3,6 +3,7 @@ import 'Network.dart';
 import 'UI_Buttons.dart';
 import 'card_barchart.dart';
 import 'dart:html';
+import 'Modals.dart';
 /*import 'dart:svg';*/
 import 'package:d3/d3.dart';
 /*This should handle interactions with other dart files in NetworkElements*/
@@ -38,12 +39,14 @@ class BayesNetCanvas{
     reset_button.onClick.listen(clearNet);
 
     load_button = querySelector("#button_load");
-    load_button.onClick.listen(changeNetwork);
+    load_button.onClick.listen(updateNodes);
 
     node_adder = querySelector("#node_adder");
-    node_adder.onClick.listen(updateNodes);
+    node_adder.onClick.listen((event) {
+      ModalNodeAdder nodeAdderMenu = new ModalNodeAdder();
+      nodeAdderMenu.show();
+      });
   }
-
 
   clearNet(Event q){
     MyNet.reset();
@@ -64,7 +67,7 @@ class BayesNetCanvas{
 
 
   updateNodes(Event f){
-   /* MyNet.addNode();*/
+    MyNet.addNode();
     window.console.debug("called method updateNodes") ;
   }
 
