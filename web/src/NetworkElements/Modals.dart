@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'DataConverter.dart';
 
 /*This file contains two classes:
  - ModalNodeAdder
@@ -16,8 +17,10 @@ class ModalNodeAdder{
   final FormElement _nodeName;
   final InputElement _inputName;
   final LabelElement _labelName;
-  final _NodeIDS;
-  final _LinkIDS;
+  List NodeIDS;
+  List LinkIDS;
+  List Data;
+  var linkInputTracker = 0; /*ensures link input are properly index in storage array*/
 
   //Constructor
   ModalNodeAdder() :
@@ -26,16 +29,20 @@ class ModalNodeAdder{
         _title = new DivElement(),
         _maincontent = new DivElement(),
         _buttonholder = new DivElement(),
-        _inputDiv = new DivElement(),
         _cancelButton = new ButtonElement(),
         _addButton = new ButtonElement(),
+
         _nodeName = new FormElement(),
+        _inputDiv = new DivElement(),
         _inputName = new InputElement(),
         _labelName = new LabelElement(),
-        _NodeIDS = new List(),
-        _LinkIDS = new List()
+
+        NodeIDS = new List(1),
+        LinkIDS = new List(),
+        Data = new List(2)
   {
     //constructor body
+
 
     /*setting some styling*/
     _content.id = "modalContent";
@@ -74,7 +81,7 @@ class ModalNodeAdder{
 
       _inputName.classes.add("mdl-textfield__input");
       _inputName.id = ("nodeInputBox");
-      _inputName.onChange.listen(returnNodeName);
+      _inputName.onChange.listen(setNodeName);
       _inputDiv.children.add(_inputName);
 
       _labelName.classes.add("mdl-textfield__label");
@@ -87,6 +94,7 @@ class ModalNodeAdder{
     _content.append(_maincontent);
     _content.append(_buttonholder);
     _maincontent.append(_nodeName);
+    addLinkInput();
 
     //Handling Button behaviour
     _cancelButton.text = "Cancel";
@@ -95,8 +103,8 @@ class ModalNodeAdder{
     });
 
     _addButton.text = "Add";
-    _cancelButton.onClick.listen((event) {
-     /* addNode()*/; /*needs to have method that adds new node*/
+    _addButton.onClick.listen((event) {
+       returnData();
     });
 
 
@@ -104,14 +112,67 @@ class ModalNodeAdder{
     _buttonholder.append(_addButton);
   }
 
-  returnNodeName(Event e){ /*this is currently setup for debugging*/
-    _NodeIDS.add(_inputName.value);
-    window.console.debug(_NodeIDS);
+  setNodeName(Event e){ /*this is currently setup for debugging*/
+    NodeIDS[0] = (_inputName.value);
+    window.console.debug(NodeIDS);
+  }
+
+  setLinkName(inputIndex, inputValue){ /*this is currently setup for debugging*/
+    LinkIDS[inputIndex] = (inputValue);
+    window.console.debug(LinkIDS);
+    linkInputTracker++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
   }
 
   addLinkInput(){
-    /*will add another LinkInputForm to the Modal*/
-    /*WIP*/
+    var newLinkElement = new DivElement();
+    var newLinkButton = new ButtonElement();
+    var newLinkInput = new FormElement();
+    var newLinkDiv = new DivElement();
+    var newTargetInput = new InputElement();
+    var newTargetLabel = new LabelElement();
+    LinkIDS.add("placeholder"); /*ensures proper initialised values*/ /*FIX*/
+
+    newLinkInput.style.display = ("inline-block");
+
+    newLinkInput.children.add(newLinkDiv);
+    newLinkDiv.classes.add("mdl-textfield");
+    newLinkDiv.classes.add("mdl-js-textfield");
+
+    newTargetInput.classes.add("mdl-textfield__input");
+    newTargetInput.classes.add("linkInputBox");
+    newTargetInput.onChange.listen((_) => setLinkName(linkInputTracker,newTargetInput.value));
+    newLinkDiv.children.add(newTargetInput);
+
+    newTargetLabel.classes.add("mdl-textfield__label");
+    newTargetLabel.text = ("Enter target name...");
+    newTargetLabel.htmlFor = ("nodeInputBox");
+    newLinkDiv.children.add(newTargetLabel);
+
+    newLinkButton.classes.add('mdl-button');
+    newLinkButton.classes.add('mdl-js-button');
+    newLinkButton.classes.add('mdl-js-ripple-effect');
+    newLinkButton.style.display = ('inline-block');
+    newLinkButton.text = ("Add Another Target");
+    newLinkButton.style.color = "rgba(0,0,0,.54)";
+    newLinkButton.onClick.listen((event){
+      window.console.debug(newTargetInput.value);
+      if (newTargetInput.value != ''){
+        addLinkInput();
+        newLinkButton.remove();
+      }
+    });
+
+    newLinkElement.append(newLinkInput);
+    newLinkElement.append(newLinkButton);
+    _maincontent.append(newLinkElement);
+  }
+
+  returnData(){
+    Data[0]=(NodeIDS);
+    Data[1]=(LinkIDS);
+    window.console.debug(Data);
+    Implement(Data);
+    hide();
   }
 
   //remove the modal dialog div's from the dom.

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:d3/d3.dart';
 import 'dart:html';
 import 'dart:js';
+import 'NetworkInterface.dart';
 
 var counter = 6;
 
@@ -35,24 +36,29 @@ class Network {
      links = input_data['links'];
      nodes = input_data['nodes'];
 
+    /*set up a force*/
      force
        ..nodes = nodes
        ..links = links
        ..start();
 
+    /*set up a zoom*/
      zoom
        ..scaleExtent = [1, 10]
        ..center = [width / 2, height / 2]
        ..size = [width, height];
 
+    /*set up interactable svg*/
       svg
         ..attr["pointer-events"] = 'all'
         ..call(zoom);
 
+    /*when zoom or pan is detected, call rescale method*/
       zoom.onZoom.listen((_) => rescale());
 
      refreshData();
 
+    /*this handles updating the network svg positions*/
      force.onTick.listen((_) {
        g.selectAll(".link")
          ..attrFn["x1"] = ((d) => d['source']['x'])
@@ -83,27 +89,18 @@ class Network {
   }
 
   addNode(){
-      window.console.debug(nodes.toString());
-      window.console.debug("what is node actually? " + node.toString());
-     /* window.console.debug(node.eachFn(toString()));*/
-
-    var temp = new JsObject.jsify({"id":counter,"group":4});
-    var temp2 = new JsObject.jsify({"source":counter,"target":5,"value":8});
-    var temp3 = new JsObject.jsify({"source":counter,"target":1,"value":8});
-
-    nodes.add(temp);
-    links.add(temp2);
-    links.add(temp3);
+    for (var i =0; i < NetworkInfo.length; i++){
+      nodes.add(NetworkInfo[i][0][0]);
+      for (var j = 0; j < NetworkInfo[i][1].length; j++){
+        links.add(NetworkInfo[i][1][j]);
+      }
+    }
 
     force.nodes = nodes;
     force.links = links;
-      window.console.debug(temp["name"]);
-      window.console.debug(counter);
-      window.console.debug(nodes.toString());
 
     refreshData();
     force.start();
-    counter++;
   }
 
   reset(){
@@ -112,13 +109,6 @@ class Network {
     link.reset();*/
     window.console.debug(svg.runtimeType.toString());
     link.remove();
-  }
-
-  setForce(ChargeIn,LnkDistIn){
-    force
-      ..charge = -ChargeIn
-      ..linkDistance = LnkDistIn
-      ..start();
   }
 
   setSize(widthIn,heightIn){
@@ -130,6 +120,11 @@ class Network {
   rescale(){ /*handles the panning and zooming of the svg*/
     window.console.debug("zoomevent triggered");
     g.attr["transform"] = "translate(" + zoom.translate.elementAt(0).toString() + "," + zoom.translate.elementAt(1).toString() + ")" + "scale(" + zoom.scale.toString() + ")" ;
+  }
+
+  getNodesSize(){
+    window.console.debug(nodes.length);
+    return nodes.length;
   }
 
 }

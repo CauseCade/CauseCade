@@ -8,9 +8,8 @@ import 'Modals.dart';
 import 'package:d3/d3.dart';
 /*This should handle interactions with other dart files in NetworkElements*/
 
-
-
-
+List NetworkInfo = new List();
+Network MyNet;
 
 class BayesNetCanvas{
 
@@ -20,7 +19,7 @@ class BayesNetCanvas{
   ButtonElement reset_button;
   ButtonElement load_button;
   ButtonElement node_adder;
-  Network MyNet;
+ /* Network MyNet;*/
   var NetworkHolder = querySelector('#GraphHolder');
   var svg = new Selection("#GraphHolder").append("svg"); /*svg file we draw on*/
  /* SvgElement svg;*/
@@ -28,11 +27,13 @@ class BayesNetCanvas{
   BayesNetCanvas(){
     window.console.debug(svg.runtimeType.toString()) ;
 
-    GenerateBarchart();
+    /*GenerateBarchart();*/
     window.onResize.listen((_) => setScreenDimensions());
+
 
     json("Supplementary/EntryExample.json").then( (input_data) {
       MyNet = new Network(svg,width,height,input_data);
+      setScreenDimensions();
     }, onError: (err) => throw err);
 
     reset_button = querySelector("#button_reset");
@@ -51,12 +52,6 @@ class BayesNetCanvas{
   clearNet(Event q){
     MyNet.reset();
   }
-
-  updateNetForce(Event e){
-    MyNet.setForce(300,100);
-    window.console.debug("called method updateNetForce") ;
-  }
-
 
   changeNetwork(Event g){
 
