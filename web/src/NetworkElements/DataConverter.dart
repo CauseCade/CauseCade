@@ -4,7 +4,7 @@ import 'dart:html';
 
 Implement(InputData){
 
-  var NewData = new List();
+  var NewData = new List(2);
   var NewNode = new List(1);
   var NewLink = new List();
 
@@ -20,8 +20,8 @@ Implement(InputData){
 
 
 
-  NewData.add(NewNode);
-  NewData.add(NewLink);
+  NewData[0]=(NewNode);
+  NewData[1]=(NewLink);
   window.console.debug(NewData);
 
   NetworkInfo.add(NewData);
@@ -29,11 +29,21 @@ Implement(InputData){
   window.console.debug(NetworkInfo);
 
 
-  MyNet.addNode();
+  MyNet.addNewData();
   NetworkInfo.clear();
 }
 
-/*var temp = new JsObject.jsify({"id":counter,"group":4});
-    var temp2 = new JsObject.jsify({"source":counter,"target":5,"value":8});
-    var temp3 = new JsObject.jsify({"source":counter,"target":1,"value":8});*/
+ImplementJson(InputData){
+
+  var currentNodeCount = MyNet.getNodesSize();
+
+  for(var i =0; i< InputData["links"].length;i++){
+    InputData["links"][i]["source"]=InputData["links"][i]["source"]+currentNodeCount;
+    InputData["links"][i]["target"]=InputData["links"][i]["target"]+currentNodeCount;
+  }
+
+
+  MyNet.addNewDataSet(InputData);
+}
+
 

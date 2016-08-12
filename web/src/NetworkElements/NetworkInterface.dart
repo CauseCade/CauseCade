@@ -1,4 +1,4 @@
-
+import 'DataConverter.dart';
 import 'Network.dart';
 import 'UI_Buttons.dart';
 import 'card_barchart.dart';
@@ -17,6 +17,7 @@ class BayesNetCanvas{
   var height =900;
 
   ButtonElement reset_button;
+  ButtonElement save_button;
   ButtonElement load_button;
   ButtonElement node_adder;
  /* Network MyNet;*/
@@ -33,11 +34,17 @@ class BayesNetCanvas{
     MyNet = new Network(svg,width,height);
     setScreenDimensions();
 
+
+
+
     reset_button = querySelector("#button_reset");
     reset_button.onClick.listen(clearNet);
 
+    save_button = querySelector("#button_save");
+    save_button.onClick.listen(fitNetwork);
+
     load_button = querySelector("#button_load");
-    load_button.onClick.listen(updateNodes);
+    load_button.onClick.listen(loadNetwork);
 
     node_adder = querySelector("#node_adder");
     node_adder.onClick.listen((event) {
@@ -50,16 +57,20 @@ class BayesNetCanvas{
     MyNet.reset();
   }
 
-  changeNetwork(Event g){
-
-    json("Supplementary/EntryExample.json").then( (input_data) {
-      MyNet = new Network(svg,width,height,input_data);
+  loadNetwork(Event g){
+    json("Supplementary/Example2.json").then( (input_data) {
+      window.console.debug(input_data["nodes"].elementAt(0).toString()) ;
+      ImplementJson(input_data);
     }, onError: (err) => throw err);
   }
 
+  fitNetwork(Event f){
+    setScreenDimensions();
+    MyNet.fitNetwork(width,height);
+  }
 
   updateNodes(Event f){
-    MyNet.addNode();
+    MyNet.addNewData();
     window.console.debug("called method updateNodes") ;
   }
 

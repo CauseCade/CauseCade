@@ -2,6 +2,7 @@ import 'dart:math' as math;
 import 'package:d3/d3.dart';
 import 'dart:html';
 import 'dart:js';
+import 'dart:svg';
 import 'NetworkInterface.dart';
 
 var counter = 6;
@@ -32,7 +33,7 @@ class Network {
     ..linkDistance = 20
     ..size = [width, height];
 
-    var kappa =new JsObject.jsify({"id":"InitialNode","group":4});
+    var kappa =new JsObject.jsify({"id":"InitialNode","group":1});
     nodes.add(kappa);
     /* nodes = input_data['nodes'];*/
 
@@ -44,7 +45,7 @@ class Network {
 
     /*set up a zoom*/
      zoom
-       ..scaleExtent = [1, 10]
+       ..scaleExtent = [0.1, 10]
        ..center = [width / 2, height / 2]
        ..size = [width, height];
 
@@ -82,13 +83,13 @@ class Network {
       ..attr["class"] = "node"
       ..attr["r"] = "8"
       ..styleFn["fill"] = ((d) => color(d['group']));
-      /*..call((_) => force.drag());*/
+/*      ..call((_) => force.drag());*/
 
     node.append("title")
       ..textFn = (d) => d['id'];
   }
 
-  addNode(){
+  addNewData(){
     for (var i =0; i < NetworkInfo.length; i++){
       nodes.add(NetworkInfo[i][0][0]);
       for (var j = 0; j < NetworkInfo[i][1].length; j++){
@@ -103,12 +104,39 @@ class Network {
     force.start();
   }
 
+  addNewDataSet(InputDataSet){
+    for(var i =0; i< InputDataSet["nodes"].length;i++){
+      nodes.add(InputDataSet["nodes"][i]);
+    }
+    for(var i =0; i< InputDataSet["links"].length;i++){
+      links.add(InputDataSet["links"][i]);
+    }
+
+    force.nodes = nodes;
+    force.links = links;
+
+    refreshData();
+    force.start();
+  }
+
   reset(){ /*WIP*/
-    /*svg.clear();
-    node.reset();
-    link.reset();*/
-    window.console.debug(svg.runtimeType.toString());
-    link.remove();
+
+    nodes.clear();
+    links.clear();
+    window.console.debug("This isn't working at the moment - WIP");
+    /*g.selectAll(".link").size();*/
+    /*link.exit();*/
+    nodes.add(new JsObject.jsify({"id":"InitialNode","group":1}));
+
+    force.nodes = nodes;
+    force.links = links;
+
+    refreshData();
+    force.start();
+
+    var holder = new SvgElement.tag("g");
+    var kappa = holder.querySelectorAll("circle");
+    holder.remove();
   }
 
   setSize(widthIn,heightIn){
@@ -120,6 +148,20 @@ class Network {
   rescale(){ /*handles the panning and zooming of the svg*/
     window.console.debug("zoomevent triggered");
     g.attr["transform"] = "translate(" + zoom.translate.elementAt(0).toString() + "," + zoom.translate.elementAt(1).toString() + ")" + "scale(" + zoom.scale.toString() + ")" ;
+  }
+
+  fitNetwork(width, height){ /*centers network and scales it to fit on the screen*/ /*WIP*/
+    g.attr["transform"] = "translate(0,0)" + "scale(1)" ;
+    zoom.scale = 1;
+    zoom.translate = [0,0];
+
+    var kappa = new SvgSvgElement();
+
+   /* var gDiv= new DivElement();
+    gDiv = querySelector(g);
+    var kappa = gDiv.height;*/
+    window.console.debug("g height");
+    /*window.console.debug(kappa);*/
   }
 
   getNodesSize(){

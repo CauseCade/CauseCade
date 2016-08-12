@@ -11,6 +11,9 @@ In the end, I hope this project will result in a page that can teach others abou
 ## todo List for this Project ##
 
 * Develop an intuitive UI
+    * Allow Saving of Network
+    * Allow Network to be opened (from file explorer) (already functional from Json)
+    * Find a way to make the reset button clear the SVG
 * Write/find a moderately efficient bayesian network algorithm (inference etc)
 * Visually represent the data in the algorithm
 * Allow for interactivity with the network
