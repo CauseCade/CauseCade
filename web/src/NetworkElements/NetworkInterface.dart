@@ -30,11 +30,8 @@ class BayesNetCanvas{
     /*GenerateBarchart();*/
     window.onResize.listen((_) => setScreenDimensions());
 
-
-    json("Supplementary/EntryExample.json").then( (input_data) {
-      MyNet = new Network(svg,width,height,input_data);
-      setScreenDimensions();
-    }, onError: (err) => throw err);
+    MyNet = new Network(svg,width,height);
+    setScreenDimensions();
 
     reset_button = querySelector("#button_reset");
     reset_button.onClick.listen(clearNet);

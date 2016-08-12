@@ -13,15 +13,15 @@ class Network {
   var force = new Force();
   var zoom = new Zoom();
   var color = new OrdinalScale.category20();
-  var links;
-  var nodes;
+  JsArray links = new JsArray();
+  JsArray nodes = new JsArray();
   var svg;
   var link;
   var node;
   var g;
 
   /*constructor*/
-  Network(svgIn,width,height,input_data) {
+  Network(svgIn,width,height) {
 
     svg = svgIn;
 
@@ -32,9 +32,9 @@ class Network {
     ..linkDistance = 20
     ..size = [width, height];
 
-    /*json("Supplementary/EntryExample.json").then( (input_data) {*/
-     links = input_data['links'];
-     nodes = input_data['nodes'];
+    var kappa =new JsObject.jsify({"id":"InitialNode","group":4});
+    nodes.add(kappa);
+    /* nodes = input_data['nodes'];*/
 
     /*set up a force*/
      force
@@ -103,7 +103,7 @@ class Network {
     force.start();
   }
 
-  reset(){
+  reset(){ /*WIP*/
     /*svg.clear();
     node.reset();
     link.reset();*/
@@ -127,6 +127,20 @@ class Network {
     return nodes.length;
   }
 
+  getNodeIndex(StringIn){ /*returns the index of the node target, so the node can be appended to the proper targets (allows users to enter the node name rather than index*/
+
+    window.console.debug("getting node index...");
+    for (var i =0; i< nodes.length; i++){
+      if (nodes.elementAt(i)["id"]==StringIn){
+        window.console.debug("found a match");
+        return i;
+      }
+      else{
+
+      }
+    }
+    window.console.debug("no match found");
+  }
 }
 
 
