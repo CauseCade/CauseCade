@@ -20,6 +20,7 @@ class Network {
   var link;
   var node;
   var g;
+  var ActiveSelection;
 
   /*constructor*/
   Network(svgIn,width,height) {
@@ -68,8 +69,8 @@ class Network {
          ..attrFn["y2"] = ((d) => d['target']['y']);
 
        g.selectAll(".node")
-         ..attrFn["cx"] = ((d) => d['x'])
-         ..attrFn["cy"] = ((d) => d['y']);
+         ..attr["transform"] = ((d) => 'translate(' + d['x'].toString() + ',' + d['y'].toString() + ")");
+         /*..attrFn["cy"] = ((d) => d['y']);*/
        });
   }
 
@@ -78,15 +79,36 @@ class Network {
       ..attr["class"] = "link"
       ..styleFn["stroke-width"] = (d) => math.sqrt(d['value']);
 
-    node = g.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("circle"); /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
-    node //FIX
-      ..attr["class"] = "node"
+    node = g.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
+        ..attr["class"]= "node";
+
+    node.append("circle") //FIX
+      ..attr["class"] = "circlesvg"
       ..attr["r"] = "8"
       ..styleFn["fill"] = ((d) => color(d['group']));
 /*      ..call((_) => force.drag());*/
 
-    node.append("title")
-      ..textFn = (d) => d['id'];
+    node.append("text")
+      ..attr["dx"] = "10"
+      ..attr["dy"] =  ".39em"
+      ..styleFn["stroke"] = "#9E9E9E"
+      ..styleFn['font-family'] = "roboto"
+      ..styleFn['font-weight'] = "100"
+      ..styleFn['font-size'] = "10px"
+      ..text = (d) => d['id'];
+
+    node.on("mouseover").listen( (Selection) {
+      window.console.debug("Mouseover");
+      ActiveSelection = Selection;
+      window.console.debug(ActiveSelection.runtimeType);
+      node.styleFn["stroke"] = "#1dc3c7";
+      svg.styleFn['cursor']="pointer";
+    });
+    node.on("mouseout").listen((d) {
+
+
+      svg.styleFn['cursor']="default";
+    });
   }
 
   addNewData(){
