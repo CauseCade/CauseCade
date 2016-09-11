@@ -6,6 +6,7 @@ import 'dart:html';
 import 'Modals.dart';
 /*import 'dart:svg';*/
 import 'package:d3/d3.dart';
+import 'BayesianDAG.dart';
 /*This should handle interactions with other dart files in NetworkElements*/
 
 List NetworkInfo = new List();
@@ -31,7 +32,7 @@ class BayesNetCanvas{
     /*GenerateBarchart();*/
     window.onResize.listen((_) => setScreenDimensions());
 
-    MyNet = new Network(svg,width,height);
+/*    MyNet = new Network(svg,width,height);
     setScreenDimensions();
 
 
@@ -50,7 +51,10 @@ class BayesNetCanvas{
     node_adder.onClick.listen((event) {
       ModalNodeAdder nodeAdderMenu = new ModalNodeAdder();
       nodeAdderMenu.show();
-      });
+      });*/
+
+
+
   }
 
   clearNet(Event q){
