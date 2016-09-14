@@ -1,10 +1,11 @@
 /*This dart file will contain the node class*/
+import 'Link.dart';
 
 class node{
 
   String name;
-  List<node> outGoing = new List();
-  List<node> inComing = new List();
+  Map<node,link> outGoing = new Map();
+  Map<node,link> inComing = new Map();
 
   node(nameIn){
     name = nameIn;
@@ -14,19 +15,23 @@ class node{
     return name;
   }
 
-  List<node> getOutGoing(){
+  Map<node,link> getOutGoing(){
     return outGoing;
   }
 
-  List<node>  getInComing(){
+  Map<node,link>  getInComing(){
     return inComing;
   }
 
-  addParent(node parentNode){
-    inComing.add(parentNode);
+  addIncoming(node parentNode, link connectingLink){
+    var map ={};
+    map[parentNode]=connectingLink;
+    inComing.addAll(map);
   }
 
-  addDaughter(node daughterNode){
-    outGoing.add(daughterNode);
+  addOutgoing(node daughterNode, link connectingLink){
+    var map ={};
+    map[daughterNode]=connectingLink;
+    outGoing.addAll(map);
   }
 }

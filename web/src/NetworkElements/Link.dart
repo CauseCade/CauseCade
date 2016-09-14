@@ -3,11 +3,16 @@ import 'Node.dart';
 
 class link{
 
-  node Parent;
-  node Daughter;
+  List<node> endpoints;
 
-  link(parentNode, daughterNode){
-    Parent = parentNode;
-    Daughter = daughterNode;
+  link(node1, node2){
+    endpoints = new List<node>(2);
+    endpoints[0]=(node1);
+    endpoints[1]=(node2);
   }
+
+  List<node> getEndPoints(){
+    return endpoints;
+  }
+
 }
