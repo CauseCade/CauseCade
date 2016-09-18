@@ -1,5 +1,6 @@
 import 'Node.dart';
 import 'Link.dart';
+import 'dart:collection';
 
 /*TODO
 * implement a way to check whether the network has accidentally become cyclic
@@ -125,6 +126,78 @@ class BayesianDAG{
     print('removed link');
   }
 
+  //searching the network (to see what is reachable) (depth first search)
+
+  DFS(node startNode,  Set<node> known,Map<node,link> forest ){
+    known.add(startNode);
+
+    startNode.getOutGoing().keys.forEach((connectedNode){
+      if (!known.contains(connectedNode)){
+        var map ={};
+        map[connectedNode]=startNode.getOutGoing()[connectedNode];
+        forest.addAll(map);
+
+        DFS(connectedNode, known, forest);
+      }
+    });
+  }
+
+  bool checkCyclic(){
+    List<node> copyNodes = new List<node>.from(NodeList);
+    List<link> copyLinks = new List<link>.from(LinkList);
+
+    List<link> holder = new List<link>();
+    List<link> linkBackup = new List<link>();
+    node nodeHolder;
+
+    List<node> sorted = new List<node>();
+    Queue<node> noIncomingEdges = new Queue<node>();
+
+    copyNodes.forEach((node){
+      if(node.getInComing().isEmpty){
+        noIncomingEdges.add(node);
+      }
+    });
+
+    while(noIncomingEdges.length != 0){
+      sorted.add(noIncomingEdges.removeFirst());
+      print(sorted);
+      sorted.last.getOutGoing().keys.forEach((node){
+        holder.add(node.getInComing()[sorted.last]);
+        linkBackup.add(node.getInComing()[sorted.last]);
+      });
+      for(var i =0;i<holder.length;i++){
+
+        print(holder[i].getEndPoints()[1].getName() + '<-  name of target');
+        nodeHolder = holder[i].getEndPoints()[1];
+        removeEdge(holder[i]);
+
+        if(nodeHolder.getInComing().isEmpty){
+          noIncomingEdges.add(nodeHolder);
+          print('found new no incoming node');
+        }
+
+      }
+      holder.clear();
+    }
+
+    if(LinkList.isEmpty){
+      reintroduceEdges(linkBackup);
+      return false;
+    }
+    else{
+      reintroduceEdges(linkBackup);
+      return true;
+    }
+
+  }
+
+  reintroduceEdges(List<link> edgesToReadd){
+    edgesToReadd.forEach((link){
+      insertLink(link.getEndPoints()[0],link.getEndPoints()[1]);
+    });
+  }
+
   //String representation of the network (very basic, for debugging)
 
   String toString(){
@@ -141,14 +214,5 @@ class BayesianDAG{
     print('Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString());
 
     print(Buffer.toString());
-
   }
-
-
-
-
-
-
-
-
 }
