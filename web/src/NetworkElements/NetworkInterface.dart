@@ -11,6 +11,7 @@ import 'BayesianDAG.dart';
 
 List NetworkInfo = new List();
 Network MyNet;
+BayesianDAG MyDAG;
 
 class BayesNetCanvas{
 
@@ -27,16 +28,15 @@ class BayesNetCanvas{
  /* SvgElement svg;*/
 
   BayesNetCanvas(){
-    window.console.debug(svg.runtimeType.toString()) ;
 
     /*GenerateBarchart();*/
     window.onResize.listen((_) => setScreenDimensions());
 
-/*    MyNet = new Network(svg,width,height);
+    MyNet = new Network(svg,width,height);
+    MyDAG = new BayesianDAG();
     setScreenDimensions();
 
-
-
+    //Buttons
 
     reset_button = querySelector("#button_reset");
     reset_button.onClick.listen(clearNet);
@@ -51,10 +51,7 @@ class BayesNetCanvas{
     node_adder.onClick.listen((event) {
       ModalNodeAdder nodeAdderMenu = new ModalNodeAdder();
       nodeAdderMenu.show();
-      });*/
-
-
-
+      });
   }
 
   clearNet(Event q){

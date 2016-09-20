@@ -48,6 +48,15 @@ class BayesianDAG{
     return nodeIn.getInComing().length;
   }
 
+  node findNode(String nameIn){ //returns the node object associated with a name
+    for(var i=0; i<NodeList.length;i++){
+      if (NodeList[i].getName()==nameIn){
+        return NodeList[i];
+      }
+    };
+    print('no node was found, please re-enter your option');
+  }
+
   //this checks whether there is a connection between two nodes (this could be both ways)
   bool isConnected(node node1, node node2){
     if(node1.getOutGoing()[node2]!=null || node2.getOutGoing()[node1]!=null){
@@ -65,9 +74,7 @@ class BayesianDAG{
     return nodeOrigin.getOutGoing()[nodeTarget];
   }
 
-
   //adding and removing nodes and links
-
   insertNode(newName){
     node NewNode = new node(newName);
     NodeList.add(NewNode);
@@ -198,10 +205,33 @@ class BayesianDAG{
     });
   }
 
+  //MAIN FUNCTIONALITY (inference)
+
+  Map<bool,double> returnDistribution(String nodename){
+    node selectedNode = findNode(nodename);
+    if(selectedNode!=null){
+      print('node selected for inference: ' + selectedNode.getName());
+      /*selectedNode.updateDistribution()*/
+
+      print('\t[true] : ' + selectedNode.getProbDist()[true].toString());
+      print('\t[false] : ' + selectedNode.getProbDist()[false].toString());
+      return selectedNode.getProbDist();
+
+
+
+
+    }
+    else{
+      print('you must have given an incorrect nodename, please try again');
+    }
+
+  }
+
   //String representation of the network (very basic, for debugging)
 
   String toString(){
     var Buffer = new StringBuffer();
+    Buffer.write('Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString() + '\n');
     for(var i =0; i<NodeList.length;i++){
       Buffer.write('Node: ' + NodeList[i].getName() + '\n');
       Buffer.write('\t [outdegree]: ' + outDegree(NodeList[i]).toString() + ' connections ->');
@@ -211,8 +241,9 @@ class BayesianDAG{
       NodeList[i].getInComing().keys.forEach((node){Buffer.write(node.getName() + ',');});
       Buffer.write('\n');
     }
-    print('Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString());
-
+/*
     print(Buffer.toString());
+*/
+    return Buffer.toString();
   }
 }

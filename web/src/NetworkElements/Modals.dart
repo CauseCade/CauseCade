@@ -9,25 +9,34 @@ import 'DataConverter.dart';
 class ModalNodeAdder{
   final DivElement _content;
   final DivElement _title;
-  final DivElement _maincontent;
+  final DivElement _maincontentNodeInfo;
+  final DivElement _maincontentParent;
+  final DivElement _maincontentTarget;
   final DivElement _buttonholder;
   final DivElement _inputDiv;
+
   final ButtonElement _cancelButton;
   final ButtonElement _addButton;
   final FormElement _nodeName;
   final InputElement _inputName;
   final LabelElement _labelName;
+
   List NodeIDS;
-  List LinkIDS;
+  List LinkParentIDS;
+  List LinkTargetIDS;
   List Data;
-  var linkInputTracker = 0; /*ensures link input are properly index in storage array*/
+
+  var linkInputTrackerTargets = 0; /*ensures link input are properly index in storage array*/
+  var linkInputTrackerParents = 0; /*ensures link input are properly index in storage array*/
 
   //Constructor
   ModalNodeAdder() :
   //constructor pre-init
         _content = new DivElement(),
         _title = new DivElement(),
-        _maincontent = new DivElement(),
+        _maincontentNodeInfo = new DivElement(),
+        _maincontentParent = new DivElement(),
+        _maincontentTarget = new DivElement(),
         _buttonholder = new DivElement(),
         _cancelButton = new ButtonElement(),
         _addButton = new ButtonElement(),
@@ -38,8 +47,9 @@ class ModalNodeAdder{
         _labelName = new LabelElement(),
 
         NodeIDS = new List(1),
-        LinkIDS = new List(),
-        Data = new List(2)
+        LinkParentIDS = new List(),
+        LinkTargetIDS = new List(),
+        Data = new List(3)
   {
     //constructor body
 
@@ -58,14 +68,25 @@ class ModalNodeAdder{
 
     _title.style.background = '#E91E63';
 
-    _maincontent.classes.add("mdl-card__supporting-text");
-    _maincontent.children.add(_nodeName);
-    _maincontent.text = ("Enter Node details below");
+    //handling input fields
+
+    _maincontentNodeInfo.classes.add("mdl-card__supporting-text");
+    _maincontentNodeInfo.children.add(_nodeName);
+    _maincontentNodeInfo.text = ("Enter your New Node name below");
+
+    _maincontentParent.classes.add("mdl-card__supporting-text");
+    _maincontentParent.text = ("Enter Parent name below");
+    _maincontentParent.style.borderTop = '1px solid rgba(0,0,0,.1)';
+
+    _maincontentTarget.classes.add("mdl-card__supporting-text");
+    _maincontentTarget.text = ("Enter Target name below");
+    _maincontentTarget.style.borderTop = '1px solid rgba(0,0,0,.1)';
+
+    /*styling buttons*/
 
     _buttonholder.classes.add('mdl-card__actions');
     _buttonholder.classes.add('mdl-card--border');
 
-    /*styling buttons*/
     _cancelButton.classes.add('mdl-button');
     _cancelButton.classes.add('mdl-js-button');
     _cancelButton.classes.add('mdl-js-ripple-effect');
@@ -91,10 +112,13 @@ class ModalNodeAdder{
 
     //Filling our card
     _content.append(_title);
-    _content.append(_maincontent);
+    _content.append(_maincontentNodeInfo);
+    _content.append(_maincontentParent);
+    _content.append(_maincontentTarget);
     _content.append(_buttonholder);
-    _maincontent.append(_nodeName);
-    addLinkInput();
+    _maincontentNodeInfo.append(_nodeName);
+    addParentInput();
+    addTargetInput();
 
     //Handling Button behaviour
     _cancelButton.text = "Cancel";
@@ -117,20 +141,20 @@ class ModalNodeAdder{
     window.console.debug(NodeIDS);
   }
 
-  setLinkName(inputIndex, inputValue){ /*this is currently setup for debugging*/
-    LinkIDS[inputIndex] = (inputValue);
-    window.console.debug(LinkIDS);
-    linkInputTracker++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
+  setTargetName(inputIndex, inputValue){ /*this is currently setup for debugging*/
+    LinkTargetIDS[inputIndex] = (inputValue);
+    window.console.debug(LinkTargetIDS);
+    linkInputTrackerTargets++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
   }
 
-  addLinkInput(){
+  addTargetInput(){
     var newLinkElement = new DivElement();
     var newLinkButton = new ButtonElement();
     var newLinkInput = new FormElement();
     var newLinkDiv = new DivElement();
     var newTargetInput = new InputElement();
     var newTargetLabel = new LabelElement();
-    LinkIDS.add("placeholder"); /*ensures proper initialised values*/ /*FIX*/
+    LinkTargetIDS.add("placeholder"); /*ensures proper initialised values*/ /*FIX*/
 
     newLinkInput.style.display = ("inline-block");
 
@@ -140,7 +164,7 @@ class ModalNodeAdder{
 
     newTargetInput.classes.add("mdl-textfield__input");
     newTargetInput.classes.add("linkInputBox");
-    newTargetInput.onChange.listen((_) => setLinkName(linkInputTracker,newTargetInput.value));
+    newTargetInput.onChange.listen((_) => setTargetName(linkInputTrackerTargets,newTargetInput.value));
     newLinkDiv.children.add(newTargetInput);
 
     newTargetLabel.classes.add("mdl-textfield__label");
@@ -152,24 +176,75 @@ class ModalNodeAdder{
     newLinkButton.classes.add('mdl-js-button');
     newLinkButton.classes.add('mdl-js-ripple-effect');
     newLinkButton.style.display = ('inline-block');
-    newLinkButton.text = ("Add Another Target");
+    newLinkButton.text = ("Add Another target");
     newLinkButton.style.color = "rgba(0,0,0,.54)";
     newLinkButton.onClick.listen((event){
       window.console.debug(newTargetInput.value);
       if (newTargetInput.value != ''){
-        addLinkInput();
+        addTargetInput();
         newLinkButton.remove();
       }
     });
 
     newLinkElement.append(newLinkInput);
     newLinkElement.append(newLinkButton);
-    _maincontent.append(newLinkElement);
+    _maincontentTarget.append(newLinkElement);
+  }
+
+  setParentName(inputIndex, inputValue){ /*this is currently setup for debugging*/
+    LinkParentIDS[inputIndex] = (inputValue);
+    window.console.debug(LinkParentIDS);
+    linkInputTrackerParents++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
+  }
+
+  addParentInput(){
+    var newLinkElement = new DivElement();
+    var newLinkButton = new ButtonElement();
+    var newLinkInput = new FormElement();
+    var newLinkDiv = new DivElement();
+    var newTargetInput = new InputElement();
+    var newTargetLabel = new LabelElement();
+    LinkParentIDS.add("placeholder"); /*ensures proper initialised values*/ /*FIX*/
+
+    newLinkInput.style.display = ("inline-block");
+
+    newLinkInput.children.add(newLinkDiv);
+    newLinkDiv.classes.add("mdl-textfield");
+    newLinkDiv.classes.add("mdl-js-textfield");
+
+    newTargetInput.classes.add("mdl-textfield__input");
+    newTargetInput.classes.add("linkInputBox");
+    newTargetInput.onChange.listen((_) => setParentName(linkInputTrackerParents,newTargetInput.value));
+    newLinkDiv.children.add(newTargetInput);
+
+    newTargetLabel.classes.add("mdl-textfield__label");
+    newTargetLabel.text = ("Enter parent name...");
+    newTargetLabel.htmlFor = ("nodeInputBox");
+    newLinkDiv.children.add(newTargetLabel);
+
+    newLinkButton.classes.add('mdl-button');
+    newLinkButton.classes.add('mdl-js-button');
+    newLinkButton.classes.add('mdl-js-ripple-effect');
+    newLinkButton.style.display = ('inline-block');
+    newLinkButton.text = ("Add Another parent");
+    newLinkButton.style.color = "rgba(0,0,0,.54)";
+    newLinkButton.onClick.listen((event){
+      window.console.debug(newTargetInput.value);
+      if (newTargetInput.value != ''){
+        addParentInput();
+        newLinkButton.remove();
+      }
+    });
+
+    newLinkElement.append(newLinkInput);
+    newLinkElement.append(newLinkButton);
+    _maincontentParent.append(newLinkElement);
   }
 
   returnData(){
     Data[0]=(NodeIDS);
-    Data[1]=(LinkIDS);
+    Data[1]=(LinkParentIDS);
+    Data[2]=(LinkTargetIDS);
     window.console.debug(Data);
     Implement(Data);
     hide();
