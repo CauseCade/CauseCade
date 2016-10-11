@@ -61,7 +61,9 @@ class BayesNetCanvas{
   loadNetwork(Event g){
     json("Supplementary/Example2.json").then( (input_data) {
       window.console.debug(input_data["nodes"].elementAt(0).toString()) ;
+/*
       ImplementJson(input_data);
+*/
     }, onError: (err) => throw err);
   }
 

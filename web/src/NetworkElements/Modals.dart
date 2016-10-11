@@ -142,9 +142,9 @@ class ModalNodeAdder{
   }
 
   setTargetName(inputIndex, inputValue){ /*this is currently setup for debugging*/
-    LinkTargetIDS[inputIndex] = (inputValue);
+    LinkTargetIDS.add(inputValue);
     window.console.debug(LinkTargetIDS);
-    linkInputTrackerTargets++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
+    //linkInputTrackerTargets++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
   }
 
   addTargetInput(){
@@ -154,7 +154,6 @@ class ModalNodeAdder{
     var newLinkDiv = new DivElement();
     var newTargetInput = new InputElement();
     var newTargetLabel = new LabelElement();
-    LinkTargetIDS.add("placeholder"); /*ensures proper initialised values*/ /*FIX*/
 
     newLinkInput.style.display = ("inline-block");
 
@@ -192,9 +191,9 @@ class ModalNodeAdder{
   }
 
   setParentName(inputIndex, inputValue){ /*this is currently setup for debugging*/
-    LinkParentIDS[inputIndex] = (inputValue);
+    LinkParentIDS.add(inputValue);
     window.console.debug(LinkParentIDS);
-    linkInputTrackerParents++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
+    //linkInputTrackerParents++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
   }
 
   addParentInput(){
@@ -204,7 +203,6 @@ class ModalNodeAdder{
     var newLinkDiv = new DivElement();
     var newTargetInput = new InputElement();
     var newTargetLabel = new LabelElement();
-    LinkParentIDS.add("placeholder"); /*ensures proper initialised values*/ /*FIX*/
 
     newLinkInput.style.display = ("inline-block");
 

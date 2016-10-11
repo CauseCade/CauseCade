@@ -1,5 +1,6 @@
 /*This dart file will contain the node class*/
 import 'Link.dart';
+import 'VectorMath.dart';
 
 class node{ //currently just boolean nodes, will add multiple states in future classes
 
@@ -9,10 +10,17 @@ class node{ //currently just boolean nodes, will add multiple states in future c
 
   bool hasEvidence = false;
   bool hasHardEvidence = false;
-  Map<String,double> probDependency = new Map<String,double>(); //dependency on other nodes
 
-  Map<bool,double> UnconditionalProbabilityDistribution = new Map<bool,double>();
-  Map<bool,double> ProbabilityDistribution = new Map<bool,double>();
+  Matrix2 LinkMatrix = new Matrix2(2,2); //2x2 matrix is default (this corresponds to no parents)
+  Vector2 Posterior = new Vector2(-9.99,-9.99); //This would be equal in dimension to the amount of states the node can have
+
+  //gained from other nodes
+  Vector2 LambdaEvidence = new Vector2(1.0,1.0); //this should be set to 1 by default, which equates to no evidence
+  Vector2 PiEvidence = new Vector2(1.0,1.0); //this should be set to 1 by default, which equates to no evidence
+
+  //sent out to other nodes
+  Vector2 LambdaMessage = new Vector2(1.0,1.0); //this should be set to 1 by default, which equates to no evidence
+  Vector2 PiMessage = new Vector2(1.0,1.0); //this should be set to 1 by default, which equates to no evidence*/
 
   node(this.name){}
 
@@ -24,49 +32,33 @@ class node{ //currently just boolean nodes, will add multiple states in future c
     return hasEvidence;
   }
 
+  String getLinkMatrixInfo(){
+    var Buffer = new StringBuffer();
+    Buffer.write('> Requested LinkMaxtrix for node: ' + name + '\n');
+    inComing.keys.forEach((node){
+      Buffer.write('InComing Nodes in Order: ' + node.getName() +'\n');
+    });
+    Buffer.write( '[0] = Node:true, [1]=Node:false \n'+ LinkMatrix.toString());
+    return Buffer.toString();
+  }
+
+  bool enterLinkMatrix(Matrix2 updatedMatrix){ //the link matrix contains the probalities of this node havign value x given the values of the parents
+    LinkMatrix = updatedMatrix;
+  }
+
   bool HardEvidenceStatus(){
     return hasHardEvidence;
   }
 
-  Map<bool,double> getProbability(){
-    return ProbabilityDistribution;
+  Vector2 getProbability(){
+    return Posterior;
   }
 
-  enterUnconditionalProbability(var probTrue, var probFalse){
-    if(probTrue+probFalse==1) {
-      UnconditionalProbabilityDistribution[true] = probTrue;
-      UnconditionalProbabilityDistribution[false] = probFalse;
-      if (!hasEvidence) {
-        ProbabilityDistribution[true] = probTrue;
-        ProbabilityDistribution[false] = probFalse;
-      }
-    }
-    else{
-      print('[] sorry these probabilities do not sum to one, please make sure you entered these values correctly');
-    }
+  UpdatePosterior(){
+    Posterior[0]=PiEvidence[0]*LambdaEvidence[0]; //updating posterior with lambda and pi evidence (note that probabilities may not sum to one)
+    Posterior[1]=PiEvidence[1]*LambdaEvidence[1]; //updating posterior with lambda and pi evidence (note that probabilities may not sum to one)
+    Posterior = Posterior.normalise(); //make sure probabilities sum to 1
   }
-
-  enterDependency(Map<String,double> newDependency){
-    probDependency = newDependency;
-  }
-
-  enterHardEvidence(bool BoolIn){
-    hasEvidence = true;
-    hasHardEvidence = true;
-    if(BoolIn){
-      ProbabilityDistribution[true]=1 as double;
-      ProbabilityDistribution[false]=0 as double;
-    }
-    else{
-      ProbabilityDistribution[true]=0 as double;
-      ProbabilityDistribution[false]=1 as double;
-    }
-  }
-
-  Map<bool,double> getProbDist(){
-    return ProbabilityDistribution;
-  }
-
 
   Map<node,link> getOutGoing(){
     return outGoing;

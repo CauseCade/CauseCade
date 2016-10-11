@@ -17,8 +17,8 @@ class Network {
   JsArray links = new JsArray();
   JsArray nodes = new JsArray();
   var svg;
-  var link;
-  var node;
+  Selection link;
+  Selection node;
   var g;
   var ActiveSelection;
 
@@ -34,8 +34,8 @@ class Network {
     ..linkDistance = 20
     ..size = [width, height];
 
-    var kappa =new JsObject.jsify({"id":"InitialNode","group":1});
-    nodes.add(kappa);
+    /*var kappa =new JsObject.jsify({"id":"InitialNode","group":1});
+    nodes.add(kappa);*/
     /* nodes = input_data['nodes'];*/
 
     /*set up a force*/
@@ -75,12 +75,14 @@ class Network {
   }
 
   refreshData(){
-    link = g.selectAll(".link").data(links).enter().append("line") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
+    link = g.selectAll(".link").data(links).enter().append("svg:marker") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
       ..attr["class"] = "link"
       ..styleFn["stroke-width"] = (d) => math.sqrt(d['value']);
 
+
     node = g.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
         ..attr["class"]= "node";
+    //node = g.selectAll(".node").data(nodes).exit(); //testing this
 
     node.append("circle") //FIX
       ..attr["class"] = "circlesvg"
@@ -100,8 +102,8 @@ class Network {
     node.on("mouseover").listen( (Selection) {
       window.console.debug("Mouseover");
       ActiveSelection = Selection;
-      window.console.debug(ActiveSelection.runtimeType);
-      node.styleFn["stroke"] = "#1dc3c7";
+      window.console.debug(ActiveSelection.toString());
+      Selected.styleFn["stroke"] = "#1dc3c7";
       svg.styleFn['cursor']="pointer";
     });
     node.on("mouseout").listen((d) {
@@ -144,21 +146,26 @@ class Network {
   reset(){ /*WIP*/
 
     nodes.clear();
-    links.clear();
+    //nodes.add(new JsObject.jsify({"id":"NewNode","group":1}));
+    //links.clear();
     window.console.debug("This isn't working at the moment - WIP");
     /*g.selectAll(".link").size();*/
     /*link.exit();*/
-    nodes.add(new JsObject.jsify({"id":"InitialNode","group":1}));
+    //print(node.data(nodes).exit().toString());
+    print(g.selectAll('node').runtimeType);
+    node = g.selectAll(".node").exit().remove();
+
+
 
     force.nodes = nodes;
     force.links = links;
 
     refreshData();
     force.start();
-
+/*
     var holder = new SvgElement.tag("g");
     var kappa = holder.querySelectorAll("circle");
-    holder.remove();
+    holder.remove();*/
   }
 
   setSize(widthIn,heightIn){

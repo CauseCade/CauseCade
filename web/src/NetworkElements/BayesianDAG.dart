@@ -205,17 +205,16 @@ class BayesianDAG{
     });
   }
 
-  //MAIN FUNCTIONALITY (inference)
+  //MAIN FUNCTIONALITY (inference) //VERY MUCH NOT FUNCTIONAL AT THE CURRENT TIME
 
-  Map<bool,double> returnDistribution(String nodename){
+  returnDistribution(String nodename){
     node selectedNode = findNode(nodename);
     if(selectedNode!=null){
       print('node selected for inference: ' + selectedNode.getName());
       /*selectedNode.updateDistribution()*/
 
-      print('\t[true] : ' + selectedNode.getProbDist()[true].toString());
-      print('\t[false] : ' + selectedNode.getProbDist()[false].toString());
-      return selectedNode.getProbDist();
+      print('\t{Probability Distribution : ' + selectedNode.getProbability().toString());
+
 
 
 
