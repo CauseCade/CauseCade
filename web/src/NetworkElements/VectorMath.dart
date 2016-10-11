@@ -24,8 +24,32 @@ class Matrix2{
     matrixInternal = matrix;
   }
 
+  int getRowCount(){return rowCount;}
+
+  int getColumnCount(){return columnCount;}
+
   List<double> operator [](int i){
     return matrixInternal [i];
+  }
+
+  operator *(dynamic arg) {
+    if (arg is double) {
+      return scale(arg);
+    }
+    if (arg is Vector) {
+      return transform(arg);
+    }
+    throw new ArgumentError(arg);
+  }
+
+  transform(Vector){} //FIX
+
+  scale(double scalingFactor){ //this method needs to be fixed, to see whetehr a copy or a change to the original matrix has to be changed //FIX
+    for(int i=0; i < rowCount; i++){
+      for(int j=0; j < columnCount; j++){
+        matrixInternal[i][j]=matrixInternal[i][j]*scalingFactor;
+      }
+    }
   }
 
   String toString(){
@@ -46,10 +70,68 @@ class Matrix2{
 
 }
 
-class Vector2{
+class Vector{
+  List<double> _vector; //holds the values of the vector
+  int _size; //dimensionality of the vector (not to be confused with the length of the vector. I should maybe consider refactoring terminology here)
+
+  Vector(int length){
+    this._vector = new List<double>(length);
+    this._size=length;
+  }
+
+  setValues(List<double> newValues){ //if you wish to change values later on
+    _vector = newValues;
+  }
+
+  int getSize(){
+    return _size;
+  }
+
+  double getLength(){
+    double squaredsum = 0.0;
+    for (int i=0; i< _size;i++){
+      squaredsum += _vector[i]*_vector[i];
+    }
+    return sqrt(squaredsum);
+  }
+
+  double operator [](int i){
+    return _vector[i];
+  }
+
+  void operator []=(int i, double v) {
+    _vector[i] = v;
+  }
+
+  normalise(){
+    double squaredsum = 0.0;
+    for (int i=0; i< _size;i++){
+      squaredsum += _vector[i]*_vector[i];
+    }
+    double factor = 1/sqrt(squaredsum);
+    for (int i=0; i< _size;i++){
+      _vector[i]=_vector[i]*factor;
+    }
+  }
+
+  String toString(){
+    StringBuffer Buffer = new StringBuffer();
+    Buffer.write('[');
+    for (int i =0; i < _size;i++){
+      Buffer.write(_vector[i]);
+      if (i+1!=_size){
+        Buffer.write(' , ');
+      }
+    }
+    Buffer.write(']\n');
+    return Buffer.toString();
+  }
+}
+
+/*class Vector2 implements Vector{
 
   List<double> vectorInternal;
-  int length = 2;
+  int _length = 2;
 
   Vector2(double entry1, double entry2){
     List<double> vector = new List<double>(2);
@@ -68,18 +150,18 @@ class Vector2{
 
   normalise(){
     double squaredsum = 0.0;
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       squaredsum += vectorInternal[i]*vectorInternal[i];
     }
-    double factor = 1/sqrt(squaredsum);
-    for (int i=0; i< length;i++){
+     double factor = 1/sqrt(squaredsum);
+    for (int i=0; i< _length;i++){
       vectorInternal[i]=vectorInternal[i]*factor;
     }
   }
 
   double getSize(){
     double squaredsum = 0.0;
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       squaredsum += vectorInternal[i]*vectorInternal[i];
     }
     return sqrt(squaredsum);
@@ -88,9 +170,9 @@ class Vector2{
   String toString(){
     StringBuffer Buffer = new StringBuffer();
     Buffer.write('[');
-    for (int i =0; i < length;i++){
+    for (int i =0; i < _length;i++){
       Buffer.write(vectorInternal[i]);
-      if (i+1!=length){
+      if (i+1!=_length){
         Buffer.write(' , ');
       }
     }
@@ -99,10 +181,10 @@ class Vector2{
   }
 }
 
-class Vector3{
+class Vector3 implements Vector{
 
   List<double> vectorInternal;
-  int length = 3;
+  int _length = 3;
 
   Vector3(double entry1, double entry2, double entry3){
     List<double> vector = new List<double>(3);
@@ -122,18 +204,18 @@ class Vector3{
 
   normalise(){
     double squaredsum = 0.0;
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       squaredsum += vectorInternal[i]*vectorInternal[i];
     }
     double factor = 1/sqrt(squaredsum);
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       vectorInternal[i]=vectorInternal[i]*factor;
     }
   }
 
   double getSize(){
     double squaredsum = 0.0;
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       squaredsum += vectorInternal[i]*vectorInternal[i];
     }
     return sqrt(squaredsum);
@@ -142,9 +224,9 @@ class Vector3{
   String toString(){
     StringBuffer Buffer = new StringBuffer();
     Buffer.write('[');
-    for (int i =0; i < length;i++){
+    for (int i =0; i < _length;i++){
       Buffer.write(vectorInternal[i]);
-      if (i+1!=length){
+      if (i+1!=_length){
         Buffer.write(' , ');
       }
     }
@@ -153,10 +235,10 @@ class Vector3{
   }
 }
 
-class Vector4{
+class Vector4 implements Vector{
 
   List<double> vectorInternal;
-  int length = 4;
+  int _length = 4;
 
   Vector4(double entry1, double entry2, double entry3, double entry4){
     List<double> vector = new List<double>(4);
@@ -177,18 +259,18 @@ class Vector4{
 
   normalise(){
     double squaredsum = 0.0;
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       squaredsum += vectorInternal[i]*vectorInternal[i];
     }
     double factor = 1/sqrt(squaredsum);
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       vectorInternal[i]=vectorInternal[i]*factor;
     }
   }
 
   double getSize(){
     double squaredsum = 0.0;
-    for (int i=0; i< length;i++){
+    for (int i=0; i< _length;i++){
       squaredsum += vectorInternal[i]*vectorInternal[i];
     }
     return sqrt(squaredsum);
@@ -197,13 +279,13 @@ class Vector4{
   String toString(){
     StringBuffer Buffer = new StringBuffer();
     Buffer.write('[');
-    for (int i =0; i < length;i++){
+    for (int i =0; i < _length;i++){
       Buffer.write(vectorInternal[i]);
-      if (i+1!=length){
+      if (i+1!=_length){
         Buffer.write(' , ');
       }
     }
     Buffer.write(']\n');
     return Buffer.toString();
-  }
-}
+  }*/
+//}

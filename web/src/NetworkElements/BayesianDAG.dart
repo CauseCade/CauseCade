@@ -75,8 +75,8 @@ class BayesianDAG{
   }
 
   //adding and removing nodes and links
-  insertNode(newName){
-    node NewNode = new node(newName);
+  insertNode(newName, stateCount){
+    node NewNode = new node(newName, stateCount);
     NodeList.add(NewNode);
   }
 
@@ -149,6 +149,20 @@ class BayesianDAG{
     });
   }
 
+  checkNodes(){
+    StringBuffer Buffer = new StringBuffer();
+    Buffer.write('> Requested Node Status of the Network\n');
+    int errorCount=0;
+    NodeList.forEach((node){
+      if(!node.getLinkMatrixStatus()){
+        errorCount++;
+        Buffer.write('Node: ' + node.getName() + ' - has an inproperly configured Link Matrix\n');
+      }
+    });
+    Buffer.write('\t['+ errorCount.toString() + '] nodes with inproper LinkMatrix values found, please enter proper values.');
+    print(Buffer.toString());
+  }
+
   bool checkCyclic(){
     List<node> copyNodes = new List<node>.from(NodeList);
     List<link> copyLinks = new List<link>.from(LinkList);
@@ -205,16 +219,17 @@ class BayesianDAG{
     });
   }
 
-  //MAIN FUNCTIONALITY (inference) //VERY MUCH NOT FUNCTIONAL AT THE CURRENT TIME
+  //MAIN FUNCTIONALITY (inference) //VERY BROKEN, DO NOT USE
 
-  returnDistribution(String nodename){
+  Map<bool,double> returnDistribution(String nodename){
     node selectedNode = findNode(nodename);
     if(selectedNode!=null){
       print('node selected for inference: ' + selectedNode.getName());
       /*selectedNode.updateDistribution()*/
 
-      print('\t{Probability Distribution : ' + selectedNode.getProbability().toString());
-
+      //print('\t[true] : ' + selectedNode.getProbDist()[true].toString());
+      //print('\t[false] : ' + selectedNode.getProbDist()[false].toString());
+      //return selectedNode.getProbDist();
 
 
 
@@ -230,7 +245,7 @@ class BayesianDAG{
 
   String toString(){
     var Buffer = new StringBuffer();
-    Buffer.write('Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString() + '\n');
+    Buffer.write('> Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString() + '\n');
     for(var i =0; i<NodeList.length;i++){
       Buffer.write('Node: ' + NodeList[i].getName() + '\n');
       Buffer.write('\t [outdegree]: ' + outDegree(NodeList[i]).toString() + ' connections ->');
