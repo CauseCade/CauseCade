@@ -36,7 +36,7 @@ Implement(InputData){
 
   //adds info to the actual DAG (beta)
 
-  MyDAG.insertNode(InputData[0][0]);
+  MyDAG.insertNode(InputData[0][0],2); //make sure this will allow for users to chose multi state variables//FIX
   for (var i = 0; i < InputData[1].length; i++) {
     MyDAG.insertLink(MyDAG.findNode(InputData[1][i]), MyDAG.findNode(InputData[0][0]));
     window.console.debug('running test');

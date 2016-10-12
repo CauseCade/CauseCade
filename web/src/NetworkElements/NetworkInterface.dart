@@ -13,6 +13,7 @@ List NetworkInfo = new List();
 Network MyNet;
 BayesianDAG MyDAG;
 
+
 class BayesNetCanvas{
 
   var width = 900;
@@ -23,6 +24,7 @@ class BayesNetCanvas{
   ButtonElement load_button;
   ButtonElement node_adder;
  /* Network MyNet;*/
+  welcomeModal WelcomeModal = new welcomeModal();
   var NetworkHolder = querySelector('#GraphHolder');
   var svg = new Selection("#GraphHolder").append("svg"); /*svg file we draw on*/
  /* SvgElement svg;*/
