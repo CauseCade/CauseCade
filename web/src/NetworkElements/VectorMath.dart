@@ -5,14 +5,14 @@ import 'dart:math';
 
 class Matrix2{
 
-  List<List<double>> matrixInternal;
+  List<List<double>> matrix;
   int rowCount;
   int columnCount;
 
   Matrix2(int rows, int columns){
     rowCount= rows;
     columnCount = columns;
-    List<List<double>> matrix = new List<List<double>>(rows);
+    this.matrix = new List<List<double>>(rows);
 
     for (var i = 0; i < rows; i++) {
       List<double> list = new List<double>(columns);
@@ -21,7 +21,6 @@ class Matrix2{
       }
       matrix[i] = list;
     }
-    matrixInternal = matrix;
   }
 
   int getRowCount(){return rowCount;}
@@ -29,7 +28,7 @@ class Matrix2{
   int getColumnCount(){return columnCount;}
 
   List<double> operator [](int i){
-    return matrixInternal [i];
+    return matrix[i];
   }
 
   operator *(dynamic arg) {
@@ -42,12 +41,38 @@ class Matrix2{
     throw new ArgumentError(arg);
   }
 
-  transform(Vector){} //FIX
-
   scale(double scalingFactor){ //this method needs to be fixed, to see whetehr a copy or a change to the original matrix has to be changed //FIX
     for(int i=0; i < rowCount; i++){
       for(int j=0; j < columnCount; j++){
-        matrixInternal[i][j]=matrixInternal[i][j]*scalingFactor;
+        matrix[i][j]=matrix[i][j]*scalingFactor;
+      }
+    }
+  }
+
+  Vector transform(Vector vectorIn){
+    if (vectorIn._size==columnCount) {
+      Vector newVector = new Vector(rowCount);
+
+      for(int i =0; i<rowCount;i++){
+        newVector[i]=0.0;
+        for(int j=0; j< columnCount;j++){
+          newVector[i]+=matrix[i][j]*vectorIn[j];
+        }
+      }
+      return newVector;
+    }
+    throw new ArgumentError(vectorIn);
+  }
+
+  identity(){ //should only be called for root nodes and upon initialisation
+    for(var i =0; i<rowCount;i++){
+      for(var j=0; j<columnCount;j++){
+        if(i==j){
+          matrix[i][j]=1.0;
+        }
+        else{
+          matrix[i][j]=0.0;
+        }
       }
     }
   }
@@ -58,7 +83,7 @@ class Matrix2{
     for (var i =0;i < rowCount; i++) {
       Buffer.write('[');
       for (var j=0; j < columnCount; j++){
-        Buffer.write(matrixInternal[i][j].toString());
+        Buffer.write(matrix[i][j].toString());
         if (j+1!=columnCount){
           Buffer.write(' , ');
         }
@@ -74,9 +99,9 @@ class Vector{
   List<double> _vector; //holds the values of the vector
   int _size; //dimensionality of the vector (not to be confused with the length of the vector. I should maybe consider refactoring terminology here)
 
-  Vector(int length){
-    this._vector = new List<double>(length);
-    this._size=length;
+  Vector(int size){
+    this._vector = new List<double>(size);
+    this._size=size;
   }
 
   setValues(List<double> newValues){ //if you wish to change values later on
@@ -103,6 +128,33 @@ class Vector{
     _vector[i] = v;
   }
 
+  operator *(dynamic arg) {
+    if (arg is double) {
+      return scale(arg);
+    }
+    if (arg is Vector) {
+      return multiplyPointswise(arg);
+    }
+    throw new ArgumentError(arg);
+  }
+
+  scale(double scaleFactor){
+    for(int i; i<_size;i++){
+      _vector[i]=_vector[i]*scaleFactor;
+    }
+  }
+
+  Vector multiplyPointswise(Vector vectorIn){
+    if(vectorIn.getSize()==_size) {
+      Vector newVector = new Vector(_size);
+      for(int i=0; i< _size;i++){
+        newVector[i]=_vector[i]*vectorIn[i];
+      }
+      return newVector;
+    }
+    throw new ArgumentError(vectorIn);
+  }
+
   normalise(){
     double squaredsum = 0.0;
     for (int i=0; i< _size;i++){
@@ -110,6 +162,18 @@ class Vector{
     }
     double factor = 1/sqrt(squaredsum);
     for (int i=0; i< _size;i++){
+      _vector[i]=_vector[i]*factor;
+    }
+  }
+
+  SumToOne(){
+    double totalSum=0.0;
+    double factor;
+    for(var i=0;i<_size;i++ ){
+      totalSum += _vector[i];
+    }
+    factor=1/totalSum;
+    for(var i=0;i<_size;i++ ){
       _vector[i]=_vector[i]*factor;
     }
   }

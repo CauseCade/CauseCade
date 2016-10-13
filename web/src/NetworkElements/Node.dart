@@ -33,7 +33,18 @@ class node{ //currently just boolean nodes, will add multiple states in future c
 
   node(this.name, this.stateCount){ //constructor
     LinkMatrix = new Matrix2(stateCount,getIncomingStates());
-    hasProperLinkMatrix = false;
+    LinkMatrix.identity();
+    hasProperLinkMatrix = true;
+
+    Posterior = new Vector(stateCount);
+    PiMessage = new Vector(stateCount);
+    LambdaMessage = new Vector(stateCount);
+    for(int i=0; i< stateCount;i++){
+      PiMessage[i]=1.0; //this is the default and is equivalent to no evidence
+      LambdaMessage[i]=1.0; //this is the default and is equivalent to no evidence
+    }
+    ComputePiEvidence();
+    ComputeLambdaEvidence();
   }
 
   String getName(){
@@ -77,8 +88,13 @@ class node{ //currently just boolean nodes, will add multiple states in future c
     }
   }
 
-
   resetLinkMatrixStructure(){ //to be called each time something regarding the link matrix is changed (so this would be a new state added to node, or a new parent node being added)
+    PiEvidence = new Vector(stateCount);
+    LambdaEvidence = new Vector(stateCount);
+    for(int i=0; i< stateCount;i++){
+      PiEvidence[i]=1.0; //this is the default and is equivalent to no evidence
+      LambdaEvidence[i]=1.0; //this is the default and is equivalent to no evidence
+    }
     LinkMatrix = new Matrix2(stateCount, getIncomingStates()); //this ensures the proper dimensions of the link matrix, but the user will still have to manually enter the accurate probabilities
     setLinkMatrixStatus(false); //indicates the values need to be updated (false= needs updating, true = no updating required)
   }
@@ -89,6 +105,10 @@ class node{ //currently just boolean nodes, will add multiple states in future c
 
   bool getLinkMatrixStatus(){
     return hasProperLinkMatrix;
+  }
+
+  Matrix2 getLinkMatrix(){ //should be only for debugging //FIX
+    return LinkMatrix;
   }
 
   bool getEvidenceStatus(){
@@ -122,10 +142,28 @@ class node{ //currently just boolean nodes, will add multiple states in future c
   }
 
   UpdatePosterior(){
+
     Posterior[0]=PiEvidence[0]*LambdaEvidence[0]; //updating posterior with lambda and pi evidence (note that probabilities may not sum to one)
     Posterior[1]=PiEvidence[1]*LambdaEvidence[1]; //updating posterior with lambda and pi evidence (note that probabilities may not sum to one)
-    Posterior = Posterior.normalise(); //make sure probabilities sum to 1
+    Posterior.SumToOne(); //make sure probabilities sum to 1
+    //print(Posterior);
   }
+
+  EnterPiMessage(Vector piMessageIn){
+    if(piMessageIn.getSize()==stateCount){
+      PiMessage = piMessageIn;
+      ComputePiEvidence();
+    }
+  }
+
+  ComputePiEvidence(){
+    PiEvidence = LinkMatrix*PiMessage;
+  }
+
+  ComputeLambdaEvidence(){
+    LambdaEvidence = LambdaMessage; //FIX
+  }
+
 
   Map<node,link> getOutGoing(){
     return outGoing;
