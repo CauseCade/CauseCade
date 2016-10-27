@@ -219,26 +219,14 @@ class BayesianDAG{
     });
   }
 
-  //MAIN FUNCTIONALITY (inference) //VERY BROKEN, DO NOT USE
+  //MAIN FUNCTIONALITY (
 
-  Map<bool,double> returnDistribution(String nodename){
-    node selectedNode = findNode(nodename);
-    if(selectedNode!=null){
-      print('node selected for inference: ' + selectedNode.getName());
-      /*selectedNode.updateDistribution()*/
-
-      //print('\t[true] : ' + selectedNode.getProbDist()[true].toString());
-      //print('\t[false] : ' + selectedNode.getProbDist()[false].toString());
-      //return selectedNode.getProbDist();
-
-
-
-
-    }
-    else{
-      print('you must have given an incorrect nodename, please try again');
-    }
-
+  updateNetwork(){
+    NodeList.forEach((node){
+      if(node.getFlaggedStatus()){
+        //node.update currently considering implementation that will easily be expandable
+      }
+    });
   }
 
   //String representation of the network (very basic, for debugging)
@@ -247,7 +235,7 @@ class BayesianDAG{
     var Buffer = new StringBuffer();
     Buffer.write('> Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString() + '\n');
     for(var i =0; i<NodeList.length;i++){
-      Buffer.write('Node: ' + NodeList[i].getName() + '\n');
+      Buffer.write('Node: ' + NodeList[i].getName() + ' - Probabilities: ' +NodeList[i].getProbability().toString());
       Buffer.write('\t [outdegree]: ' + outDegree(NodeList[i]).toString() + ' connections ->');
       NodeList[i].getOutGoing().keys.forEach((node){Buffer.write(node.getName() + ',');});
       Buffer.write('\n');
