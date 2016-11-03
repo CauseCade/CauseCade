@@ -187,14 +187,17 @@ class node{
   }
 
   UpdatePosterior(){ //this computes a new posterior value - this means you must have updated either lambda evidence or pievidence for this to change the posterior
-    for(var i =0; i< stateCount;i++){
+    //print('statecount is: ' + stateCount.toString());
+    for(var i =0; i<stateCount;i++){
       Posterior[i]=PiEvidence[i]*LambdaEvidence[i]; //updating posterior with lambda and pi evidence (note that probabilities may not sum to one)
     }
     Posterior.SumToOne(); //make sure probabilities sum to 1
+    Flagged = false; //if we have called this method we assume we have also updated both our Pi and Lambda messages - we must set flagged status false, we dont hav to updte this one anymore
+    _FlagOtherNodes(name);
     print('posterior is' + Posterior.toString());
   }
 
-  EnterPiMessage(Vector piMessageIn){
+  EnterPiMessage(Vector piMessageIn){ // this should only be called when you enter evidence for a node
     if(piMessageIn.getSize()==stateCount){
       PiMessage = piMessageIn;
       _ComputePiEvidence();
@@ -202,6 +205,61 @@ class node{
     }
     else{
       print('sorry you need to have the right dimensionality of your vector');
+    }
+  }
+
+  FetchPiMessage(){ //this will be called if another node in the network has been updated and this one is flagged to be updated in light of the new evidence
+    PiMessage = new Vector(_getIncomingStates()); //the vector must have right dimensions
+    //print(inComing.keys.length);
+    // print('incoming nodes for Fetching: ');
+    //inComing.keys.forEach((node){print(node.getName());});
+
+    List<int> kappa = new List(inComing.keys.length); //FIX
+    for(var i =0; i<kappa.length;i++){
+      kappa[i]=0;
+    }
+
+    if(inComing.keys.length != 1) {
+      _recursivePiFetch(kappa, 0);
+    }
+    else{
+      PiMessage = inComing.keys.elementAt(0).getProbability();
+    }
+
+    //print('fetching pi message....');
+    print('our PiMessage is: ' + PiMessage.toString());
+    _ComputePiEvidence();
+
+    //THIS NEED TO BE ADAPTED FOR MULTIPLE PARENT NODES
+  }
+
+  _recursivePiFetch(List<int> LocationTracker,int vectorIndex){
+    /*print('entering recursive loop');
+    print('Vectorindex is: ' + vectorIndex.toString());
+    print('LocationTracker is: ' + LocationTracker.toString());*/
+
+    PiMessage[vectorIndex]=1.0; /*update the actual PiMessage*/
+    for(var i=0; i<LocationTracker.length;i++) {
+      /* print('debug message; index: ' + i.toString());
+      print(inComing.keys.elementAt(i).getProbability());*/
+      PiMessage[vectorIndex] = PiMessage[vectorIndex]*inComing.keys.elementAt(i).getProbability()[LocationTracker[i]];
+    }
+
+    vectorIndex++;
+    LocationTracker[LocationTracker.length-1]++;
+
+    if(vectorIndex<PiMessage.getSize()) { //trivial check to see if we are done
+
+      for (var i = 0; i < LocationTracker.length; i++) {
+        //increase vectorindex and update LocationTracker  /*these loops can have a lot fewer method calls*/ //FIX
+
+        if (LocationTracker[LocationTracker.length -i-1]==inComing.keys.elementAt(LocationTracker.length-i-1).getStateCount()) {
+          LocationTracker[LocationTracker.length - i-1] = 0;
+          LocationTracker[LocationTracker.length - i-2]++;
+        }
+      }
+
+      _recursivePiFetch(LocationTracker,vectorIndex); //recursive call
     }
   }
 
@@ -233,7 +291,7 @@ class node{
 
   // --------------------- No Category ----------------------
 
-  int _getIncomingStates(){ //returns how many states this nodes causes has (ex:  1 parent node A with three states and 1 parent B with 2 states will ensure this returns 6 options: A1B1 A2B1 A3B1 A1B2 A2B2 A3B2)
+  int _getIncomingStates(){ //returns how many states this node's causes have (ex:  1 parent node A with three states and 1 parent B with 2 states will ensure this returns 6 options: A1B1 A2B1 A3B1 A1B2 A2B2 A3B2)
     int incomingStateCount = 1 ;
     inComing.keys.forEach((node){
       incomingStateCount = incomingStateCount*node.getStateCount();

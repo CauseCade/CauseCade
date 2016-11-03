@@ -1,7 +1,6 @@
 import 'dart:math';
 //home brew solution for vector math
 //perhaps look for a more robust pre-existing library to handle this later (for efficiency)
-//TODO: implement linear operations (matrix multiplication etc)
 
 class Matrix2{
 
@@ -62,7 +61,7 @@ class Matrix2{
       return newVector;
     }
     throw new ArgumentError(vectorIn);
-  }
+  } //FIX
 
   identity(){ //should only be called for root nodes and upon initialisation
     for(var i =0; i<rowCount;i++){
@@ -187,7 +186,7 @@ class Vector{
         Buffer.write(' , ');
       }
     }
-    Buffer.write(']\n');
+    Buffer.write(']');
     return Buffer.toString();
   }
 }

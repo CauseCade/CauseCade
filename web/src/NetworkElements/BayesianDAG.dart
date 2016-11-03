@@ -163,6 +163,15 @@ class BayesianDAG{
     print(Buffer.toString());
   }
 
+  checkFlags(){ //this could use some fancier print message
+    print('flagged nodes are given below');
+    NodeList.forEach((node){
+      if(node.getFlaggedStatus()){
+        print('The following Node is Currently Flagged: ' + node.getName());
+      }
+    });
+  }
+
   bool checkCyclic(){
     List<node> copyNodes = new List<node>.from(NodeList);
     List<link> copyLinks = new List<link>.from(LinkList);
@@ -189,13 +198,13 @@ class BayesianDAG{
       });
       for(var i =0;i<holder.length;i++){
 
-        print(holder[i].getEndPoints()[1].getName() + '<-  name of target');
+        //print(holder[i].getEndPoints()[1].getName() + '<-  name of target');
         nodeHolder = holder[i].getEndPoints()[1];
         removeEdge(holder[i]);
 
         if(nodeHolder.getInComing().isEmpty){
           noIncomingEdges.add(nodeHolder);
-          print('found new no incoming node');
+          //print('found new no incoming node');
         }
 
       }
@@ -221,12 +230,24 @@ class BayesianDAG{
 
   //MAIN FUNCTIONALITY (
 
-  updateNetwork(){
-    NodeList.forEach((node){
-      if(node.getFlaggedStatus()){
-        //node.update currently considering implementation that will easily be expandable
+  updateNetwork(){ //This may be changed to a thing that loops over all nodes, as this only updates max 1 nodes per call.
+    //the only problem with that is that the order in which the network is updated matters, as otherwise itll start finding itself working with null values
+    //Will eventually implement method that avoids these problems and allows updating the whole network with one call
+
+    for(var i=0; i<NodeList.length;i++){
+      if(NodeList[i].getFlaggedStatus()){
+        print('> Updating The Network - Propagating Evidence...');
+        print('updating node: ' + NodeList[i].getName());
+        print('fetching Pi Messages...');
+        NodeList[i].FetchPiMessage();
+        /*print('fetching lambda Messages...'); //This is currently not yet implemented - the network can only propagate downwards
+       NodeList[i].FetchLambdaMessage();*/
+        print('Updating Probability...');
+        NodeList[i].UpdatePosterior();
+        print('Single Update Cycle Complete.\n');
+        break;
       }
-    });
+    };
   }
 
   //String representation of the network (very basic, for debugging)
@@ -236,10 +257,9 @@ class BayesianDAG{
     Buffer.write('> Network Representation - Nodes: ' + NodeList.length.toString() + ' Links: ' + LinkList.length.toString() + '\n');
     for(var i =0; i<NodeList.length;i++){
       Buffer.write('Node: ' + NodeList[i].getName() + ' - Probabilities: ' +NodeList[i].getProbability().toString());
-      Buffer.write('\t [outdegree]: ' + outDegree(NodeList[i]).toString() + ' connections ->');
+      Buffer.write('\n \t [outdegree]: ' + outDegree(NodeList[i]).toString() + ' connections ->');
       NodeList[i].getOutGoing().keys.forEach((node){Buffer.write(node.getName() + ',');});
-      Buffer.write('\n');
-      Buffer.write('\t [indegree]: ' + inDegree(NodeList[i]).toString() + ' connections ->');
+      Buffer.write('\n \t [indegree]: ' + inDegree(NodeList[i]).toString() + ' connections ->');
       NodeList[i].getInComing().keys.forEach((node){Buffer.write(node.getName() + ',');});
       Buffer.write('\n');
     }
