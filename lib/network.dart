@@ -3,7 +3,7 @@ import 'package:d3/d3.dart';
 import 'dart:html';
 import 'dart:js';
 import 'dart:svg';
-import 'NetworkInterface.dart';
+import 'package:causecade/network_interface.dart';
 
 var counter = 6;
 
@@ -114,10 +114,10 @@ class Network {
   }
 
   addNewData(){
-    for (var i =0; i < NetworkInfo.length; i++){
-      nodes.add(NetworkInfo[i][0][0]);
-      for (var j = 0; j < NetworkInfo[i][1].length; j++){
-        links.add(NetworkInfo[i][1][j]);
+    for (var i =0; i < networkInfo.length; i++){
+      nodes.add(networkInfo[i][0][0]);
+      for (var j = 0; j < networkInfo[i][1].length; j++){
+        links.add(networkInfo[i][1][j]);
       }
     }
 

@@ -1,6 +1,6 @@
 /*This dart file will contain the node class*/
-import 'Link.dart';
-import 'VectorMath.dart';
+import 'package:causecade/link.dart';
+import 'package:causecade/vector_math.dart';
 
 class node{
 

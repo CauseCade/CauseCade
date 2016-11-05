@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'DataConverter.dart';
+import 'package:causecade/data_converter.dart';
 
 /*This file contains two classes:
  - ModalNodeAdder
@@ -136,18 +136,18 @@ class ModalNodeAdder{
     _buttonholder.append(_addButton);
   }
 
-  setNodeName(Event e){ /*this is currently setup for debugging*/
+  void setNodeName(Event e){ /*this is currently setup for debugging*/
     NodeIDS[0] = (_inputName.value);
     window.console.debug(NodeIDS);
   }
 
-  setTargetName(inputIndex, inputValue){ /*this is currently setup for debugging*/
+  void setTargetName(inputIndex, inputValue){ /*this is currently setup for debugging*/
     LinkTargetIDS.add(inputValue);
     window.console.debug(LinkTargetIDS);
     //linkInputTrackerTargets++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
   }
 
-  addTargetInput(){
+  void addTargetInput(){
     var newLinkElement = new DivElement();
     var newLinkButton = new ButtonElement();
     var newLinkInput = new FormElement();
@@ -190,13 +190,13 @@ class ModalNodeAdder{
     _maincontentTarget.append(newLinkElement);
   }
 
-  setParentName(inputIndex, inputValue){ /*this is currently setup for debugging*/
+  void setParentName(inputIndex, inputValue){ /*this is currently setup for debugging*/
     LinkParentIDS.add(inputValue);
     window.console.debug(LinkParentIDS);
     //linkInputTrackerParents++; /*increases index by 1*/ /*currently means you cannot alter the value of this */
   }
 
-  addParentInput(){
+  void addParentInput(){
     var newLinkElement = new DivElement();
     var newLinkButton = new ButtonElement();
     var newLinkInput = new FormElement();
@@ -239,7 +239,7 @@ class ModalNodeAdder{
     _maincontentParent.append(newLinkElement);
   }
 
-  returnData(){
+  void returnData(){
     Data[0]=(NodeIDS);
     Data[1]=(LinkParentIDS);
     Data[2]=(LinkTargetIDS);
@@ -249,11 +249,11 @@ class ModalNodeAdder{
   }
 
   //remove the modal dialog div's from the dom.
-  hide() {
+  void hide() {
         _content.remove();
   }
   //add the modal dialog div's to the dom
-  show() {
+  void show() {
 
     document.body.append(_content);
   }
@@ -263,7 +263,7 @@ class ModalNodeAdder{
   *//*WIP*//*
 }*/
 
-class welcomeModal { //informative modal that launches when causecade is opened
+class WelcomeModal { //informative modal that launches when causecade is opened
   final DivElement _welcomeModal;
   final ButtonElement _closeButton;
   final ButtonElement _tutorialButton;
@@ -276,7 +276,7 @@ class welcomeModal { //informative modal that launches when causecade is opened
   final DivElement _welcomeMainContentInternal;
   final ImageElement _Logo;
 
-  welcomeModal() :
+  WelcomeModal() :
   //constructor pre-init
         _welcomeModal = new DivElement(),
         _blackOverlay = new DivElement(),
@@ -343,12 +343,12 @@ class welcomeModal { //informative modal that launches when causecade is opened
   }
 
   //remove the modal dialog div's from the dom.
-  hide() {
+  void hide() {
     _welcomeModal.remove();
     _blackOverlay.remove();
   }
   //add the modal dialog div's to the dom
-  show() {
+  void show() {
     document.body.append(_welcomeModal);
     document.body.append(_blackOverlay);
   }

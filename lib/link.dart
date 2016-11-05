@@ -1,5 +1,5 @@
 /*This dart file will contain the link class*/
-import 'Node.dart';
+import 'package:causecade/node.dart';
 
 class link{
 

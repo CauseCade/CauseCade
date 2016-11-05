@@ -24,3 +24,6 @@ doc/api/
 
 # working folders
 GraphTester/
+
+#other
+.analysis_options

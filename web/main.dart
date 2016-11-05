@@ -1,11 +1,8 @@
 
 import 'dart:async';
-import 'NetworkElements/NetworkInterface.dart';
+import 'package:causecade/network_interface.dart';
 
-
-
-main() {
+void main() {
   /*LAUNCH NETWORK*/
   new BayesNetCanvas();
-
 }

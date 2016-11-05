@@ -12,7 +12,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.11.2"
+    version: "1.11.3"
   barback:
     description:
       name: barback
@@ -36,7 +36,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.13.2+1"
   d3:
     description:
       name: d3
@@ -90,13 +90,13 @@ packages:
       name: quiver
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.23.0"
+    version: "0.24.0"
   source_span:
     description:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.3"
+    version: "1.2.4"
   stack_trace:
     description:
       name: stack_trace
@@ -109,4 +109,5 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0+3"
-sdk: ">=1.14.0 <2.0.0"
+sdks:
+  dart: ">=1.19.0 <2.0.0"

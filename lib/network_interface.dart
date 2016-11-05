@@ -1,17 +1,17 @@
-import 'DataConverter.dart';
-import 'Network.dart';
-import 'UI_Buttons.dart';
-import 'card_barchart.dart';
+import 'package:causecade/data_converter.dart';
+import 'package:causecade/network.dart';
+import 'package:causecade/ui_buttons.dart';
+import 'package:causecade/card_barchart.dart';
 import 'dart:html';
-import 'Modals.dart';
+import 'package:causecade/modals.dart';
 /*import 'dart:svg';*/
 import 'package:d3/d3.dart';
-import 'BayesianDAG.dart';
+import 'package:causecade/bayesian_dag.dart';
 /*This should handle interactions with other dart files in NetworkElements*/
 
-List NetworkInfo = new List();
-Network MyNet;
-BayesianDAG MyDAG;
+List networkInfo = new List();
+Network myNet;
+BayesianDAG myDAG;
 
 
 class BayesNetCanvas{
@@ -24,8 +24,8 @@ class BayesNetCanvas{
   ButtonElement load_button;
   ButtonElement node_adder;
  /* Network MyNet;*/
-  welcomeModal WelcomeModal = new welcomeModal();
-  var NetworkHolder = querySelector('#GraphHolder');
+  WelcomeModal welcomeModal = new WelcomeModal();
+  var networkHolder = querySelector('#GraphHolder');
   var svg = new Selection("#GraphHolder").append("svg"); /*svg file we draw on*/
  /* SvgElement svg;*/
 
@@ -34,8 +34,8 @@ class BayesNetCanvas{
     /*GenerateBarchart();*/
     window.onResize.listen((_) => setScreenDimensions());
 
-    MyNet = new Network(svg,width,height);
-    MyDAG = new BayesianDAG();
+    myNet = new Network(svg,width,height);
+    myDAG = new BayesianDAG();
     setScreenDimensions();
 
     //Buttons
@@ -56,40 +56,40 @@ class BayesNetCanvas{
       });
   }
 
-  clearNet(Event q){
-    MyNet.reset();
+  void clearNet(Event q){
+    myNet.reset();
   }
 
-  loadNetwork(Event g){
-    json("Supplementary/Example2.json").then( (input_data) {
-      window.console.debug(input_data["nodes"].elementAt(0).toString()) ;
+  void loadNetwork(Event g){
+    json("Supplementary/Example2.json").then( (inputData) {
+      window.console.debug(inputData["nodes"].elementAt(0).toString()) ;
 /*
       ImplementJson(input_data);
 */
     }, onError: (err) => throw err);
   }
 
-  fitNetwork(Event f){
+  void fitNetwork(Event f){
     setScreenDimensions();
-    MyNet.fitNetwork(width,height);
+    myNet.fitNetwork(width,height);
   }
 
-  updateNodes(Event f){
-    MyNet.addNewData();
+  void updateNodes(Event f){
+    myNet.addNewData();
     window.console.debug("called method updateNodes") ;
   }
 
-  setScreenDimensions(){ /*sets the SVG Dimensions*/
+  void setScreenDimensions(){ /*sets the SVG Dimensions*/
     window.console.debug("set screen dimensions");
 
-    width = NetworkHolder.contentEdge.width;
-    height = NetworkHolder.contentEdge.height;
+    width = networkHolder.contentEdge.width;
+    height = networkHolder.contentEdge.height;
 
     svg
-      ..attr["width"] = width
-      ..attr["height"] = height;
+      ..attr["width"] = width.toString()
+      ..attr["height"] = height.toString();
 
-    MyNet.setSize(width,height);
+    myNet.setSize(width,height);
   }
 }
 
