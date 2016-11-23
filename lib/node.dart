@@ -2,6 +2,7 @@
 import 'package:causecade/link.dart';
 import 'package:causecade/vector_math.dart';
 
+// I might have to move some of the methods in this class to the BayesianDAG to make this class a little more readable
 class node{
 
   String name;

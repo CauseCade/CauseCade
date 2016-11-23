@@ -20,10 +20,10 @@ class Network {
   Selection link;
   Selection node;
   var g;
-  var ActiveSelection;
+  var activeSelection;
 
   /*constructor*/
-  Network(svgIn,width,height) {
+  Network(svgIn,int width,int height) {
 
     svg = svgIn;
 
@@ -74,7 +74,7 @@ class Network {
        });
   }
 
-  refreshData(){
+  void refreshData(){
     link = g.selectAll(".link").data(links).enter().append("svg:marker") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
       ..attr["class"] = "link"
       ..styleFn["stroke-width"] = (d) => math.sqrt(d['value']);
@@ -88,7 +88,7 @@ class Network {
       ..attr["class"] = "circlesvg"
       ..attr["r"] = "8"
       ..styleFn["fill"] = ((d) => color(d['group']));
-/*      ..call((_) => force.drag());*/
+      //..call((_) => force.drag());*/
 
     node.append("text")
       ..attr["dx"] = "10"
@@ -101,8 +101,8 @@ class Network {
 
     node.on("mouseover").listen( (Selection) {
       window.console.debug("Mouseover");
-      ActiveSelection = Selection;
-      window.console.debug(ActiveSelection.toString());
+      activeSelection = Selection;
+      window.console.debug(activeSelection.toString());
       Selected.styleFn["stroke"] = "#1dc3c7";
       svg.styleFn['cursor']="pointer";
     });
@@ -113,7 +113,7 @@ class Network {
     });
   }
 
-  addNewData(){
+  void addNewData(){
     for (var i =0; i < networkInfo.length; i++){
       nodes.add(networkInfo[i][0][0]);
       for (var j = 0; j < networkInfo[i][1].length; j++){
@@ -128,7 +128,7 @@ class Network {
     force.start();
   }
 
-  addNewDataSet(InputDataSet){
+  void addNewDataSet(InputDataSet){
     for(var i =0; i< InputDataSet["nodes"].length;i++){
       nodes.add(InputDataSet["nodes"][i]);
     }
@@ -143,7 +143,7 @@ class Network {
     force.start();
   }
 
-  reset(){ /*WIP*/
+  void reset(){ /*WIP*/
 
     nodes.clear();
     //nodes.add(new JsObject.jsify({"id":"NewNode","group":1}));
@@ -168,18 +168,18 @@ class Network {
     holder.remove();*/
   }
 
-  setSize(widthIn,heightIn){
+  void setSize(widthIn,heightIn){
     force.size = [widthIn, heightIn];
     force.start();
     /*zoom.size = [widthIn, heightIn];*/ /*im not sure if this is actually useful, will revisit this later FIX*/
   }
 
-  rescale(){ /*handles the panning and zooming of the svg*/
+  void rescale(){ /*handles the panning and zooming of the svg*/
     window.console.debug("zoomevent triggered");
     g.attr["transform"] = "translate(" + zoom.translate.elementAt(0).toString() + "," + zoom.translate.elementAt(1).toString() + ")" + "scale(" + zoom.scale.toString() + ")" ;
   }
 
-  fitNetwork(width, height){ /*centers network and scales it to fit on the screen*/ /*WIP*/
+  void fitNetwork(width, height){ /*centers network and scales it to fit on the screen*/ /*WIP*/
     g.attr["transform"] = "translate(0,0)" + "scale(1)" ;
     zoom.scale = 1;
     zoom.translate = [0,0];
@@ -193,16 +193,16 @@ class Network {
     /*window.console.debug(kappa);*/
   }
 
-  getNodesSize(){
+  int getNodesSize(){
     window.console.debug(nodes.length);
     return nodes.length;
   }
 
-  getNodeIndex(StringIn){ /*returns the index of the node target, so the node can be appended to the proper targets (allows users to enter the node name rather than index*/
+  int getNodeIndex(stringIn){ /*returns the index of the node target, so the node can be appended to the proper targets (allows users to enter the node name rather than index*/
 
     window.console.debug("getting node index...");
     for (var i =0; i< nodes.length; i++){
-      if (nodes.elementAt(i)["id"]==StringIn){
+      if (nodes.elementAt(i)["id"]==stringIn){
         window.console.debug("found a match");
         return i;
       }

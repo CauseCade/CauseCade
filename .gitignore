@@ -26,4 +26,4 @@ doc/api/
 GraphTester/
 
 #other
-.analysis_options
+*.analysis_options

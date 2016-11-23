@@ -1,5 +1,5 @@
-import 'package:causecade/node.dart';
-import 'package:causecade/link.dart';
+import 'node.dart';
+import 'link.dart';
 import 'dart:collection';
 
 /*TODO
@@ -9,8 +9,8 @@ import 'dart:collection';
 
 class BayesianDAG{
 
-  List<node> nodeList = new List();
-  List<link> linkList = new List();
+  List<node> NodeList = new List();
+  List<link> LinkList = new List();
 
   BayesianDAG(){
     print("DAG Created!");
@@ -19,19 +19,19 @@ class BayesianDAG{
 
   //basic network query
   int numNodes(){
-    return nodeList.length;
+    return NodeList.length;
   }
 
   List<node> getNodes(){
-    return nodeList;
+    return NodeList;
   }
 
   int numLinks(){
-    return linkList.length;
+    return LinkList.length;
   }
 
   List<link> getLinks(){
-    return linkList;
+    return LinkList;
   }
 
   //detailed node query
@@ -49,15 +49,16 @@ class BayesianDAG{
   }
 
   node findNode(String nameIn){ //returns the node object associated with a name
-    for(var i=0; i<nodeList.length;i++){
-      if (nodeList[i].getName()==nameIn){
-        return nodeList[i];
+    for(var i=0; i<NodeList.length;i++){
+      if (NodeList[i].getName()==nameIn){
+        return NodeList[i];
       }
     };
     print('no node was found, please re-enter your option');
   }
 
-  //this checks whether there is a connection between two nodes (this could be both ways)
+  // this checks whether there is a connection between two nodes
+  // (this could be both ways)
   bool isConnected(node node1, node node2){
     if(node1.getOutGoing()[node2]!=null || node2.getOutGoing()[node1]!=null){
       print('they are connected');
@@ -69,25 +70,26 @@ class BayesianDAG{
     }
   }
 
-  //checks and returns the edge of the node origin to target - note this is a directed check, unlike isConnected
+  //checks and returns the edge of the node origin to target
+  // - note this is a directed check, unlike isConnected
   link getLink(node nodeOrigin,node nodeTarget){
     return nodeOrigin.getOutGoing()[nodeTarget];
   }
 
   //adding and removing nodes and links
-  void insertNode(newName, stateCount){
-    node newNode = new node(newName, stateCount);
-    nodeList.add(newNode);
+  insertNode(newName, stateCount){
+    node NewNode = new node(newName, stateCount);
+    NodeList.add(NewNode);
   }
 
-  void insertLink(node nodeOrigin, node nodeTarget){
-    if (!isConnected(nodeOrigin,nodeTarget)){ //!isConnected(node1, node2)
+  insertLink(node nodeOrigin, node nodeTarget){
+    if (!isConnected(nodeOrigin,nodeTarget)){ /*!isConnected(node1, node2)*/
       link newLink = new link(nodeOrigin,nodeTarget);
 
       nodeOrigin.addOutgoing(nodeTarget,newLink);
       nodeTarget.addIncoming(nodeOrigin,newLink);
 
-      linkList.add(newLink);
+      LinkList.add(newLink);
       print("created link");
     }
     else{
@@ -98,24 +100,25 @@ class BayesianDAG{
   /*needs more verification to see whether this is functional - update links*/
   bool removeNode(String nameIn){
     var removingHolder = new List<link>();
-    for(var i =0; i< nodeList.length;i++){
+    for(var i =0; i< NodeList.length;i++){
 
-      if(nodeList[i].getName()==nameIn){
-        nodeList[i].getOutGoing().values.forEach((link){
+      if(NodeList[i].getName()==nameIn){
+        NodeList[i].getOutGoing().values.forEach((link){
           print(link);
           removingHolder.add(link);
         });
-        nodeList[i].getInComing().values.forEach((link){
+        NodeList[i].getInComing().values.forEach((link){
           print(link);
           removingHolder.add(link);
         });
 
-        for(var j=0; j< removingHolder.length;j++){ //This is done because nodes cant be removed during forEach loop
+        //This is done because nodes cant be removed during forEach loop
+        for(var j=0; j< removingHolder.length;j++){
           removeEdge(removingHolder[j]);
         }
         removingHolder.clear();
 
-        nodeList.removeAt(i);
+        NodeList.removeAt(i);
         print("node removed");
         return true;
       }
@@ -124,23 +127,23 @@ class BayesianDAG{
     return false;
   }
 
-  void removeEdge(link linkIn){
+  removeEdge(link linkIn){
     //this will remove the map value from the vertices' link map
     linkIn.getEndPoints()[0].getOutGoing().remove(linkIn.getEndPoints()[1]);
     linkIn.getEndPoints()[1].getInComing().remove(linkIn.getEndPoints()[0]);
     // this will remove the actual link instance
-    linkList.remove(linkIn);
+    LinkList.remove(linkIn);
     print('removed link');
   }
 
   //searching the network (to see what is reachable) (depth first search)
 
-  void DFS(node startNode,  Set<node> known,Map<node,link> forest ){
+  DFS(node startNode,  Set<node> known,Map<node,link> forest ){
     known.add(startNode);
 
     startNode.getOutGoing().keys.forEach((connectedNode){
       if (!known.contains(connectedNode)){
-        Map<node,link> map ={};
+        var map ={};
         map[connectedNode]=startNode.getOutGoing()[connectedNode];
         forest.addAll(map);
 
@@ -149,23 +152,26 @@ class BayesianDAG{
     });
   }
 
-  void checkNodes(){
-    StringBuffer buffer = new StringBuffer();
-    buffer.write('> Requested Node Status of the Network\n');
+  checkNodes(){
+    StringBuffer Buffer = new StringBuffer();
+    Buffer.write('> Requested Node Status of the Network\n');
     int errorCount=0;
-    nodeList.forEach((node){
+    NodeList.forEach((node){
       if(!node.getLinkMatrixStatus()){
         errorCount++;
-        buffer.write('Node: ' + node.getName() + ' - has an inproperly configured Link Matrix\n');
+        Buffer.write('Node: ' + node.getName() +
+            ' - has an inproperly configured Link Matrix\n');
       }
     });
-    buffer.write('\t['+ errorCount.toString() + '] nodes with inproper LinkMatrix values found, please enter proper values.');
-    print(buffer.toString());
+    Buffer.write('\t['+ errorCount.toString() +
+        '] nodes with inproper LinkMatrix values found,'
+            ' please enter proper values.');
+    print(Buffer.toString());
   }
 
-  void checkFlags(){ //this could use some fancier print message
+  checkFlags(){ //this could use some fancier print message
     print('flagged nodes are given below');
-    nodeList.forEach((node){
+    NodeList.forEach((node){
       if(node.getFlaggedStatus()){
         print('The following Node is Currently Flagged: ' + node.getName());
       }
@@ -173,8 +179,8 @@ class BayesianDAG{
   }
 
   bool checkCyclic(){
-    List<node> copyNodes = new List<node>.from(nodeList);
-    List<link> copyLinks = new List<link>.from(linkList);
+    List<node> copyNodes = new List<node>.from(NodeList);
+    List<link> copyLinks = new List<link>.from(LinkList);
 
     List<link> holder = new List<link>();
     List<link> linkBackup = new List<link>();
@@ -211,7 +217,7 @@ class BayesianDAG{
       holder.clear();
     }
 
-    if(linkList.isEmpty){
+    if(LinkList.isEmpty){
       reintroduceEdges(linkBackup);
       return false;
     }
@@ -222,7 +228,7 @@ class BayesianDAG{
 
   }
 
-  void reintroduceEdges(List<link> edgesToReadd){
+  reintroduceEdges(List<link> edgesToReadd){
     edgesToReadd.forEach((link){
       insertLink(link.getEndPoints()[0],link.getEndPoints()[1]);
     });
@@ -230,20 +236,27 @@ class BayesianDAG{
 
   //MAIN FUNCTIONALITY (
 
-  void updateNetwork(){ //This may be changed to a thing that loops over all nodes, as this only updates max 1 nodes per call.
-    //the only problem with that is that the order in which the network is updated matters, as otherwise itll start finding itself working with null values
-    //Will eventually implement method that avoids these problems and allows updating the whole network with one call
+  updateNetwork(){ // This may be changed to a thing that loops over all nodes,
+    // as this only updates max 1 nodes per call.
+    // the only problem with that is that the order in which the
+    // network is updated matters, as otherwise itll start finding
+    // itself working with null values.
+    // Will eventually implement method that avoids these problems
+    // and allows updating the whole network with one call
 
-    for(var i=0; i<nodeList.length;i++){
-      if(nodeList[i].getFlaggedStatus()){
+    for(var i=0; i<NodeList.length;i++){
+      if(NodeList[i].getFlaggedStatus()){
         print('> Updating The Network - Propagating Evidence...');
-        print('updating node: ' + nodeList[i].getName());
+        print('updating node: ' + NodeList[i].getName());
         print('fetching Pi Messages...');
-        nodeList[i].FetchPiMessage();
-        /*print('fetching lambda Messages...'); //This is currently not yet implemented - the network can only propagate downwards
+        NodeList[i].FetchPiMessage();
+
+        //This is currently not yet implemented
+        // - the network can only propagate downwards
+        /*print('fetching lambda Messages...');
        NodeList[i].FetchLambdaMessage();*/
         print('Updating Probability...');
-        nodeList[i].UpdatePosterior();
+        NodeList[i].UpdatePosterior();
         print('Single Update Cycle Complete.\n');
         break;
       }
@@ -253,19 +266,26 @@ class BayesianDAG{
   //String representation of the network (very basic, for debugging)
 
   String toString(){
-    var buffer = new StringBuffer();
-    buffer.write('> Network Representation - Nodes: ' + nodeList.length.toString() + ' Links: ' + linkList.length.toString() + '\n');
-    for(var i =0; i<nodeList.length;i++){
-      buffer.write('Node: ' + nodeList[i].getName() + ' - Probabilities: ' +nodeList[i].getProbability().toString());
-      buffer.write('\n \t [outdegree]: ' + outDegree(nodeList[i]).toString() + ' connections ->');
-      nodeList[i].getOutGoing().keys.forEach((node){buffer.write(node.getName() + ',');});
-      buffer.write('\n \t [indegree]: ' + inDegree(nodeList[i]).toString() + ' connections ->');
-      nodeList[i].getInComing().keys.forEach((node){buffer.write(node.getName() + ',');});
-      buffer.write('\n');
+    var Buffer = new StringBuffer();
+    Buffer.write('> Network Representation - Nodes: ' +
+        NodeList.length.toString() + ' Links: ' +
+        LinkList.length.toString() + '\n');
+    for(var i =0; i<NodeList.length;i++){
+      Buffer.write('Node: ' + NodeList[i].getName() + ' - Probabilities: ' +
+          NodeList[i].getProbability().toString());
+      Buffer.write('\n \t [outdegree]: ' + outDegree(NodeList[i]).toString() +
+          ' connections ->');
+      NodeList[i].getOutGoing().keys.forEach(
+          (node){Buffer.write(node.getName() + ',');});
+      Buffer.write('\n \t [indegree]: ' + inDegree(NodeList[i]).toString() +
+          ' connections ->');
+      NodeList[i].getInComing().keys.forEach(
+          (node){Buffer.write(node.getName() + ',');});
+      Buffer.write('\n');
     }
 /*
     print(Buffer.toString());
 */
-    return buffer.toString();
+    return Buffer.toString();
   }
 }

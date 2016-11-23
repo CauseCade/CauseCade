@@ -1,12 +1,12 @@
 import 'package:causecade/data_converter.dart';
 import 'package:causecade/network.dart';
-import 'package:causecade/ui_buttons.dart';
 import 'package:causecade/card_barchart.dart';
 import 'dart:html';
 import 'package:causecade/modals.dart';
 /*import 'dart:svg';*/
 import 'package:d3/d3.dart';
 import 'package:causecade/bayesian_dag.dart';
+
 /*This should handle interactions with other dart files in NetworkElements*/
 
 List networkInfo = new List();
@@ -60,8 +60,9 @@ class BayesNetCanvas{
     myNet.reset();
   }
 
+
   void loadNetwork(Event g){
-    json("Supplementary/Example2.json").then( (inputData) {
+    json('/supplementary/Example2.json').then( (inputData) {
       window.console.debug(inputData["nodes"].elementAt(0).toString()) ;
 /*
       ImplementJson(input_data);
