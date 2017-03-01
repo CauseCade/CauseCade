@@ -253,12 +253,12 @@ class BayesianDAG{
 
         //This is currently not yet implemented
         // - the network can only propagate downwards
-        /*print('fetching lambda Messages...');
-       NodeList[i].FetchLambdaMessage();*/
+        print('fetching lambda Messages...');
+        NodeList[i].fetchLambdaMessage();
         print('Updating Probability...');
         NodeList[i].UpdatePosterior();
         print('Single Update Cycle Complete.\n');
-        break;
+        //break; //enable this if you only want one node updating at a time (useful for debugging)
       }
     };
   }
@@ -272,7 +272,7 @@ class BayesianDAG{
         LinkList.length.toString() + '\n');
     for(var i =0; i<NodeList.length;i++){
       Buffer.write('Node: ' + NodeList[i].getName() + ' - Probabilities: ' +
-          NodeList[i].getProbability().toString());
+          NodeList[i].getProbability().toString() + NodeList[i].getStateLabels().toString());
       Buffer.write('\n \t [outdegree]: ' + outDegree(NodeList[i]).toString() +
           ' connections ->');
       NodeList[i].getOutGoing().keys.forEach(

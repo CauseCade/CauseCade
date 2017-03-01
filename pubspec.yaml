@@ -10,9 +10,13 @@ environment:
 dependencies:
   browser: '>=0.10.0 <0.11.0'
   dart_to_js_script_rewriter: '^1.0.1'
+  angular2: ^2.0.0
   d3: '^0.2.0'
   quiver: any
   json: any
 
 transformers:
+- angular2:
+    entry_points: web/main.dart
+    platform_directives: 'package:angular2/src/common/directives.dart#CORE_DIRECTIVES'
 - dart_to_js_script_rewriter
