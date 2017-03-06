@@ -1,6 +1,7 @@
 import 'node.dart';
 import 'link.dart';
 import 'dart:collection';
+import 'package:causecade/vector_math.dart';
 
 /*TODO
 * implement a way to check whether the network has accidentally become cyclic
@@ -248,12 +249,12 @@ class BayesianDAG{
       if(NodeList[i].getFlaggedStatus()){
         print('> Updating The Network - Propagating Evidence...');
         print('updating node: ' + NodeList[i].getName());
-        print('fetching Pi Messages...');
+        // print('fetching Pi Messages...');
         NodeList[i].FetchPiMessage();
 
         //This is currently not yet implemented
         // - the network can only propagate downwards
-        print('fetching lambda Messages...');
+        //  print('fetching lambda Messages...');
         NodeList[i].fetchLambdaMessage();
         print('Updating Probability...');
         NodeList[i].UpdatePosterior();
@@ -261,6 +262,45 @@ class BayesianDAG{
         //break; //enable this if you only want one node updating at a time (useful for debugging)
       }
     };
+  }
+
+  //Enter Hard evidence for a node
+  //Hard Evidence(instantiated) means the probability of the node cannot change]
+  //Node can be both root node and instantiated
+  setEvidence(String nodeName,Vector EvidenceToSet){
+    NodeList.forEach((node){
+      //we choose to let the user give a name,
+      //may change to referencing a node object later on (better performance)
+      if (node.getName()== nodeName){
+        node.setProbability(EvidenceToSet);
+        print('node: ' + node.getName() + ' has been updated (instantiated)'
+            'to probability: ' + node.getProbability().toString());
+      }
+    });
+  }
+
+  //sets the prior probability for the node. This is the probability a root
+  //node will have. This differs from instantiating a node, with the regard that
+  //a root node can still change it's probability in the face of lambda evidence
+  //This method should ONLY be called on root nodes (with no parent).
+  setPrior(String nodeName, Vector PiEvidenceToSet){
+    NodeList.forEach((node){
+      //we choose to let the user give a name,
+      //may change to referencing a node object later on (better performance)
+      if (node.getName()== nodeName){
+        if(node.getEvidenceStatus()){ //informative message
+          print('you are setting a prior for an instantiated node,'
+              'the probability wont be affected until you remove instantiation.');
+        }
+
+        node.setRootStatus(true); //this to inform users this is a root node
+        node.setPiEvidence(PiEvidenceToSet); //set the PiEvidence;
+        node.UpdatePosterior(); //have new evidence come into effect
+
+        print('node: ' + node.getName() + ' has a new Prior Probability: '
+            + node.getProbability().toString());
+      }
+    });
   }
 
   //String representation of the network (very basic, for debugging)

@@ -6,6 +6,8 @@ import 'package:causecade/modals.dart';
 /*import 'dart:svg';*/
 import 'package:d3/d3.dart';
 import 'package:causecade/bayesian_dag.dart';
+import 'package:causecade/example_networks.dart';
+
 
 /*This should handle interactions with other dart files in NetworkElements*/
 
@@ -62,12 +64,14 @@ class BayesNetCanvas{
 
 
   void loadNetwork(Event g){
-    json('/supplementary/Example2.json').then( (inputData) {
+/*    json('/supplementary/Example2.json').then( (inputData) {
       window.console.debug(inputData["nodes"].elementAt(0).toString()) ;
-/*
+*//*
       ImplementJson(input_data);
-*/
-    }, onError: (err) => throw err);
+*//*
+    }, onError: (err) => throw err);*/
+
+  LoadExample_Animals();
   }
 
   void fitNetwork(Event f){
