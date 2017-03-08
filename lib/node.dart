@@ -332,17 +332,26 @@ class node{
     print('posterior is' + Posterior.toString());
   }
 
-/*  // this should only be called when you enter evidence for a node //FIX COMMENTED 01-03-2017 Replaced by setProbability (may need a separate method again later)
-  EnterPiMessage(Vector piMessageIn){
-    if(piMessageIn.getSize()==stateCount){
-      PiMessage = piMessageIn;
-      _ComputePiEvidence();
-     // _FlagOtherNodes(name); //FIX - CHANGED 01-03-2017 (seems already contained in UpdatePosterior)
-    }
-    else{
-      print('sorry you need to have the right dimensionality of your vector');
-    }
-  }*/
+  //TODO: give this a better name + store vector to improve performance
+  Vector sendPiProbability(node NodeToExclude){
+    //the PiProbability must not include the eviudence from the node
+    //Imagine A->B. If B gets evidence it will change A. This change in A could
+    //then influence B again etc
+    //this is a special version of computeLambdaEvidence()
+    Vector PiProbability = new Vector(stateCount);
+    PiProbability.setAll(1.0); //get a clean Vector
+
+    outGoing.keys.forEach((node) {
+      if(node!=NodeToExclude) {
+        PiProbability= PiProbability*node.sendLambdaMessage(this);
+      }
+    });
+
+    //This is essentiall the posterior, but now with the evidence from the node
+    //we are excluding removed (this is apparent from the calculation.
+    //the only difference is that we have a slightlychange LambdaEvidence
+    return (PiEvidence*PiProbability);
+  }
 
   //this will be called if another node in the network has been updated
   //and this one is flagged to be updated in light of the new evidence
@@ -365,7 +374,7 @@ class node{
 
   _RecursivePiMessage(double probabilityOld, int currentParent, int Limit,Vector PiMessage){
     for( int i =0; i<inComing.keys.elementAt(currentParent).getStateCount();i++){
-      double probability=inComing.keys.elementAt(currentParent).getProbability()[i]*probabilityOld;
+      double probability=inComing.keys.elementAt(currentParent).sendPiProbability(this)[i]*probabilityOld;
 
       //print('Start-------------------');
       //print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
@@ -391,67 +400,6 @@ class node{
       }
     }
   }
-
-/*  //TODO: adapt for any number of parents
-  fetchLambdaMessage(){
-
-    if(!isInstantiated) {
-      int RelativePosition;
-      int referenceInt;
-     // Vector LambdaMessageTemp= new Vector();
-
-
-      outGoing.keys.forEach((node) { //FIX this wastes performance
-        //we must check the OUTGOING nodes (they  send the lambda message to the node before it!
-
-
-        if(node==flaggingNode) {
-          print('lambda message from flagged node: ' + flaggingNode.getName().toString());
-          Vector LambdaMessageJoint = flaggingNode
-              .sendLambdaMessage(); //this joint
-          // message needs to be separated for the node we are interested in
-
-          for(int i =0;i<flaggingNode.getInComing().length;i++){
-            print(flaggingNode.getInComing().keys.elementAt(i));
-            if (this==flaggingNode.getInComing().keys.elementAt(i)){
-              print('mathc foundL: ' + i.toString());
-              referenceInt=i;
-            }
-          }
-
-          if (outGoing.keys.length!=1) {
-            print(outGoing.keys.length.toString()+' this is the length ' );
-            print('lambda class updating');
-            for (int i = 0; i < stateCount; i++) {
-              LambdaMessage[i]=0.0;
-
-             _RecursiveLambdaMessage(1.0,0,flaggingNode.getInComing().length,referenceInt,i,LambdaMessage,false);
-            }
-          }
-
-          else {
-            print('only one daughter node, easy Lambda message');
-            LambdaMessage = LambdaMessageJoint;
-          }
-          print('---->>>>>> we are passing lambda message upwards: ' + LambdaMessage.toString());
-          //});
-          ComputeLambdaEvidence();
-        }
-      });
-    }
-    else{
-      print('this node is instantiated, and cannot receive lambda evidence');
-    }
-  }*/
-
-
-
-  /*Vector sendPiMessage(){ //WIP
-    Vector PiMessageToSend = new Vector(stateCount);
-    PiMessageToSend=Posterior/
-    return PiMessageToSend;
-  }
-*/
 
   //This sends the lambda message for ANOTHER node. Dont confuse it with
   //the lambda message for this node.
@@ -510,17 +458,17 @@ class node{
       //lambda message to with the right index
       if((inComing.keys.elementAt(currentParent)==ParentOfInterest)&&(i==StateOfInterest)){
         relevant=true;
-        //print('relevance found: ' + currentParent.toString()+ 'state: ' + StateOfInterest.toString());
+        print('relevance found: ' + currentParent.toString()+ 'state: ' + StateOfInterest.toString());
       }
       //We should set it to false for the other states of this variable,
       //but not for any other layers (hard to explain)
       else if((inComing.keys.elementAt(currentParent)==ParentOfInterest)){
         relevant=false;
-        //print('no relevance');
+        print('no relevance');
       }
       else{
         probability=inComing.keys.elementAt(currentParent).getProbability()[i]*probability; //TODO: risky move, check if correct
-        //print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
+        print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
       }
       // print('Start-------------------');
       // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
@@ -535,12 +483,12 @@ class node{
       else{
         //print('at limit');
         if(relevant){
-          //print('Found; we are adding to LambdaMessage: ' + probability.toString());
-          for(int i=0; i<LambdaMessageToChange.getSize();i++) {
+          print('Found; we are adding to LambdaMessage: ' + probability.toString());
+          for(int i=0; i<ProbabilityVector.getSize();i++) {
             if(ProbabilityVector[i]!=null) { //TODO: very inefficient
               LambdaMessageToChange[StateOfInterest] = LambdaMessageToChange[StateOfInterest] + probability*ProbabilityVector[i];
               ProbabilityVector[i]=null;
-              //print(ProbabilityVector.toString());
+              print(ProbabilityVector.toString());
               break;
             }
           }

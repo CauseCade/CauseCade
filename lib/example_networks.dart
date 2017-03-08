@@ -41,10 +41,10 @@ import 'package:causecade/vector_math.dart';
       print('                 tester Cyclic - 1');
 
       if (myDAG.checkCyclic()) {
-        print('this network is cyclic, dammit');
+          print('this network is cyclic, dammit');
       }
       else {
-        print('this network aint cyclic, cool!');
+          print('this network aint cyclic, cool!');
       }
 
       //print(myDAG.getNodes()[5].getLinkMatrixInfo());
@@ -224,6 +224,13 @@ import 'package:causecade/vector_math.dart';
 
       myDAG.updateNetwork();
       print('<--  updated network - TESTING MULTIPLE PARENTS 2 ->');
+      print(myDAG.toString());
+
+      rootProb3.setValues([0.0,0.0,1.0]);
+      myDAG.setEvidence('BodyCovering',rootProb3);
+
+      myDAG.updateNetwork();
+      print('<--  updated network - TESTING MULTIPLE PARENTS 3 ->');
       print(myDAG.toString());
 
       print(myDAG.getNodes()[2].getMatrixLabels());
