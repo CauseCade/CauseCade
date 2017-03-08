@@ -3,11 +3,6 @@ import 'link.dart';
 import 'dart:collection';
 import 'package:causecade/vector_math.dart';
 
-/*TODO
-* implement a way to check whether the network has accidentally become cyclic
-* find a way to refer to nodes by their name
-*/
-
 class BayesianDAG{
 
   List<node> NodeList = new List();
@@ -179,6 +174,18 @@ class BayesianDAG{
     });
   }
 
+  bool checkFlagsStatus(){
+    for(int i=0; i<NodeList.length;i++){
+      if(NodeList[i].getFlaggedStatus()){
+        //print('we found at least one flag');
+        return true;
+
+      }
+    };
+
+    return false;
+  }
+
   bool checkCyclic(){
     List<node> copyNodes = new List<node>.from(NodeList);
     List<link> copyLinks = new List<link>.from(LinkList);
@@ -237,6 +244,7 @@ class BayesianDAG{
 
   //MAIN FUNCTIONALITY (
 
+
   updateNetwork(){ // This may be changed to a thing that loops over all nodes,
     // as this only updates max 1 nodes per call.
     // the only problem with that is that the order in which the
@@ -244,23 +252,29 @@ class BayesianDAG{
     // itself working with null values.
     // Will eventually implement method that avoids these problems
     // and allows updating the whole network with one call
+    int iterationTracker=1;
+    while(checkFlagsStatus()){
+      print('<<<<<<<<<<<<< We are on Iteration: '+ iterationTracker.toString() +' >>>>>>>>>>>>>>>>>>>>>>');
+      for(var i=0; i<NodeList.length;i++) {
+        if (NodeList[i].getFlaggedStatus()) {
+          print('> Updating The Network - Propagating Evidence...');
+          print('updating node: ' + NodeList[i].getName());
+          // print('fetching Pi Messages...');
+          NodeList[i].ComputePiEvidence();
 
-    for(var i=0; i<NodeList.length;i++){
-      if(NodeList[i].getFlaggedStatus()){
-        print('> Updating The Network - Propagating Evidence...');
-        print('updating node: ' + NodeList[i].getName());
-        // print('fetching Pi Messages...');
-        NodeList[i].FetchPiMessage();
+          //This is currently not yet implemented
+          // - the network can only propagate downwards
+          //  print('fetching lambda Messages...');
+          NodeList[i].ComputeLambdaEvidence();
 
-        //This is currently not yet implemented
-        // - the network can only propagate downwards
-        //  print('fetching lambda Messages...');
-        NodeList[i].fetchLambdaMessage();
-        print('Updating Probability...');
-        NodeList[i].UpdatePosterior();
-        print('Single Update Cycle Complete.\n');
-        //break; //enable this if you only want one node updating at a time (useful for debugging)
+          NodeList[i].UpdatePosterior();
+          print('Updating Probability...' +
+              NodeList[i].getProbability().toString());
+          print('Single Update Cycle Complete.\n');
+          //break; //enable this if you only want one node updating at a time (useful for debugging)
+        }
       }
+      iterationTracker++;
     };
   }
 

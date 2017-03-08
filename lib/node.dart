@@ -38,6 +38,8 @@ class node{
   //sent out to other nodes
   Vector LambdaMessage; //this should be set to 1 by default, which equates to no evidence
   Vector PiMessage; //this should be set to 1 by default, which equates to no evidence*/
+  /*List<Vector> LambdaMessageHolder; //this will hold the lambda messages received //TODO: consider
+  //this is required to allow for adequate piMessage Generation.*/
 
   // ------------- CONSTRUCTOR --------------
 
@@ -53,8 +55,8 @@ class node{
       PiMessage[i]=1.0; //this is the default and is equivalent to no evidence
       LambdaMessage[i]=1.0; //this is the default and is equivalent to no evidence
     }
-    _ComputePiEvidence();
-    _ComputeLambdaEvidence();
+    //_ComputePiEvidence();
+    ComputeLambdaEvidence();
   }
 
   // ------------- OTHER METHODS --------------
@@ -103,6 +105,8 @@ class node{
     // is entered. This means other nodes can (logically) no longer affect it.
     Posterior=(observedProbability);
     Posterior.SumToOne();
+    LambdaEvidence=Posterior; //TODO: done at 08-17
+    PiEvidence=Posterior;//TODO: done at 08-17
     isInstantiated=true;
     flaggingNode=null; //We now have no more memory of what updated the node
     _FlagOtherNodes();// Networks needs to be updated
@@ -343,9 +347,8 @@ class node{
   //this will be called if another node in the network has been updated
   //and this one is flagged to be updated in light of the new evidence
   FetchPiMessage(){
-
-    if (isInstantiated){
-      PiMessage=Posterior;
+    if(isRootNode){
+      print('This is a root node, no Pi evidence change required.');
     }
     else{
       PiMessage = new Vector(_getIncomingStates());
@@ -353,24 +356,25 @@ class node{
 
 
       //the vector must have right dimensions
+      inComing.keys.forEach((node){print("incoming nodes(Pi)"+ node.getName());});
       _RecursivePiMessage(1.0,0,ParentNodeCount,PiMessage);
+
+      print('our PiMessage is: ' + PiMessage.toString());
     }
-    print('our PiMessage is: ' + PiMessage.toString());
-    _ComputePiEvidence();
   }
 
   _RecursivePiMessage(double probabilityOld, int currentParent, int Limit,Vector PiMessage){
     for( int i =0; i<inComing.keys.elementAt(currentParent).getStateCount();i++){
       double probability=inComing.keys.elementAt(currentParent).getProbability()[i]*probabilityOld;
 
-      // print('Start-------------------');
-      // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
-      // print('our probability is '+probability.toString());
-      // print('our limit is '+Limit.toString());
+      //print('Start-------------------');
+      //print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
+      //print('our probability is '+probability.toString());
+      //print('our limit is '+Limit.toString());
 
       if(currentParent+1<Limit) {
-        // print('is this broek?');
-        // print('END-------------------');
+        //print('is this broek?');
+        //print('END-------------------');
         _RecursivePiMessage(probability, currentParent+1,Limit, PiMessage);
       }
       else{
@@ -388,13 +392,13 @@ class node{
     }
   }
 
-  //TODO: adapt for any number of parents
+/*  //TODO: adapt for any number of parents
   fetchLambdaMessage(){
 
     if(!isInstantiated) {
       int RelativePosition;
       int referenceInt;
-      // Vector LambdaMessageTemp= new Vector();
+     // Vector LambdaMessageTemp= new Vector();
 
 
       outGoing.keys.forEach((node) { //FIX this wastes performance
@@ -421,7 +425,7 @@ class node{
             for (int i = 0; i < stateCount; i++) {
               LambdaMessage[i]=0.0;
 
-              _RecursiveLambdaMessage(1.0,0,flaggingNode.getInComing().length,referenceInt,i,LambdaMessage,false);
+             _RecursiveLambdaMessage(1.0,0,flaggingNode.getInComing().length,referenceInt,i,LambdaMessage,false);
             }
           }
 
@@ -431,29 +435,93 @@ class node{
           }
           print('---->>>>>> we are passing lambda message upwards: ' + LambdaMessage.toString());
           //});
-          _ComputeLambdaEvidence();
+          ComputeLambdaEvidence();
         }
       });
     }
     else{
       print('this node is instantiated, and cannot receive lambda evidence');
     }
+  }*/
+
+
+
+  /*Vector sendPiMessage(){ //WIP
+    Vector PiMessageToSend = new Vector(stateCount);
+    PiMessageToSend=Posterior/
+    return PiMessageToSend;
+  }
+*/
+
+  //This sends the lambda message for ANOTHER node. Dont confuse it with
+  //the lambda message for this node.
+  Vector sendLambdaMessage(node NodeIn){
+    // NodeIn = node requesting evidence, which must be a parent of this node
+    Vector lambdaToSend = new Vector(NodeIn.getStateCount());
+    //this lambdaToSend must have a probability for each state of the requesting
+    //parent node. dimensionality=NodeIn.getStateCount();
+    //print('Lambda Process: Generating Lambda Message by: ' + name);
+    //First reduce the LinkMatrix to 1xn matrix with
+    //n being amount of states of all parents. ex:
+    // P(0.1)|[0.3][0.5][0.5] -> [0.1*0.3+0.9*0.7][0.1*0.5+0.9*0.5][0.1*0.5+0.9*0.5]
+    // P(0.9)|[0.7][0.5][0.5]
+    //print('Lambda Process: Found ReducedMatrix: ' + LinkMatrix.toString());
+    Vector ReducedMatrix= new Vector(LinkMatrix.getColumnCount());
+    for (int i=0; i<LinkMatrix.getColumnCount();i++){
+      double sum=0.0;
+      for(int j=0; j<LinkMatrix.getRowCount();j++){
+        sum=sum+LinkMatrix[j][i]*LambdaEvidence[j];
+      }
+      ReducedMatrix[i]=sum;
+    }//reduced Matrix is now a 1xn matrix, which we need to further work on.
+    //print('Lambda Process: Found ReducedMatrix: ' + ReducedMatrix.toString());
+    //In the case of a single parent, this reducedMatrix is simply the
+    //lambda evidence, but in the case of multiple partens (e.g. A and B) it
+    //contains the joint probabilities. If we want only the evidence for A
+    //we must sum over all states of B.
+
+    if(inComing.keys.length==1){
+      lambdaToSend=ReducedMatrix;
+      //print('Lambda Process: This node only has one parent.');
+    }
+    else{ //case > 1 (case = 0 should never happen)
+      //print('Lambda Process: This node has multiple parents.');
+      for (int i = 0; i < NodeIn.getStateCount(); i++) {
+        lambdaToSend[i]=0.0;
+        //print('Lambda Process: fetching state: ' + i.toString());
+        _RecursiveLambdaMessage(1.0,0,inComing.keys.length,NodeIn,i,lambdaToSend,ReducedMatrix,false);
+      }
+      //this generates a new lambdaToSend
+    }
+
+    //lambdaToSend.SumToOne(); //optional rescaling;
+    print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
+    return lambdaToSend;
   }
 
-  _RecursiveLambdaMessage(double probabilityIn,int currentParent,int Limit, int ParentOfInterest,int StateOfInterest, Vector LambdaMessageToChange,bool relevant){
-    for( int i =0; i<flaggingNode.inComing.keys.elementAt(currentParent).getStateCount();i++){
+  //TODO: automate this for all states of interest - would reduce compuational time
+  _RecursiveLambdaMessage(double probabilityIn,int currentParent,int Limit, node ParentOfInterest,int StateOfInterest, Vector LambdaMessageToChange,Vector ProbabilityVector,bool relevant){
+    for( int i =0; i<inComing.keys.elementAt(currentParent).getStateCount();i++){
 
-      if((currentParent==ParentOfInterest)&&(i==StateOfInterest)){
+      double probability = probabilityIn; //to prevent other iterations of loop
+      //modifying this value
+
+      //We are looking to sum all the states with the parent we are sending
+      //lambda message to with the right index
+      if((inComing.keys.elementAt(currentParent)==ParentOfInterest)&&(i==StateOfInterest)){
         relevant=true;
-        print('relevance found: ' + currentParent.toString());
+        //print('relevance found: ' + currentParent.toString()+ 'state: ' + StateOfInterest.toString());
+      }
+      //We should set it to false for the other states of this variable,
+      //but not for any other layers (hard to explain)
+      else if((inComing.keys.elementAt(currentParent)==ParentOfInterest)){
+        relevant=false;
+        //print('no relevance');
       }
       else{
-        relevant=false;
-        print('no relevance');
+        probability=inComing.keys.elementAt(currentParent).getProbability()[i]*probability; //TODO: risky move, check if correct
+        //print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
       }
-
-      double probability=flaggingNode.inComing.keys.elementAt(currentParent).getProbability()[i]*probabilityIn;
-
       // print('Start-------------------');
       // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
       // print('our probability is '+probability.toString());
@@ -462,115 +530,94 @@ class node{
       if(currentParent+1<Limit) {
         // print('is this broek?');
         // print('END-------------------');
-        _RecursiveLambdaMessage(probability, currentParent+1,Limit,ParentOfInterest,StateOfInterest,PiMessage,true);
+        _RecursiveLambdaMessage(probability, currentParent+1,Limit,ParentOfInterest,StateOfInterest,LambdaMessageToChange,ProbabilityVector,relevant);
       }
       else{
         //print('at limit');
         if(relevant){
-          LambdaMessage[StateOfInterest]=LambdaMessage[StateOfInterest]+probability;
+          //print('Found; we are adding to LambdaMessage: ' + probability.toString());
+          for(int i=0; i<LambdaMessageToChange.getSize();i++) {
+            if(ProbabilityVector[i]!=null) { //TODO: very inefficient
+              LambdaMessageToChange[StateOfInterest] = LambdaMessageToChange[StateOfInterest] + probability*ProbabilityVector[i];
+              ProbabilityVector[i]=null;
+              //print(ProbabilityVector.toString());
+              break;
+            }
+          }
+          //print(LambdaMessageToChange.toString());
         }
-        // print('piMessage at limit' + PiMessage.toString());
         // print('END-------------------');
       }
     }
   }
 
-  fetchLambdaMessageOLD(){
+  // --------------------- Computing Pi&Lambda Evidences ----------------------
 
-    if(!isInstantiated) {
-      outGoing.keys.forEach((node) {
-        //we must check the OUTGOING nodes (they  send the lambda message to the node before it!
-
-
-        if(node==flaggingNode) {
-          print('lambda message from flagged node: ' + flaggingNode.toString());
-          Vector LambdaMessageJoint = flaggingNode
-              .sendLambdaMessage(); //this joint
-          // message needs to be separated for the node we are interested in
-
-          if (name == 'Animal') {
-            print('lambda class updating');
-            for (int i = 0; i < stateCount; i++) {
-              //separating other evidence
-              LambdaMessage[i] =
-                  LambdaMessageJoint[i] * node
-                      .getInComing()
-                      .keys
-                      .elementAt(0)
-                      .getProbability()[0] + LambdaMessageJoint[i + 5] * node
-                      .getInComing()
-                      .keys
-                      .elementAt(0)
-                      .getProbability()[1];
-            }
-          }
-
-          else {
-            LambdaMessage = LambdaMessageJoint;
-          }
-          print('we are passing lambda message upwards: ' + LambdaMessage.toString());
-          //});
-          _ComputeLambdaEvidence();
-        }
-      });
+  //Compute the Pi Evidence (vector of dimensionality(StateCount)
+  ComputePiEvidence(){
+    //P(Node)=P(Node|Evidence)*P(Evidence)
+    //This operation is just matrix-vector multiplication
+    //The hard part is generating the PiMessage (in the case of multiple parents)
+    if((!isInstantiated)&&(!isRootNode)) {
+      print('Pi Process: START - Computing Pi Evidence');
+      FetchPiMessage();
+      PiEvidence = LinkMatrix * PiMessage;
+      print('Pi Process: END - Pi Evidence Set: ' +
+          PiEvidence.toString());
+    }
+    else if(isInstantiated) {
+      print('this node is instantiated, so Pi evidence has no effect.');
     }
     else{
-      print('this node is instantiated, and cannot receive lambda evidence');
+      print('this node is a root node, so Pi evidence has no effect.');
     }
   }
 
-  Vector sendLambdaMessage(){
+  //Compute the Lambda Evidence (vector of dimensionality(StateCount)
+  ComputeLambdaEvidence(){
+    if(!isInstantiated) {
+      print('Lambda Process: START - Computing Lambda Evidence');
+      LambdaMessage.setAll(1.0); //get a clean Lambda Message
 
-    Vector lambdaToSend= new Vector(LinkMatrix.getColumnCount());
-    for (int i=0; i<LinkMatrix.getColumnCount();i++){
-      double sum=0.0;
-      for(int j=0; j<LinkMatrix.getRowCount();j++){
-        sum=sum+LinkMatrix[j][i]*Posterior[j];
-      }
-      lambdaToSend[i]=sum;
+      //Lambda Evidence is the product of the lambda messages from all the
+      //daughter nodes. we must multiply them together for this to work
+      outGoing.keys.forEach((node) {
+        //sendLambdaMessage calls the daughter nodes to send the lambda message
+        //for this specific node. This then handles the multiplication.
+        LambdaMessage = LambdaMessage * node.sendLambdaMessage(this);
+      });
+
+      //The lambda evidence then just setting it to this product
+      //remember that .updatePosterior has to be called in other for this to
+      //result in the change of the posterior of the node.
+
+      LambdaEvidence = LambdaMessage;
+      print('Lambda Process: END - Lambda Evidence Set: ' +
+          LambdaEvidence.toString());
     }
-    print(lambdaToSend.toString());
-    return lambdaToSend;
-  }
-
-  _ComputePiEvidence(){
-    PiEvidence = LinkMatrix*PiMessage;
-  }
-
-  _ComputeLambdaEvidence(){
-    LambdaEvidence=LambdaMessage;
-    // If C is a node with Children D1,D2,D3,...,Dn then lambda evidence =
-/*    // 1 if the node is instatiated.
-    // if not instantiated then it is the product of all the
-    // lambda messages from the children
-
-    //This holds the value that will be assigned as lambda evidence
-    //after a few loops
-    Vector LambdaEvidenceHolder = new Vector(stateCount);
-    LambdaEvidenceHolder.setAll(1.0);
-    outGoing.keys.forEach((node){
-      LambdaEvidenceHolder = LambdaEvidenceHolder*node.getLambdaMessage(this);
-      //all vectors should be of size equal to the amount of states of this node
-    });
-    //LambdaEvidence = LambdaMessageHolder;
-    LambdaEvidence = LambdaMessage; //FIX*/
+    else{
+      print('this node is instantiated, so Lambda evidence has no effect.');
+    }
   }
 
   //flags all directly connected node to be updated anc passes
   //from which node it has received evidence (to prevent circling evidence))
   _FlagOtherNodes(){
+    if(flaggingNode!=null) {
+      print('the flagging node was: ' + flaggingNode.getName());
+    }
     outGoing.keys.forEach((node){
-      if(node!=flaggingNode) {
-        //print('this is: ' + this.getName().toString());
-        //print('and we are flagging(child): ' + node.getName().toString());
+      if(node!=(flaggingNode)&&(node.getEvidenceStatus()!=true)) {
+        print('this node is: ' + this.getName().toString());
+        print('and we are flagging(child): ' + node.getName().toString() + ' <');
         node.setFlagged(this);
       }
     });
     //uncomment when Upwards propagation is implemented
     inComing.keys.forEach((node){
-      if(node!=flaggingNode) {
-        // print('this is: ' + this.getName().toString());
-        //print('and we are flagging(parent): ' + node.getName().toString());
+      if(node!=(flaggingNode)&&(node.getEvidenceStatus()!=true)) {
+        print('this node is: ' + this.getName().toString());
+        print('and we are flagging(parent): ' + node.getName().toString() + ' <');
         node.setFlagged(this);
       }
     });
