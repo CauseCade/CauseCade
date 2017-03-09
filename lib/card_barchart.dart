@@ -1,59 +1,34 @@
-import 'package:d3/d3.dart';
-import 'package:quiver/iterables.dart' show max;
+import 'node.dart';
+import 'package:chartjs/chartjs.dart';
+//import 'dart:math' as math; //FIX
+import 'dart:html';
+import 'package:causecade/network_interface.dart'; //to acces global variables
 
-var margin = new Margin(top: 20, right: 20, bottom: 30, left: 40);
+
 var width = 300;
-var height = 300;
+var height = 300; //?
 
-GenerateBarchart() {
+void GenerateBarchart(node NodeIn) {
+  node Node = NodeIn;
+  //var rnd = new math.Random();
+  //var months = <String>["January", "February", "March", "April", "May", "June"];
+  List ProbabilityHolderList = new List();
+  for(int i=0;i<Node.getProbability().getSize();i++){
+    ProbabilityHolderList.add(Node.getProbability()[i]);
+  }
 
-  var x = new OrdinalScale()..rangeRoundBands([0, width], 0.1);
+  var data = new LinearChartData(labels: Node.getStateLabels(), datasets: <ChartDataSets>[
+    new ChartDataSets(
+        label: 'Info of Node: ' + Node.getName(),
+        backgroundColor: "rgba(223,30,90,1.0)",
+        data: ProbabilityHolderList)]);
 
-  var y = new LinearScale<num>()..range = [height, 0];
+  var config = new ChartConfiguration(
+      type: 'bar', data: data, options: new ChartOptions(responsive: true));
 
-  var xAxis = new Axis()
-    ..scale = x
-    ..orient = "bottom";
+  new Chart(querySelector('#BarChartHolder') as CanvasElement, config);
+  HtmlElement Holder= querySelector('BarChartHolder');
+  Holder.style.height='65%';
 
-  var yAxis = new Axis()
-    ..scale = y
-    ..orient = "left"
-    ..ticks(10, "%");
-
-  var svg = (new Selection("#node_info").append("svg")
-    ..attr["width"] = "${width + margin.left + margin.right}"
-    ..attr["height"] = "${height + margin.top + margin.bottom}").append("g")
-    ..attr["transform"] = "translate(${margin.left},${margin.top})";
-
-  tsv("src/NetworkElements/data.tsv", type).then((List data) {
-    x.domain = data.map((d) => d['letter']);
-    y.domain =  [0, max(data.map((d) => d['frequency']))];
-
-    svg.append("g")
-      ..attr["class"] = "x axis"
-      ..attr["transform"] = "translate(0,${height})"
-      ..call(xAxis);
-
-    var g = svg.append("g")
-      ..attr["class"] = "y axis"
-      ..call(yAxis);
-    g.append("text")
-      ..attr["transform"] = "rotate(-90)"
-      ..attr["y"] = "6"
-      ..attr["dy"] = ".71em"
-      ..style["text-anchor"] = "end"
-      ..text = "Frequency";
-
-    svg.selectAll(".bar").data(data).enter().append("rect")
-      ..attr["class"] = "bar"
-      ..attrFn["x"] = ((d) => x(d['letter']))
-      ..attr["width"] = "${x.rangeBand}"
-      ..attrFn["y"] = ((d) => y(d['frequency']))
-      ..attrFn["height"] = (d) => height - y(d['frequency']);
-  }, onError: (err) => throw err);
 }
 
-type(d) {
-  d['frequency'] = double.parse(d['frequency']);
-  return d;
-}

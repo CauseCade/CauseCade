@@ -33,6 +33,8 @@
   <!--stylesheet-->
   <link rel="stylesheet" href="styles.css">
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
 </head>
 <style>
 
@@ -119,10 +121,10 @@
 
         </div>
         <div id="node_info" class="mdl-card__actions mdl-card--border">
-
+          <canvas id="BarChartHolder"></canvas>
         </div>
       </div>
-      <div id="GraphHolder"></div>
+      <canvas id="GraphHolder"></canvas>
 
       <button id="node_adder" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--pink-500" style="color: #fafafa">
         <i class="material-icons">add</i>

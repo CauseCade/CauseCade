@@ -33,7 +33,7 @@ class BayesNetCanvas{
 
   BayesNetCanvas(){
 
-    /*GenerateBarchart();*/
+    //GenerateBarchart();
     window.onResize.listen((_) => setScreenDimensions());
 
     myNet = new Network(svg,width,height);
@@ -75,8 +75,7 @@ class BayesNetCanvas{
   }
 
   void fitNetwork(Event f){
-    setScreenDimensions();
-    myNet.fitNetwork(width,height);
+  GenerateBarchart(myDAG.getNodes()[0]);
   }
 
   void updateNodes(Event f){
