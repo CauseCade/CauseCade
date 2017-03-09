@@ -1,12 +1,11 @@
 import 'package:causecade/data_converter.dart';
 import 'package:causecade/network.dart';
-import 'package:causecade/card_barchart.dart';
+
 import 'dart:html';
 import 'package:causecade/modals.dart';
 /*import 'dart:svg';*/
 import 'package:d3/d3.dart';
 import 'package:causecade/bayesian_dag.dart';
-import 'package:causecade/example_networks.dart';
 
 
 /*This should handle interactions with other dart files in NetworkElements*/
@@ -42,14 +41,14 @@ class BayesNetCanvas{
 
     //Buttons
 
-    reset_button = querySelector("#button_reset");
+   /* reset_button = querySelector("#button_reset");
     reset_button.onClick.listen(clearNet);
 
     save_button = querySelector("#button_save");
     save_button.onClick.listen(fitNetwork);
 
     load_button = querySelector("#button_load");
-    load_button.onClick.listen(loadNetwork);
+    load_button.onClick.listen(loadNetwork);*/
 
     node_adder = querySelector("#node_adder");
     node_adder.onClick.listen((event) {
@@ -71,7 +70,7 @@ class BayesNetCanvas{
 *//*
     }, onError: (err) => throw err);*/
 
-  LoadExample_Animals();
+    LoadExample_Animals();
   }
 
   void fitNetwork(Event f){

@@ -1,0 +1,34 @@
+<div class="mdl-card mdl-shadow--4dp" style="min-height: 50px" id="main_card">
+    <div class="mdl-card__supporting-text" id="controlmenu">
+        Controls
+        <div id="button_holder">
+
+            <button id="button_save" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  " disabled>
+                Save
+            </button>
+
+            <button  (click)="loadData()" id="button_load" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect ">
+                Load
+            </button>
+
+            <button id="button_reset" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect " disabled>
+                Reset
+            </button>
+        </div>
+        <div id="input_main">
+            <form action="#">
+                <div class="mdl-textfield mdl-js-textfield">
+                    <input (keyup.enter)="onKey($event)" class="mdl-textfield__input" type="text" id="sample1">
+                    <label class="mdl-textfield__label" for="sample1">Search Node...</label>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    <div *ngIf=HasNodeSelected class="mdl-card__supporting-text">
+        <span class="header_card">Node Information</span>
+
+    </div>
+    <canvas [style.display]="HasNodeSelected ? 'inline' : 'none'"id="BarChartHolder"></canvas>
+
+</div>
