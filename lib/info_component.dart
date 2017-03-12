@@ -1,6 +1,7 @@
 import 'package:angular2/core.dart';
+import 'package:angular2_components/angular2_components.dart';
 import 'node.dart';
-import 'package:causecade/network_interface.dart';
+import 'package:causecade/app_component.dart';
 import 'package:causecade/card_barchart.dart';
 import 'package:causecade/example_networks.dart';
 import 'package:chartjs/chartjs.dart';
@@ -13,12 +14,15 @@ import 'package:chartjs/chartjs.dart';
                       margin-left: 4em ;
                       margin-top: 4em ;
                     }
-                   '''])
-class AppComponent {
+                   '''],
+    directives: const [materialDirectives],
+    providers: const [materialProviders])
+class InfoComponent {
   var name = 'Angular';
   node SelectedNode;
   Chart ChartHolder;
   bool HasNodeSelected;
+
 
   //when the ''LOAD'' button is clicked
   loadData(){

@@ -368,7 +368,7 @@ class node{
       inComing.keys.forEach((node){print("incoming nodes(Pi)"+ node.getName());});
       _RecursivePiMessage(1.0,0,ParentNodeCount,PiMessage);
 
-      print('our PiMessage is: ' + PiMessage.toString());
+      //print('our PiMessage is: ' + PiMessage.toString());
     }
   }
 
@@ -443,7 +443,7 @@ class node{
     }
 
     //lambdaToSend.SumToOne(); //optional rescaling;
-    print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
+    //print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
     return lambdaToSend;
   }
 
@@ -458,17 +458,17 @@ class node{
       //lambda message to with the right index
       if((inComing.keys.elementAt(currentParent)==ParentOfInterest)&&(i==StateOfInterest)){
         relevant=true;
-        print('relevance found: ' + currentParent.toString()+ 'state: ' + StateOfInterest.toString());
+        //print('relevance found: ' + currentParent.toString()+ 'state: ' + StateOfInterest.toString());
       }
       //We should set it to false for the other states of this variable,
       //but not for any other layers (hard to explain)
       else if((inComing.keys.elementAt(currentParent)==ParentOfInterest)){
         relevant=false;
-        print('no relevance');
+        //print('no relevance');
       }
       else{
         probability=inComing.keys.elementAt(currentParent).getProbability()[i]*probability; //TODO: risky move, check if correct
-        print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
+        //print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
       }
       // print('Start-------------------');
       // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
@@ -483,12 +483,12 @@ class node{
       else{
         //print('at limit');
         if(relevant){
-          print('Found; we are adding to LambdaMessage: ' + probability.toString());
+          //print('Found; we are adding to LambdaMessage: ' + probability.toString());
           for(int i=0; i<ProbabilityVector.getSize();i++) {
             if(ProbabilityVector[i]!=null) { //TODO: very inefficient
               LambdaMessageToChange[StateOfInterest] = LambdaMessageToChange[StateOfInterest] + probability*ProbabilityVector[i];
               ProbabilityVector[i]=null;
-              print(ProbabilityVector.toString());
+              //print(ProbabilityVector.toString());
               break;
             }
           }
@@ -507,24 +507,24 @@ class node{
     //This operation is just matrix-vector multiplication
     //The hard part is generating the PiMessage (in the case of multiple parents)
     if((!isInstantiated)&&(!isRootNode)) {
-      print('Pi Process: START - Computing Pi Evidence');
+      //print('Pi Process: START - Computing Pi Evidence');
       FetchPiMessage();
       PiEvidence = LinkMatrix * PiMessage;
-      print('Pi Process: END - Pi Evidence Set: ' +
-          PiEvidence.toString());
+      //print('Pi Process: END - Pi Evidence Set: ' +
+       //   PiEvidence.toString());
     }
     else if(isInstantiated) {
-      print('this node is instantiated, so Pi evidence has no effect.');
+      //print('this node is instantiated, so Pi evidence has no effect.');
     }
     else{
-      print('this node is a root node, so Pi evidence has no effect.');
+      //print('this node is a root node, so Pi evidence has no effect.');
     }
   }
 
   //Compute the Lambda Evidence (vector of dimensionality(StateCount)
   ComputeLambdaEvidence(){
     if(!isInstantiated) {
-      print('Lambda Process: START - Computing Lambda Evidence');
+      //print('Lambda Process: START - Computing Lambda Evidence');
       LambdaMessage.setAll(1.0); //get a clean Lambda Message
 
       //Lambda Evidence is the product of the lambda messages from all the
@@ -540,11 +540,11 @@ class node{
       //result in the change of the posterior of the node.
 
       LambdaEvidence = LambdaMessage;
-      print('Lambda Process: END - Lambda Evidence Set: ' +
-          LambdaEvidence.toString());
+      //print('Lambda Process: END - Lambda Evidence Set: ' +
+      //    LambdaEvidence.toString());
     }
     else{
-      print('this node is instantiated, so Lambda evidence has no effect.');
+      //print('this node is instantiated, so Lambda evidence has no effect.');
     }
   }
 
@@ -552,20 +552,20 @@ class node{
   //from which node it has received evidence (to prevent circling evidence))
   _FlagOtherNodes(){
     if(flaggingNode!=null) {
-      print('the flagging node was: ' + flaggingNode.getName());
+      //print('the flagging node was: ' + flaggingNode.getName());
     }
     outGoing.keys.forEach((node){
       if(node!=(flaggingNode)&&(node.getEvidenceStatus()!=true)) {
-        print('this node is: ' + this.getName().toString());
-        print('and we are flagging(child): ' + node.getName().toString() + ' <');
+        //print('this node is: ' + this.getName().toString());
+        //print('and we are flagging(child): ' + node.getName().toString() + ' <');
         node.setFlagged(this);
       }
     });
     //uncomment when Upwards propagation is implemented
     inComing.keys.forEach((node){
       if(node!=(flaggingNode)&&(node.getEvidenceStatus()!=true)) {
-        print('this node is: ' + this.getName().toString());
-        print('and we are flagging(parent): ' + node.getName().toString() + ' <');
+        //print('this node is: ' + this.getName().toString());
+        //print('and we are flagging(parent): ' + node.getName().toString() + ' <');
         node.setFlagged(this);
       }
     });

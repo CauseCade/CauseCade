@@ -3,9 +3,9 @@ import 'package:d3/d3.dart';
 import 'dart:html';
 import 'dart:js';
 import 'dart:svg';
-import 'package:causecade/network_interface.dart';
+import 'package:causecade/app_component.dart';
 
-var counter = 6;
+var counter = 6; //not sure what this is //TODO
 
 
 class Network {
@@ -31,7 +31,7 @@ class Network {
 
     force
     ..charge = -120
-    ..linkDistance = 20
+    ..linkDistance = 35
     ..size = [width, height];
 
     /*var kappa =new JsObject.jsify({"id":"InitialNode","group":1});
@@ -58,7 +58,9 @@ class Network {
     /*when zoom or pan is detected, call rescale method*/
       zoom.onZoom.listen((_) => rescale());
 
-     refreshData();
+
+    refreshData();
+    print('Network View is refreshing');
 
     /*this handles updating the network svg positions*/
      force.onTick.listen((_) {
@@ -75,12 +77,15 @@ class Network {
   }
 
   void refreshData(){
+    print('refreshData() called');
     link = g.selectAll(".link").data(links).enter().append("svg:marker") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
       ..attr["class"] = "link"
-      ..styleFn["stroke-width"] = (d) => math.sqrt(d['value']);
+      ..styleFn["fill"] = color(16)
+      ..styleFn["stroke-width"] = ((d) => math.sqrt(d['value']));
 
 
-    node = g.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
+
+  node = g.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
         ..attr["class"]= "node";
     //node = g.selectAll(".node").data(nodes).exit(); //testing this
 
@@ -100,25 +105,23 @@ class Network {
       ..text = (d) => d['id'];
 
     node.on("mouseover").listen( (Selection) {
-      window.console.debug("Mouseover");
-      activeSelection = Selection;
-      window.console.debug(activeSelection.toString());
-      Selected.styleFn["stroke"] = "#1dc3c7";
+      window.console.debug(node.toString());
+      node.styleFn['fill']=color(6);
       svg.styleFn['cursor']="pointer";
     });
     node.on("mouseout").listen((d) {
-
-
       svg.styleFn['cursor']="default";
     });
   }
 
   void addNewData(){
-    for (var i =0; i < networkInfo.length; i++){
-      nodes.add(networkInfo[i][0][0]);
-      for (var j = 0; j < networkInfo[i][1].length; j++){
-        links.add(networkInfo[i][1][j]);
-      }
+    //Adds the new nodes present in networkInfo
+    for (var i =0; i < networkInfo[0][0].length; i++){
+      nodes.add(networkInfo[0][0][i]);
+    }
+    //Adds the new links present in networkInfo
+    for (var j = 0; j < networkInfo[0][1].length; j++){
+      links.add(networkInfo[0][1][j]);
     }
 
     force.nodes = nodes;

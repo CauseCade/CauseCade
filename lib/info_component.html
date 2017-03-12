@@ -3,27 +3,13 @@
         Controls
         <div id="button_holder">
 
-            <button id="button_save" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  " disabled>
-                Save
-            </button>
+            <material-button raised>Save</material-button>
 
-            <button  (click)="loadData()" id="button_load" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect ">
-                Load
-            </button>
+            <material-button (click)="loadData()" raised>Load</material-button>
 
-            <button id="button_reset" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect " disabled>
-                Reset
-            </button>
+            <material-button raised>Reset</material-button>
         </div>
-        <div id="input_main">
-            <form action="#">
-                <div class="mdl-textfield mdl-js-textfield">
-                    <input (keyup.enter)="onKey($event)" class="mdl-textfield__input" type="text" id="sample1">
-                    <label class="mdl-textfield__label" for="sample1">Search Node...</label>
-                </div>
-            </form>
-
-        </div>
+        <material-input style="padding-bottom: 0px" (keyup.enter)="onKey($event)" floatingLabel label="Search Node..."></material-input>
     </div>
     <div *ngIf=HasNodeSelected class="mdl-card__supporting-text">
         <span class="header_card">Node Information</span>

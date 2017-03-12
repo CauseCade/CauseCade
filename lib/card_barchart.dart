@@ -2,7 +2,7 @@ import 'node.dart';
 import 'package:chartjs/chartjs.dart';
 //import 'dart:math' as math; //FIX
 import 'dart:html';
-import 'package:causecade/network_interface.dart'; //to acces global variables
+import 'package:causecade/app_component.dart'; //to acces global variables
 
 
 var width = 300;
