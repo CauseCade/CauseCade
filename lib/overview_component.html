@@ -1,4 +1,4 @@
-<div  class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em"> <!--*ngIf=HasNodeSelected-->
+<div [class.hidden]="ShouldBeHidden" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em"> <!--*ngIf=HasNodeSelected-->
 
     <div class="mdl-card__actions mdl-card--border">
         Node Information
@@ -39,6 +39,4 @@
             <material-chip>{{node.getName()}}</material-chip>
         </material-chips>
     </div>
-
-
 </div>

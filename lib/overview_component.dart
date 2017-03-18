@@ -26,7 +26,7 @@ class OverviewComponent implements OnInit{
 
   node SelectedNode;
   Chart ChartHolder;
-  bool HasNodeSelected;
+  bool ShouldBeHidden;
   bool IsRootNode; //holds information about the selected node
   bool HasEvidence; //holds information about the selected node
   List IncomingNodes; //holds information about the selected node
@@ -36,16 +36,29 @@ class OverviewComponent implements OnInit{
 
    ngOnInit(){
     print('node overview for: ' + _routeParams.get('id').toString()); //fetch searched string
-    SelectedNode = myDAG.findNode(_routeParams.get('id'));
+    if(_routeParams.get('id')!=null) {
+      print('not null, byos');
+      SelectedNode = myDAG.findNode(_routeParams.get('id'));
+      ChartHolder = GenerateBarchart(SelectedNode);
+
+      IsRootNode = SelectedNode.getRootStatus();
+      HasEvidence = SelectedNode.getEvidenceStatus();
+      IncomingNodes = SelectedNode.getParents();
+      OutGoingNodes = SelectedNode.getDaughters();
+      makeBarChart();
+    }
+    else{
+      //else, hide the component
+      ShouldBeHidden=true;
+    }
+
+  }
+
+  makeBarChart(){
     ChartHolder = GenerateBarchart(SelectedNode);
-    HasNodeSelected=true;
-    ChartHolder = GenerateBarchart(SelectedNode);
-    IsRootNode = SelectedNode.getRootStatus();
-    HasEvidence = SelectedNode.getEvidenceStatus();
-    IncomingNodes = SelectedNode.getParents();
-    OutGoingNodes = SelectedNode.getDaughters();
   }
 /*
+
   //this allows the user to manually type a node they want info about
   onKey(dynamic event){
     SelectedNode = myDAG.findNode(event.target.value);

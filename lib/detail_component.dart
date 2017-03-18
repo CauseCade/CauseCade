@@ -24,7 +24,7 @@ class DetailComponent implements OnInit {
   final RouteParams _routeParams;
 
   node SelectedNode;
-  bool HasNodeSelected;
+  bool ShouldBeHidden;
   bool IsRootNode;
 
   //holds information about the selected node
@@ -43,11 +43,17 @@ class DetailComponent implements OnInit {
   ngOnInit() {
     print('node overview for: ' +
         _routeParams.get('id').toString()); //fetch searched string
-    SelectedNode = myDAG.findNode(_routeParams.get('id'));
-    HasNodeSelected = true;
-    IsRootNode = SelectedNode.getRootStatus();
-    HasEvidence = SelectedNode.getEvidenceStatus();
-    IncomingNodes = SelectedNode.getParents();
-    OutGoingNodes = SelectedNode.getDaughters();
+    if(_routeParams.get('id')!=null) {
+      print('not null, byos');
+      SelectedNode = myDAG.findNode(_routeParams.get('id'));
+      IsRootNode = SelectedNode.getRootStatus();
+      HasEvidence = SelectedNode.getEvidenceStatus();
+      IncomingNodes = SelectedNode.getParents();
+      OutGoingNodes = SelectedNode.getDaughters();
+    }
+    else{
+      //else, we should hide this component
+      ShouldBeHidden=true;
+    }
   }
 }

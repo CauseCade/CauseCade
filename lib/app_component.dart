@@ -42,7 +42,6 @@ class AppComponent implements OnInit{
   var svg;
   String NodeName;
 
-
   AppComponent(){
     print('Appcomponent created');
   }
@@ -62,8 +61,12 @@ class AppComponent implements OnInit{
   }
 
   onKey(dynamic event) {
-    NodeName=event.target.value; //saves entered string
-    myDAG.findNode(event.target.value); //prints if error
+    if(myDAG.findNode(event.target.value)!=null){ //then node found
+      NodeName=event.target.value; //then we use this string
+    }
+    else{
+      NodeName=null;
+    }
   }
 
   loadNodeAdder(){
