@@ -192,6 +192,22 @@ class node{
     return inComing;
   }
 
+  List<node> getParents(){
+    List<node> nodeHolder = new List<node>();
+    inComing.keys.forEach((node){
+      nodeHolder.add(node);
+    });
+    return nodeHolder;
+  }
+
+  List<node> getDaughters(){
+    List<node> nodeHolder = new List<node>();
+    outGoing.keys.forEach((node){
+      nodeHolder.add(node);
+    });
+    return nodeHolder;
+  }
+
   // --------------- Changes to Network Structure --------------
 
   //to be called each time something fundamental regarding the link matrix

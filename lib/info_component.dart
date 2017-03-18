@@ -22,6 +22,10 @@ class InfoComponent {
   node SelectedNode;
   Chart ChartHolder;
   bool HasNodeSelected;
+  bool IsRootNode; //holds information about the selected node
+  bool HasEvidence; //holds information about the selected node
+  List IncomingNodes; //holds information about the selected node
+  List OutGoingNodes;//holds information about the selected node
 
 
   //when the ''LOAD'' button is clicked
@@ -36,9 +40,16 @@ class InfoComponent {
     if (SelectedNode!=null) {
       print(SelectedNode.getName());
 
+      IsRootNode = SelectedNode.getRootStatus();
+      HasEvidence = SelectedNode.getEvidenceStatus();
+      IncomingNodes = SelectedNode.getParents();
+      OutGoingNodes = SelectedNode.getDaughters();
+
+      //Handling Updating the Bar Chart
       if(ChartHolder!=null){updateBarChart(ChartHolder,SelectedNode);}
       else{
         HasNodeSelected=true;
+
         ChartHolder = GenerateBarchart(SelectedNode);
 
       }

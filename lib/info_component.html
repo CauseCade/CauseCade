@@ -11,10 +11,44 @@
         </div>
         <material-input style="padding-bottom: 0px" (keyup.enter)="onKey($event)" floatingLabel label="Search Node..."></material-input>
     </div>
-    <div *ngIf=HasNodeSelected class="mdl-card__supporting-text">
-        <span class="header_card">Node Information</span>
-
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        Node Information
     </div>
     <canvas [style.display]="HasNodeSelected ? 'inline' : 'none'"id="BarChartHolder"></canvas>
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        Node Status
+    </div>
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        <acx-scorecard
+                selectable
+                [selected]=IsRootNode
+                label="Is Root Node:"
+                value={{IsRootNode}}
+                description="Node has no parents">
+        </acx-scorecard>
+        <acx-scorecard
+                selectable
+                [selected]=HasEvidence
+                label="has Evidence: "
+                value={{HasEvidence}}
+                description="State has been observed">
+        </acx-scorecard>
+    </div>
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        Parent Nodes
+    </div>
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        <material-chips *ngFor="let node of IncomingNodes">
+            <material-chip>{{node.getName()}}</material-chip>
+        </material-chips>
+    </div>
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        Daughter Nodes
+    </div>
+    <div *ngIf=HasNodeSelected class="mdl-card__actions mdl-card--border">
+        <material-chips *ngFor="let node of OutGoingNodes">
+            <material-chip>{{node.getName()}}</material-chip>
+        </material-chips>
+    </div>
 
 </div>

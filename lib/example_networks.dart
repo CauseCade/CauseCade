@@ -182,13 +182,13 @@ import 'package:causecade/data_converter.dart';
 
 
 
-      print('--------------------------- STARTING UPDATES ----------------------');
+      //print('--------------------------- STARTING UPDATES ----------------------');
       myDAG.checkNodes();
       myDAG.checkFlags();
 
       myDAG.updateNetwork();
-      print('<--  updated network  ->');
-      print(myDAG.toString());
+      //print('<--  updated network  ->');
+      //print(myDAG.toString());
       /*for (int i=0;i<2;i++){
     print(myDAG.getNodes()[2].getInComing().keys.elementAt(i).getName().toString());
   }*/
@@ -199,14 +199,14 @@ import 'package:causecade/data_converter.dart';
       rootProb2.setValues([0.0,1.0]);
       myDAG.setEvidence('Speed',rootProb2);
       myDAG.checkFlags();
-      print('<--  updating network - TESTING MULTIPLE PARENTS ->');
+      //print('<--  updating network - TESTING MULTIPLE PARENTS ->');
       myDAG.updateNetwork();
-      print('<--  updated string - TESTING MULTIPLE PARENTS ->');
-      print(myDAG.toString());
+      //print('<--  updated string - TESTING MULTIPLE PARENTS ->');
+      //print(myDAG.toString());
 
 // Checking Upwards Propagation (from bottom node)
 
-      print('<--  updating network - TESTING UPSTREAM INFERENCE ->');
+      //print('<--  updating network - TESTING UPSTREAM INFERENCE ->');
       rootProb2.setValues([1.0,0.0]); //RESET SPEED NODE
       myDAG.setEvidence('Speed',rootProb2);
       Vector rootProb3 =new Vector(3);
@@ -215,8 +215,8 @@ import 'package:causecade/data_converter.dart';
 
       myDAG.checkFlags();
       myDAG.updateNetwork();
-      print('<--  updated string - TESTING UPSTREAM INFERENCE ->');
-      print(myDAG.toString());
+      //print('<--  updated string - TESTING UPSTREAM INFERENCE ->');
+      //print(myDAG.toString());
 
       // Checking Multiple Parents 2
 
@@ -224,19 +224,19 @@ import 'package:causecade/data_converter.dart';
       myDAG.setEvidence('Speed',rootProb2);
 
       myDAG.updateNetwork();
-      print('<--  updated network - TESTING MULTIPLE PARENTS 2 ->');
-      print(myDAG.toString());
+     // print('<--  updated network - TESTING MULTIPLE PARENTS 2 ->');
+     // print(myDAG.toString());
 
       rootProb3.setValues([0.0,0.0,1.0]);
       myDAG.setEvidence('BodyCovering',rootProb3);
 
       myDAG.updateNetwork();
-      print('<--  updated network - TESTING MULTIPLE PARENTS 3 ->');
-      print(myDAG.toString());
+     // print('<--  updated network - TESTING MULTIPLE PARENTS 3 ->');
+     // print(myDAG.toString());
 
-      print(myDAG.getNodes()[2].getMatrixLabels());
+    //  print(myDAG.getNodes()[2].getMatrixLabels());
       // print(myDAG.getNodes()[2].getMatrixIndexes());
-      print(myDAG.getNodes()[2].getLinkMatrixInfo());
+     // print(myDAG.getNodes()[2].getLinkMatrixInfo());
 
       visualiseNetwork();
   }
