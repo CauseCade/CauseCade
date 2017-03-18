@@ -16,11 +16,12 @@
         </div>
 
         <div>
+
             <div class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs_menu">
                 <div id="MenuOptions" class="mdl-tabs__tab-bar">
-                    <a href="#starks-panel" class="mdl-tabs__tab is-active">Overview</a>
-                    <a href="#lannisters-panel" class="mdl-tabs__tab">Details</a>
-                    <a href="#targaryens-panel" class="mdl-tabs__tab">Edit</a>
+                    <a href="#starks-panel" [routerLink]="['Overview', {id: NodeName}]" class="mdl-tabs__tab is-active">Overview</a>
+                    <a href="#lannisters-panel" [routerLink]="['Detail', {id: NodeName}]" class="mdl-tabs__tab">Details</a>
+                    <a href="#targaryens-panel" [routerLink]="['Edit', {id: NodeName}]" class="mdl-tabs__tab">Edit</a>
                 </div>
             </div>
 
@@ -35,9 +36,22 @@
     </header>
 
     <main class="mdl-layout__content">
-        <div>
-            <net-info>Angular Goes here...</net-info>
+
+        <div class="mdl-card mdl-shadow--4dp" style="min-height: 50px" id="main_card">
+            <div class="mdl-card__supporting-text" id="controlmenu">
+                Controls
+                <div id="button_holder">
+
+                    <material-button raised>Save</material-button>
+
+                    <material-button (click)="loadData()" raised>Load</material-button>
+
+                    <material-button raised>Reset</material-button>
+                </div>
+                <material-input style="padding-bottom: 0px" (keyup.enter)="onKey($event)" floatingLabel label="Search Node..."></material-input>
+            </div>
         </div>
+        <router-outlet></router-outlet>
 
         <div id="GraphHolder"></div>
 
