@@ -3,13 +3,15 @@
         <material-expansionpanel-set>
             <material-expansionpanel name="Set Evidence/Observation">
                 <div>
-                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setObservationValue(i,$event)" required label="Value {{i}}"></material-input>
+                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setObservationValue(i,$event)" (blur)="setObservationValue(i,$event)" required label="Value {{i}}"></material-input>
                 </div>
+                <material-button (click)="setObservation()" raised class="red">Set Observation</material-button>
             </material-expansionpanel>
             <material-expansionpanel name="Set Prior">
                 <div>
-                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setPriorValue(i,$event)" required label="Value {{i}}"></material-input>
+                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setPriorValue(i,$event)" (blur)="setPriorValue(i,$event)" required label="Value {{i}}"></material-input>
                 </div>
+                <material-button (click)="setPrior()" raised class="red">Set Prior</material-button>
             </material-expansionpanel>
             <material-expansionpanel name="Add Link (new Parent)">
                 <div>
@@ -36,13 +38,20 @@
                 </div>
                 <material-button (click)="pushNewLabels()" raised class="red">Set Labels</material-button>
             </material-expansionpanel>
+            <!--<material-expansionpanel name="Set LinkMatrix">
+                <div>
+                    <material-input  leadingText=">" *ngFor="let label of LabelOld; let i=index" (keyup.enter)="setMatrixValue(i,$event)" (blur)="setNewLabel(i,$event)" required label="New Label">
+
+                    </material-input>
+                </div>
+                <material-button (click)="pushNewMatrix()" raised class="red">Set Matrix</material-button>
+            </material-expansionpanel>-->
+            <material-expansionpanel name="Change Amount of States/Events">
+                    <material-input (keyup.enter)="setNewStateCountValue($event)" (blur)="setNewStateCountValue($event)" required label="New Amount"></material-input>
+                    <material-button (click)="setNewStateCount()" raised class="red">Set New Amount</material-button>
+            </material-expansionpanel>
+
         </material-expansionpanel-set>
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        Change LinkMatrix
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        Change Amount of States
     </div>
     <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
     <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>

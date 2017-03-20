@@ -29,6 +29,9 @@ class EditComponent implements OnInit {
 
   Vector Observation; //these will be used
   Vector Prior;
+  Matrix2 LinkMatrix;
+
+  int state_count_new;
   List<double> ObservationList;
   List<double> PriorList;
   List<double> Probability = new List<double>();
@@ -93,7 +96,8 @@ class EditComponent implements OnInit {
     IncomingNodes = SelectedNode.getParents();
     OutGoingNodes = SelectedNode.getDaughters();
     StateCount = SelectedNode.getStateCount();
-    LabelOld = SelectedNode.getStateLabels();
+    LinkMatrix=SelectedNode.getLinkMatrix();
+    fetchOldLabels();
     LabelNew= new List<String>(StateCount);
 
    fetchLinks();
@@ -108,6 +112,16 @@ class EditComponent implements OnInit {
     }
   }
 
+  fetchOldLabels(){
+    LabelOld = new List<String>(StateCount);
+    for(int i=0;i<StateCount;i++){
+      LabelOld[i]='not yet defined';
+    }
+    for(int i=0;i<SelectedNode.getStateLabels().length;i++){
+      LabelOld[i]=SelectedNode.getStateLabels()[i];
+    }
+  }
+
   fetchLinks(){
     LinkList.clear();
     SelectedNode.getInComing().values.forEach((link){
@@ -118,20 +132,17 @@ class EditComponent implements OnInit {
     });
   }
 
-  //TODO: find a better implementation (that cant result in user error)
+
   void setPriorValue(int index, dynamic event){
     PriorList[index] = double.parse(event.target.value);
     print(event.target.value.toString());
-    if(index==StateCount-1){
-      setPrior();
-      print('set new Prior by user');
-    }
   }
 
   //actually set the value
   void setPrior(){
     Prior.setValues(PriorList);
     SelectedNode.setPiEvidence(Prior); //Sets the prior.
+    SelectedNode.setRootStatus(true);
     //node will now have isRootNode=true;
   }
 
@@ -139,10 +150,6 @@ class EditComponent implements OnInit {
   void setObservationValue(int index, dynamic event){
     ObservationList[index] = double.parse(event.target.value);
     print(event.target.value.toString());
-    if(index==StateCount-1){
-      setObservation();
-      print('set new Observation by user');
-    }
   }
 
   void setObservation(){
@@ -158,6 +165,10 @@ class EditComponent implements OnInit {
   void pushNewLabels(){
     SelectedNode.setStateLabels(LabelNew);
   }
+  void pushNewMatrix(){
+    SelectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
+    //matrix. If no changes are made in the ui this wont change anything.
+  }
 
   void updateEdits(){
     myDAG.updateNetwork();
@@ -166,6 +177,17 @@ class EditComponent implements OnInit {
 
   void printNetworkToConsole(){
     print(myDAG.toString());
+  }
+
+  void setNewStateCountValue(dynamic event){
+    state_count_new = int.parse(event.target.value);
+  }
+
+  //TODO: make this bulletproof, currently just breaks a lot of things, not
+  // very user friendly at all
+  void setNewStateCount(){
+    SelectedNode.setStateCount(state_count_new,LabelOld);
+    print('updated the new count, but please change labels');
   }
 
 }

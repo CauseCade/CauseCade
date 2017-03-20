@@ -92,4 +92,5 @@ class AppComponent implements OnInit{
 
     myNet.setSize(width,height);
   }
+
 }

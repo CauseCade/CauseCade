@@ -57,6 +57,7 @@ class node{
     }
     //_ComputePiEvidence();
     ComputeLambdaEvidence();
+
   }
 
   // ------------- OTHER METHODS --------------
