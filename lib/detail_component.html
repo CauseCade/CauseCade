@@ -1,18 +1,33 @@
 <div [class.hidden]="ShouldBeHidden" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em">
     <div class="mdl-card__actions mdl-card--border">
-        Daughter Nodes
+        Lambda and Pi Evidence
     </div>
+    <canvas id="BarChartHolder"></canvas>
     <div class="mdl-card__actions mdl-card--border">
         Parent Nodes
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        Lambda Evidence
+        <material-list>
+            <material-list-item  *ngFor="let node of IncomingNodes"  (trigger)="print('node')"> <!--(trigger)="selectColor('red')"-->
+                {{node.getName()}}
+            </material-list-item>
+        </material-list>
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        Pi Evidence
+        Daughter Nodes
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        Other
+        <material-list>
+            <material-list-item  *ngFor="let node of OutGoingNodes" > <!--(trigger)="selectColor('red')"-->
+                {{node.getName()}}
+            </material-list-item>
+        </material-list>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        Is properly Configured: {{SelectedNode.getLinkMatrixStatus()}}
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        Flagged last by Node: {{FlaggingName}}
     </div>
 
 </div>

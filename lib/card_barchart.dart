@@ -8,6 +8,8 @@ import 'package:causecade/app_component.dart'; //to acces global variables
 var width = 300;
 var height = 300; //?
 
+//------------- THIS could be made more flexible -----------------------------
+
 Chart GenerateBarchart(node NodeIn) {
   node Node = NodeIn;
   //var rnd = new math.Random();
@@ -30,24 +32,32 @@ Chart GenerateBarchart(node NodeIn) {
   return myChart;
 }
 
-updateBarChart(Chart ChartIn, node NodeIn){
-  node Node = NodeIn;
-  //var rnd = new math.Random();
-  //var months = <String>["January", "February", "March", "April", "May", "June"];
-  List ProbabilityHolderList = new List();
-  for(int i=0;i<Node.getProbability().getSize();i++){
-    ProbabilityHolderList.add(Node.getProbability()[i]);
+Chart GenerateEvidenceBarChart(node NodeIn){
+
+  List LambdaHolderList = new List();
+  List PiHolderList = new List();
+  /*Vector LambdaVector;
+  Vector PiVector;*/
+
+  for(int i=0;i<NodeIn.getStateCount();i++){
+    LambdaHolderList.add(NodeIn.getLambdaEvidence()[i]);
+    PiHolderList.add(NodeIn.getPiEvidence()[i]);
   }
 
-  var data = new LinearChartData(labels: Node.getStateLabels(), datasets: <ChartDataSets>[
+  var data = new LinearChartData(labels: NodeIn.getStateLabels(), datasets: <ChartDataSets>[
     new ChartDataSets(
-        label: 'Node: ' + Node.getName(),
+        label: 'Lambda Evidence of Node: ' + NodeIn.getName(),
         backgroundColor: "rgba(223,30,90,1.0)",
-        data: ProbabilityHolderList)]);
+        data: LambdaHolderList),
+    new ChartDataSets(
+      label: 'Pi Evidence of Node: ' + NodeIn.getName(),
+      backgroundColor: "rgba(30,30,90,1.0)",
+      data: PiHolderList)
+  ]);
 
   var config = new ChartConfiguration(
       type: 'bar', data: data, options: new ChartOptions(responsive: true));
 
-  ChartIn.config=config;
-  ChartIn.update();
+  Chart myChart = new Chart(querySelector('#BarChartHolder') as CanvasElement, config);
+  return myChart;
 }

@@ -34,50 +34,27 @@ class OverviewComponent implements OnInit{
 
   OverviewComponent(this._routeParams);
 
-   ngOnInit(){
-    print('node overview for: ' + _routeParams.get('id').toString()); //fetch searched string
-    if(_routeParams.get('id')!=null) {
-      print('not null, byos');
-      SelectedNode = myDAG.findNode(_routeParams.get('id'));
-      ChartHolder = GenerateBarchart(SelectedNode);
+ ngOnInit(){
+  print('node overview for: ' + _routeParams.get('id').toString()); //fetch searched string
+  if(_routeParams.get('id')!=null) {
+    print('not null, byos');
+    SelectedNode = myDAG.findNode(_routeParams.get('id'));
+    ChartHolder = GenerateBarchart(SelectedNode);
 
-      IsRootNode = SelectedNode.getRootStatus();
-      HasEvidence = SelectedNode.getEvidenceStatus();
-      IncomingNodes = SelectedNode.getParents();
-      OutGoingNodes = SelectedNode.getDaughters();
-      makeBarChart();
-    }
-    else{
-      //else, hide the component
-      ShouldBeHidden=true;
-    }
+    IsRootNode = SelectedNode.getRootStatus();
+    HasEvidence = SelectedNode.getEvidenceStatus();
+    IncomingNodes = SelectedNode.getParents();
+    OutGoingNodes = SelectedNode.getDaughters();
+    makeBarChart();
+  }
+  else{
+    //else, hide the component
+    ShouldBeHidden=true;
+  }
 
   }
 
   makeBarChart(){
     ChartHolder = GenerateBarchart(SelectedNode);
   }
-/*
-
-  //this allows the user to manually type a node they want info about
-  onKey(dynamic event){
-    SelectedNode = myDAG.findNode(event.target.value);
-    if (SelectedNode!=null) {
-      print(SelectedNode.getName());
-
-      IsRootNode = SelectedNode.getRootStatus();
-      HasEvidence = SelectedNode.getEvidenceStatus();
-      IncomingNodes = SelectedNode.getParents();
-      OutGoingNodes = SelectedNode.getDaughters();
-
-      //Handling Updating the Bar Chart
-      if(ChartHolder!=null){updateBarChart(ChartHolder,SelectedNode);}
-      else{
-        HasNodeSelected=true;
-
-        ChartHolder = GenerateBarchart(SelectedNode);
-
-      }
-    }
-  }*/
 }

@@ -142,6 +142,8 @@ class node{
   //Should be called only when setting prior probability.
   setPiEvidence(Vector ProbabilityIn){
     PiEvidence=ProbabilityIn;
+    PiEvidence.SumToOne();
+    _FlagOtherNodes();
   }
 
   List<String> getStateLabels(){
@@ -180,8 +182,20 @@ class node{
     return flagged;
   }
 
+  node getFlaggingNode(){
+    return flaggingNode;
+  }
+
   Vector getLambdaMessage(node NodeToBeUpdated){
     return LambdaMessage; //This needs some more work
+  }
+
+  Vector getLambdaEvidence(){
+    return LambdaEvidence;
+  }
+
+  Vector getPiEvidence(){
+    return PiEvidence;
   }
 
   Map<node,link> getOutGoing(){
@@ -567,9 +581,8 @@ class node{
   //flags all directly connected node to be updated anc passes
   //from which node it has received evidence (to prevent circling evidence))
   _FlagOtherNodes(){
-    if(flaggingNode!=null) {
-      //print('the flagging node was: ' + flaggingNode.getName());
-    }
+   /* if(flaggingNode!=null) {set
+    }*/
     outGoing.keys.forEach((node){
       if(node!=(flaggingNode)&&(node.getEvidenceStatus()!=true)) {
         //print('this node is: ' + this.getName().toString());

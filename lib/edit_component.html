@@ -1,24 +1,49 @@
 <div  class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em">
-    <div class="mdl-card__actions mdl-card--border">
-        Set Evidence/Observation
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        Set Prior
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        Add Link
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        Remove Link
+    <div>
+        <material-expansionpanel-set>
+            <material-expansionpanel name="Set Evidence/Observation">
+                <div>
+                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setObservationValue(i,$event)" required label="Value {{i}}"></material-input>
+                </div>
+            </material-expansionpanel>
+            <material-expansionpanel name="Set Prior">
+                <div>
+                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setPriorValue(i,$event)" required label="Value {{i}}"></material-input>
+                </div>
+            </material-expansionpanel>
+            <material-expansionpanel name="Add Link (new Parent)">
+                <div>
+                    <material-input floatingLabel  (keyup)="setNewLinkParent($event)" label="Parent Name"></material-input>
+                    <material-button (click)="addNewParentLink()" raised class="red">Add Link</material-button>
+                </div>
+            </material-expansionpanel>
+            <material-expansionpanel name="Add Link (new Daughter)">
+                <div>
+                    <material-input floatingLabel  (keyup)="setNewLinkDaughter($event)" label="Daughter Name"></material-input>
+                    <material-button (click)="addNewDaughterLink()" raised class="red">Add Link</material-button>
+                </div>
+            </material-expansionpanel>
+            <material-expansionpanel name="Remove Link">
+                <div>
+                <material-chips *ngFor="let link of LinkList">
+                    <material-chip (click)="removeLink(link)">{{link.getEndPoints()[0].getName()}}<->{{link.getEndPoints()[1].getName()}}</material-chip>
+                </material-chips>
+                </div>
+            </material-expansionpanel>
+            <material-expansionpanel name="Set Labels for Node">
+                <div>
+                    <material-input  leadingText="[old:{{LabelOld[i]}}]" *ngFor="let label of LabelOld; let i=index" (keyup.enter)="setNewLabel(i,$event)" (blur)="setNewLabel(i,$event)" required label="New Label"></material-input>
+                </div>
+                <material-button (click)="pushNewLabels()" raised class="red">Set Labels</material-button>
+            </material-expansionpanel>
+        </material-expansionpanel-set>
     </div>
     <div class="mdl-card__actions mdl-card--border">
         Change LinkMatrix
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        Change Labels
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
         Change Amount of States
     </div>
-
+    <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
+    <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>
 </div>

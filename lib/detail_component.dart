@@ -5,6 +5,7 @@ import 'package:angular2/router.dart';
 
 import 'node.dart';
 import 'package:causecade/app_component.dart';
+import 'package:causecade/card_barchart.dart';
 import 'package:chartjs/chartjs.dart';
 
 @Component(
@@ -24,8 +25,10 @@ class DetailComponent implements OnInit {
   final RouteParams _routeParams;
 
   node SelectedNode;
+  String FlaggingName;
   bool ShouldBeHidden;
   bool IsRootNode;
+  Chart ChartHolder;
 
   //holds information about the selected node
   bool HasEvidence;
@@ -41,19 +44,28 @@ class DetailComponent implements OnInit {
   DetailComponent(this._routeParams);
 
   ngOnInit() {
-    print('node overview for: ' +
-        _routeParams.get('id').toString()); //fetch searched string
     if(_routeParams.get('id')!=null) {
-      print('not null, byos');
-      SelectedNode = myDAG.findNode(_routeParams.get('id'));
-      IsRootNode = SelectedNode.getRootStatus();
-      HasEvidence = SelectedNode.getEvidenceStatus();
-      IncomingNodes = SelectedNode.getParents();
-      OutGoingNodes = SelectedNode.getDaughters();
+      setupCard();
     }
     else{
       //else, we should hide this component
       ShouldBeHidden=true;
+    }
+  }
+
+  setupCard(){
+    SelectedNode = myDAG.findNode(_routeParams.get('id'));
+    IsRootNode = SelectedNode.getRootStatus();
+    HasEvidence = SelectedNode.getEvidenceStatus();
+    IncomingNodes = SelectedNode.getParents();
+    OutGoingNodes = SelectedNode.getDaughters();
+    ChartHolder = GenerateEvidenceBarChart(SelectedNode);
+    //Set Up the Flagging Name (name of node that last flagged this node)
+    if (SelectedNode.getFlaggingNode()!=null){
+      FlaggingName=SelectedNode.getFlaggingNode().getName();
+    }
+    else{
+      FlaggingName='not flagged yet';
     }
   }
 }
