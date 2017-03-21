@@ -25,7 +25,7 @@ BayesianDAG myDAG;
 @Component(
     selector: 'causecade',
     templateUrl: 'app_component.html',
-directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent],
+directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent], /**/
 providers: const [ROUTER_PROVIDERS,materialProviders]
 )
 @RouteConfig(const [
@@ -78,6 +78,10 @@ class AppComponent implements OnInit{
   loadData(){
     //This function will get improved functionality in the future
     LoadExample_Animals(); //loads the animals example
+  }
+  loadNodeAdder_leg(){
+    new NodeAdderComponent();
+    print('kappa');
   }
 
   void setScreenDimensions(){ /*sets the SVG Dimensions*/
