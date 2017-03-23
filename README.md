@@ -8,9 +8,9 @@ While this may not be too hard of a project for a seasoned programmer, I am stil
 
 In the end, I hope this project will result in a page that can teach others about bayesian networks and allow for some basic use cases (on the go). While there are currently great programs that can be used to locally compute solutions and solve problems using bayesian networks, I feel there is still room for an easy to use, educational tool focussing on them.
 
-## Update March 2017 ##
+## Update March 2017  ##
 
-Work on the project will continue again. Hopefully the basic bayesian network should be operational this month, freeing up time for UI design.
+Work on the project will continue again. Current work is being done on the User Interface. Following this, saving and loading of networks will be top priority. I will also attempt to get  a live version of the network on gh-pages soon.
 
 ## todo List for this Project ##
 
@@ -18,13 +18,14 @@ Work on the project will continue again. Hopefully the basic bayesian network sh
     * Allow Saving of Network
     * Allow Network to be opened (from file explorer) (already functional from Json)
     * Find a way to make the reset button clear the SVG
-* Write/find a moderately efficient bayesian network algorithm (inference etc)
+* Optimise Bayesian Network 
+* Allow for Self Learning from datasets (optional)
 * Visually represent the data in the algorithm
 * Allow for interactivity with the network
-* Create example cases
+* Create example cases (currently one example available)
 * Create a sort of 'teaching' mode, that will explain the functioning of the network
-* Add search function
-* Add Greeting Screen
 * Create Help screen
 * Create Blog (gh-pages)
 * Find a way to host this project
+* Develop Alternative Canvas Views
+
