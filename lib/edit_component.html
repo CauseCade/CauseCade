@@ -38,14 +38,14 @@
                 </div>
                 <material-button (click)="pushNewLabels()" raised class="red">Set Labels</material-button>
             </material-expansionpanel>
-            <!--<material-expansionpanel name="Set LinkMatrix">
-                <div>
-                    <material-input  leadingText=">" *ngFor="let label of LabelOld; let i=index" (keyup.enter)="setMatrixValue(i,$event)" (blur)="setNewLabel(i,$event)" required label="New Label">
-
-                    </material-input>
-                </div>
-                <material-button (click)="pushNewMatrix()" raised class="red">Set Matrix</material-button>
-            </material-expansionpanel>-->
+            <material-expansionpanel name="Set LinkMatrix">
+                <material-button (trigger)="showMatrixEditor = true"
+                                 [disabled]="showMatrixEditor"
+                                 raised
+                                 class="blue">
+                    Edit Matrix
+                </material-button>
+            </material-expansionpanel>
             <material-expansionpanel name="Change Amount of States/Events">
                     <material-input (keyup.enter)="setNewStateCountValue($event)" (blur)="setNewStateCountValue($event)" required label="New Amount"></material-input>
                     <material-button (click)="setNewStateCount()" raised class="red">Set New Amount</material-button>
@@ -56,3 +56,46 @@
     <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
     <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>
 </div>
+
+<modal [(visible)]="showMatrixEditor">
+    <material-dialog headered class="headered-dialog">
+
+        <div header>
+            <h3>Edit LinkMatrix</h3>
+            <p>This matrix is essential for evidence propagation. Columns should sum to one.</p>
+        </div>
+
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+      <!--      <thead>
+            <tr>
+                <th class="mdl-data-table__cell&#45;&#45;non-numeric">Material</th>
+                <th>Quantity</th>
+                <th>Unit price</th>
+            </tr>
+            </thead>-->
+            <tbody>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
+                <td>25</td>
+                <td>$2.90</td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
+                <td>50</td>
+                <td>$1.25</td>
+            </tr>
+            <tr>
+                <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
+                <td>10</td>
+                <td>$2.35</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div footer>
+            <material-button autoFocus clear-size (trigger)="showMatrixEditor = false" class="white">Cancel</material-button>
+            <material-button (click)="pushNewMatrix()" raised class="red">Set Matrix</material-button>
+        </div>
+
+    </material-dialog>
+</modal>

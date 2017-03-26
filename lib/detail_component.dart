@@ -28,6 +28,7 @@ class DetailComponent implements OnInit {
   String FlaggingName;
   bool ShouldBeHidden;
   bool IsRootNode;
+  bool LinkMatrixInfo;
   Chart ChartHolder;
 
   //holds information about the selected node
@@ -60,6 +61,7 @@ class DetailComponent implements OnInit {
     IncomingNodes = SelectedNode.getParents();
     OutGoingNodes = SelectedNode.getDaughters();
     ChartHolder = GenerateEvidenceBarChart(SelectedNode);
+    LinkMatrixInfo = SelectedNode.getLinkMatrixStatus();
     //Set Up the Flagging Name (name of node that last flagged this node)
     if (SelectedNode.getFlaggingNode()!=null){
       FlaggingName=SelectedNode.getFlaggingNode().getName();

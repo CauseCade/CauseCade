@@ -25,6 +25,7 @@ class EditComponent implements OnInit {
 
   node SelectedNode;
   bool ShouldBeHidden;
+  bool showMatrixEditor;
   int StateCount;
 
   Vector Observation; //these will be used
@@ -56,6 +57,7 @@ class EditComponent implements OnInit {
   EditComponent(this._routeParams);
 
   void ngOnInit() {
+    showMatrixEditor = false;
     if(_routeParams.get('id')!=null) {
       setupCard();
     }
@@ -71,6 +73,7 @@ class EditComponent implements OnInit {
   void addNewParentLink(){
     if((newLinkParent!=null)) {
       myDAG.insertLink(myDAG.findNode(newLinkParent),SelectedNode);
+      fetchLinks();
     }
     else{
       print('please enter proper node name, and try again');
@@ -80,6 +83,7 @@ class EditComponent implements OnInit {
   void addNewDaughterLink(){
     if((newLinkParent!=null)) {
       myDAG.insertLink(SelectedNode,myDAG.findNode(newLinkDaughter));
+      fetchLinks();
     }
     else{
       print('please enter proper node name, and try again');
@@ -92,6 +96,7 @@ class EditComponent implements OnInit {
   }
 
   void setupCard(){
+
     SelectedNode = myDAG.findNode(_routeParams.get('id'));
     IncomingNodes = SelectedNode.getParents();
     OutGoingNodes = SelectedNode.getDaughters();
@@ -167,6 +172,7 @@ class EditComponent implements OnInit {
   }
   void pushNewMatrix(){
     SelectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
+    showMatrixEditor = false;
     //matrix. If no changes are made in the ui this wont change anything.
   }
 

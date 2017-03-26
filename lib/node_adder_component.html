@@ -1,34 +1,92 @@
 <div *ngIf="Visible" id="modalContent" class="mdl-card mdl-shadow--4dp">
     <div class="mdl-card__title mdl-card__title-text" style="font-size: 20px; color: rgb(250, 250, 250); height: 100px; background: rgb(233, 30, 99);">Add a Node</div>
-    <div class="mdl-card__supporting-text">Enter your New Node name below
+   <!-- <div class="mdl-card__supporting-text">Enter your New Node name below
         <div>
-            <material-input required label="Node Name" (keyup.enter)="setNodeName($event)" (blur)="setNodeName($event)"></material-input>
-            <material-input required label="#states (default:2)" (keyup.enter)="setStateCount($event)" (blur)="setStateCount($event)"></material-input>
-        </div>
-    </div>
+            <material-input type="text" required label="Node Name" (keyup.enter)="setNodeName($event)" (blur)="setNodeName($event)"></material-input>
+            <material-input type="number" required label="#states (default:2)" (keyup.enter)="setStateCount($event)" (blur)="setStateCount($event)"></material-input>
 
-    <div class="mdl-card__supporting-text" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">Enter Parent name below
+        </div>
+    </div>-->
+
+   <!-- <div class="mdl-card__supporting-text" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">Enter Parent name below
         <div *ngFor="let string of ParentsToLink; let i=index">
-            <material-input required label="Parent Name" (keyup.enter)="setParentValue(i,$event)" (blur)="setParentValue(i,$event)" ></material-input>
+            <material-input type="text" required label="Parent Name" (keyup.enter)="setParentValue(i,$event)" (blur)="setParentValue(i,$event)" ></material-input>
             <material-button (click)="increaseParents()" >Add Another Input</material-button>
         </div>
-    </div>
+    </div>-->
 
-    <div class="mdl-card__supporting-text" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">Enter Target name below
+  <!--  <div class="mdl-card__supporting-text" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">Enter Target name below
         <div *ngFor="let string of DaughtersToLink; let i=index">
-            <material-input required label="Daughter Name" (keyup.enter)="setDaughterValue(i,$event)" (blur)="setDaughterValue(i,$event)" ></material-input>
+            <material-input type="text" required label="Daughter Name" (keyup.enter)="setDaughterValue(i,$event)" (blur)="setDaughterValue(i,$event)" ></material-input>
             <material-button (click)="increaseDaughters()" >Add Another Input</material-button>
         </div>
     </div>
-
-    <div class="mdl-card__actions mdl-card--border">
+-->
+   <!-- <div class="mdl-card__actions mdl-card&#45;&#45;border">
         <material-button (click)="close()">Cancel</material-button>
         <material-button (click)="pushNodeLegacy()" class="green">Add</material-button>
-    </div>
+    </div>-->
 
+    <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
+
+        <div class="mdl-card__supporting-text">Enter your New Node name below
+            <div class="form-group ">
+                <label for="node_name">Node Name</label>
+                <input type="text" class="form-control" id="node_name" required
+                       [(ngModel)]="NodeName"
+                       #node_name="ngForm" [ngClass]="controlStateClasses(node_name)"
+                       ngControl="node_name">
+                <div [hidden]="node_name.valid || node_name.pristine" class="alert alert-danger">
+                    A Node Name is required
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="state_count_new">Number of States</label>
+                <select class="form-control" id="state_count_new" required
+                        [(ngModel)]="NodeCount"
+                        #state_count_new="ngForm" [ngClass]="controlStateClasses(state_count_new)"
+                        ngControl="state_count_new">
+                    <option *ngFor="let index of AllowedStates" [value]="index">{{index}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="mdl-card__supporting-text" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">Select Parents
+            <div  *ngFor="let node of NodeList; let i=index">
+                <label class="checkbox-inline">
+                    <input (click)="addParent(node.getName())" type="checkbox"> {{node.getName()}}
+                </label>
+            </div>
+        </div>
+        {{ParentsToLink}}
+        <div class="mdl-card__supporting-text" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">Select Daughters
+            <div  *ngFor="let node of NodeList; let i=index">
+                <label class="checkbox-inline">
+                    <input (click)="addDaughter(node.getName())" type="checkbox"> {{node.getName()}}
+                </label>
+            </div>
+        </div>
+        {{DaughtersToLink}}
+
+       <!-- <div class="form-group">
+            <label for="alterEgo">Alter Ego</label>
+            <input type="text" class="form-control" id="alterEgo"
+                   [(ngModel)]="model.alterEgo"
+                   #alterEgo="ngForm" [ngClass]="controlStateClasses(alterEgo)"
+                   ngControl="alterEgo" >
+        </div>-->
+
+        <div class="mdl-card__actions mdl-card--border">
+            <material-button (click)="close()">Cancel</material-button>
+            <material-button type="submit" (click)="pushNodeLegacy()" [disabled]="!heroForm.form.valid" class="green">Add</material-button>
+        </div>
+  <!--      <button type="submit" class="btn btn-default"
+                [disabled]="!heroForm.form.valid">Submit</button>-->
+    </form>
 </div>
 
-    <button (click)="makeVisible()" id="node_adder" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--pink-500" style="color: #fafafa">
+<button (click)="makeVisible()" id="node_adder" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-color--pink-500" style="color: #fafafa">
     <i class="material-icons">add</i>
 </button>
 

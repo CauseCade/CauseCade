@@ -622,4 +622,8 @@ class node{
       //on the incoming nodes which
     }
   }
+
+  String toString(){
+    return name;
+  }
 }

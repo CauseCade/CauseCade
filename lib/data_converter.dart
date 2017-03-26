@@ -30,12 +30,15 @@ Implement(InputData){
   NewData[1]=(NewLink); //Storing In Other List
   //print(NewData);
 
+
   networkInfo.add(NewData); //updating the (global) list of all information
                             //in the visual part of the network. We need
                             //to call .addNewData() for this to have effect.
-  print("NetworkInfo: ");
-  print(networkInfo);
+  //print("NetworkInfo: ");
+  //print(networkInfo);
+
   myNet.addNewData(); //actually adding the nodes to the network
+
   networkInfo.clear(); //clearing stuff
 
   // -------- adds info to the actual DAG (NETWORK BEHIND THE SCENES) ---------
@@ -49,7 +52,7 @@ Implement(InputData){
   for (var i = 0; i < InputData[2].length; i++) {
     myDAG.insertLink(myDAG.findNode(InputData[0][0]), myDAG.findNode(InputData[2][i]));
   }
-  print(myDAG.toString());
+  //print(myDAG.toString());
 
 }
 

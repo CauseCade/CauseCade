@@ -132,6 +132,7 @@ class Network {
   }
 
   void addNewDataSet(InputDataSet){
+
     for(var i =0; i< InputDataSet["nodes"].length;i++){
       nodes.add(InputDataSet["nodes"][i]);
     }
@@ -142,6 +143,7 @@ class Network {
     force.nodes = nodes;
     force.links = links;
 
+    //print('addNewDataCalled');
     refreshData();
     force.start();
   }

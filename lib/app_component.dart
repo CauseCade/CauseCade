@@ -8,10 +8,9 @@ import 'package:causecade/overview_component.dart';
 import 'package:causecade/detail_component.dart';
 import 'package:causecade/edit_component.dart';
 import 'package:causecade/node_adder_component.dart';
+import 'package:causecade/welcome_modal_component.dart';
 
 import 'package:causecade/example_networks.dart';
-import 'package:causecade/modals.dart';
-import 'node.dart';
 import 'dart:html';
 
 import 'package:d3/d3.dart';
@@ -25,7 +24,7 @@ BayesianDAG myDAG;
 @Component(
     selector: 'causecade',
     templateUrl: 'app_component.html',
-directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent], /**/
+directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent,WelcomeComponent], /**/
 providers: const [ROUTER_PROVIDERS,materialProviders]
 )
 @RouteConfig(const [
@@ -35,14 +34,18 @@ providers: const [ROUTER_PROVIDERS,materialProviders]
 ])
 class AppComponent implements OnInit{
 
+  Router router;
   //display settings
   var width = 900;
   var height =900;
   var networkHolder;
   var svg;
+
   String NodeName;
 
-  AppComponent(){
+  Router test;
+
+  AppComponent(this.router){
     print('Appcomponent created');
   }
 
@@ -58,30 +61,24 @@ class AppComponent implements OnInit{
 
     setScreenDimensions();
     window.onResize.listen((_) => setScreenDimensions());
+
+
   }
 
   onKey(dynamic event) {
     if(myDAG.findNode(event.target.value)!=null){ //then node found
-      NodeName=event.target.value; //then we use this string
+      NodeName=event.target.value;
+      router.navigate(['Overview',{'id':NodeName}]);
     }
     else{
       NodeName=null;
     }
   }
 
-  loadNodeAdder(){
-    ModalNodeAdder nodeAdderMenu = new ModalNodeAdder();
-    nodeAdderMenu.show();
-  }
-
   //when the ''LOAD'' button is clicked
   loadData(){
     //This function will get improved functionality in the future
     LoadExample_Animals(); //loads the animals example
-  }
-  loadNodeAdder_leg(){
-    new NodeAdderComponent();
-    print('kappa');
   }
 
   void setScreenDimensions(){ /*sets the SVG Dimensions*/

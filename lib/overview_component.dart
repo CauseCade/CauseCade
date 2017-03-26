@@ -23,6 +23,7 @@ import 'package:chartjs/chartjs.dart';
 
 class OverviewComponent implements OnInit{
   final RouteParams _routeParams;
+  final Router _router;
 
   node SelectedNode;
   Chart ChartHolder;
@@ -32,7 +33,7 @@ class OverviewComponent implements OnInit{
   List IncomingNodes; //holds information about the selected node
   List OutGoingNodes;//holds information about the selected node
 
-  OverviewComponent(this._routeParams);
+  OverviewComponent(this._routeParams,this._router);
 
  ngOnInit(){
   print('node overview for: ' + _routeParams.get('id').toString()); //fetch searched string
@@ -56,5 +57,10 @@ class OverviewComponent implements OnInit{
 
   makeBarChart(){
     ChartHolder = GenerateBarchart(SelectedNode);
+  }
+
+  Navigate(String NameIn){
+    print('navigating trough roter');
+    _router.navigate(['overview',{'id':NameIn}]);
   }
 }

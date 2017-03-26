@@ -36,7 +36,7 @@
     </div>
     <div class="mdl-card__actions mdl-card--border">
         <material-chips *ngFor="let node of OutGoingNodes">
-            <material-chip>{{node.getName()}}</material-chip>
+            <material-chip (click)="Navigate(node.getName())">{{node.getName()}}</material-chip>
         </material-chips>
     </div>
 </div>
