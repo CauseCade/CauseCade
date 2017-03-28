@@ -1,4 +1,5 @@
 import 'package:angular2/core.dart';
+import 'package:angular2/common.dart';
 
 import 'package:angular2_components/angular2_components.dart';
 import 'package:angular2/router.dart';
@@ -19,9 +20,15 @@ import 'package:causecade/app_component.dart';
     directives: const [materialDirectives],
     providers: const [materialProviders])
 
-// THIS IS STILL WIP
+
 class EditComponent implements OnInit {
   final RouteParams _routeParams;
+
+  //TODO Remove
+  String TestString;
+  testTestString(double In){
+    TestString=In.toString();
+  }
 
   node SelectedNode;
   bool ShouldBeHidden;
@@ -30,7 +37,9 @@ class EditComponent implements OnInit {
 
   Vector Observation; //these will be used
   Vector Prior;
+
   Matrix2 LinkMatrix;
+  List<List<double>> MatrixValues;
 
   int state_count_new;
   List<double> ObservationList;
@@ -38,6 +47,8 @@ class EditComponent implements OnInit {
   List<double> Probability = new List<double>();
   List<String> LabelNew;
   List<String> LabelOld;
+  List<String> MatrixValueLabels;
+
   String newLinkParent;
   String newLinkDaughter;
 
@@ -103,7 +114,9 @@ class EditComponent implements OnInit {
     StateCount = SelectedNode.getStateCount();
     LinkMatrix=SelectedNode.getLinkMatrix();
     fetchOldLabels();
+    fetchMatrixValues();
     LabelNew= new List<String>(StateCount);
+
 
    fetchLinks();
 
@@ -117,7 +130,7 @@ class EditComponent implements OnInit {
     }
   }
 
-  fetchOldLabels(){
+  void fetchOldLabels(){
     LabelOld = new List<String>(StateCount);
     for(int i=0;i<StateCount;i++){
       LabelOld[i]='not yet defined';
@@ -127,7 +140,22 @@ class EditComponent implements OnInit {
     }
   }
 
-  fetchLinks(){
+  //TODO: less duct-tape
+  void fetchMatrixValues(){
+    MatrixValueLabels=SelectedNode.getMatrixLabels();
+    MatrixValues = new List<List<double>>(); //pointless type specification here
+    for(int i=0;i<LinkMatrix.getRowCount();i++){
+      List<double> valuesList = new List<double>();
+      for(int j=0;j<LinkMatrix.getColumnCount();j++){
+        valuesList.add(LinkMatrix[i][j]);
+      }
+      print(valuesList);
+      MatrixValues.add(valuesList);
+    }
+    print(MatrixValues);
+  }
+
+  void fetchLinks(){
     LinkList.clear();
     SelectedNode.getInComing().values.forEach((link){
       LinkList.add(link);
@@ -163,6 +191,11 @@ class EditComponent implements OnInit {
     //node will now have Instantiated=true;
   }
 
+  //TODO: make this error proof, perhaps using forms?
+  void setMatrixValue(int i, int j, dynamic event){
+    LinkMatrix[i][j]=double.parse(event.target.value);
+  }
+
   void setNewLabel(int index, dynamic event){
     LabelNew[index] = event.target.value;
   }
@@ -172,6 +205,9 @@ class EditComponent implements OnInit {
   }
   void pushNewMatrix(){
     SelectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
+    SelectedNode.clearFlaggingNode();
+    SelectedNode.FlagOtherNodes();
+    fetchMatrixValues(); //we want to have the matrid values reflect the new matrix
     showMatrixEditor = false;
     //matrix. If no changes are made in the ui this wont change anything.
   }
@@ -188,6 +224,20 @@ class EditComponent implements OnInit {
   void setNewStateCountValue(dynamic event){
     state_count_new = int.parse(event.target.value);
   }
+
+  //TODO give this some functionality
+  void onSubmit() {
+    print('pressed submit matrix!');
+  }
+  /// Returns a map of CSS class names representing the state of [control].
+  Map<String, bool> controlStateClasses(NgControl control) => {
+    'ng-dirty': control.dirty ?? false,
+    'ng-pristine': control.pristine ?? false,
+    'ng-touched': control.touched ?? false,
+    'ng-untouched': control.untouched ?? false,
+    'ng-valid': control.valid ?? false,
+    'ng-invalid': control.valid == false
+  };
 
   //TODO: make this bulletproof, currently just breaks a lot of things, not
   // very user friendly at all

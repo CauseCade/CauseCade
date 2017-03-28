@@ -65,37 +65,40 @@
             <p>This matrix is essential for evidence propagation. Columns should sum to one.</p>
         </div>
 
+        <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
         <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
-      <!--      <thead>
-            <tr>
-                <th class="mdl-data-table__cell&#45;&#45;non-numeric">Material</th>
-                <th>Quantity</th>
-                <th>Unit price</th>
+            <thead>
+            <tr >
+                <th class="mdl-data-table__cell--non-numeric">Parent States -></th>
+                <th *ngFor="let label of MatrixValueLabels" class="mdl-data-table__cell--non-numeric">{{label}}</th>
             </tr>
-            </thead>-->
+            </thead>
+            {{TestString}}
             <tbody>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
-                <td>25</td>
-                <td>$2.90</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric">Plywood (Birch)</td>
-                <td>50</td>
-                <td>$1.25</td>
-            </tr>
-            <tr>
-                <td class="mdl-data-table__cell--non-numeric">Laminate (Gold on Blue)</td>
-                <td>10</td>
-                <td>$2.35</td>
-            </tr>
-            </tbody>
-        </table>
 
-        <div footer>
-            <material-button autoFocus clear-size (trigger)="showMatrixEditor = false" class="white">Cancel</material-button>
-            <material-button (click)="pushNewMatrix()" raised class="red">Set Matrix</material-button>
-        </div>
+                <tr *ngFor="let label of LabelOld; let i=index">
+                    <td class="mdl-data-table__cell--non-numeric">P({{label}}|Column)</td>
+                    <td *ngFor="let value of MatrixValues[i]; let j=index">
+                        <div class="form-group ">
+                            <label for="matrix_name">{{value}}</label>
+                            <input type="number" class="form-control" id="matrix_name"
+                                   [(ngModel)]="LinkMatrix[i][j]"
+                                   #matrix_name="ngForm" [ngClass]="controlStateClasses(matrix_name)"
+                                   ngControl="matrix_name">
+                        </div>
+                    </td>
+                </tr>
+
+
+            <div footer class="mdl-card__actions mdl-card--border">
+                <material-button autoFocus clear-size (trigger)="showMatrixEditor = false">Cancel</material-button>
+                <material-button type="submit" (click)="pushNewMatrix()" [disabled]="!heroForm.form.valid" class="green">Add</material-button>
+            </div>
+
+            </tbody>
+-->
+        </table>
+        </form>
 
     </material-dialog>
 </modal>

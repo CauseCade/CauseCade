@@ -110,7 +110,7 @@ class node{
     PiEvidence=Posterior;//TODO: done at 08-17
     isInstantiated=true;
     flaggingNode=null; //We now have no more memory of what updated the node
-    _FlagOtherNodes();// Networks needs to be updated
+    FlagOtherNodes();// Networks needs to be updated
 
   }
 
@@ -144,13 +144,17 @@ class node{
   setPiEvidence(Vector ProbabilityIn){
     PiEvidence=ProbabilityIn;
     PiEvidence.SumToOne();
-    _FlagOtherNodes();
+    FlagOtherNodes();
+  }
+
+  clearFlaggingNode(){
+    flaggingNode=null;
   }
 
   List<String> getStateLabels(){
     return stateLabels;
   }
-  //TODO: remove method
+
   List<String> getMatrixLabels(){
     return matrixLabels;
   }
@@ -312,6 +316,9 @@ class node{
       _generateMatrixIndexes(0,inComing.keys.length,'');
       _setLinkMatrixStatus(true); //this should trigger if the updated matrix is valid
       print('New Matrix Set');
+      flagged=true; //A change in matrix means this node's probabilities must
+                    // be updated.
+
     }
     else{
       print('sorry this is not a valid matrix');
@@ -359,7 +366,7 @@ class node{
     else{
       print('This node is already instantiated, and cannot be affected');
     }
-    _FlagOtherNodes();
+    FlagOtherNodes();
     print('posterior is' + Posterior.toString());
   }
 
@@ -581,7 +588,7 @@ class node{
 
   //flags all directly connected node to be updated anc passes
   //from which node it has received evidence (to prevent circling evidence))
-  _FlagOtherNodes(){
+  void FlagOtherNodes(){
    /* if(flaggingNode!=null) {set
     }*/
     outGoing.keys.forEach((node){
