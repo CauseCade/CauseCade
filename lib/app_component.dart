@@ -78,7 +78,7 @@ class AppComponent implements OnInit{
   //when the ''LOAD'' button is clicked
   loadData(){
     //This function will get improved functionality in the future
-    LoadExample_Animals(); //loads the animals example
+    LoadExample_CarStart(); //loads the animals example
   }
 
   void setScreenDimensions(){ /*sets the SVG Dimensions*/

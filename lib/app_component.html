@@ -42,11 +42,11 @@
                 Controls
                 <div id="button_holder">
 
-                    <material-button raised>Save</material-button>
+                    <material-button raised disabled>Save</material-button>
 
                     <material-button (click)="loadData()" raised>Load</material-button>
 
-                    <material-button raised>Reset</material-button>
+                    <material-button raised disabled>Reset</material-button>
                 </div>
                 <material-input style="padding-bottom: 0px" (keyup.enter)="onKey($event)" floatingLabel label="Search Node..."></material-input>
             </div>

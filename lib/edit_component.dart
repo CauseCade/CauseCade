@@ -42,8 +42,8 @@ class EditComponent implements OnInit {
   List<List<double>> MatrixValues;
 
   int state_count_new;
-  List<double> ObservationList;
-  List<double> PriorList;
+  List ObservationList;
+  List PriorList;
   List<double> Probability = new List<double>();
   List<String> LabelNew;
   List<String> LabelOld;
@@ -120,9 +120,9 @@ class EditComponent implements OnInit {
 
    fetchLinks();
 
-    ObservationList = new List<double>(StateCount);
+    ObservationList = new List(StateCount);
     Observation = new Vector(StateCount);
-    PriorList = new List<double>(StateCount);
+    PriorList = new List(StateCount);
     Prior = new Vector(StateCount);
 
     for(int i =0;i<SelectedNode.getStateCount();i++){
@@ -132,11 +132,14 @@ class EditComponent implements OnInit {
 
   void fetchOldLabels(){
     LabelOld = new List<String>(StateCount);
+    LabelNew = new List<String>(StateCount);
     for(int i=0;i<StateCount;i++){
       LabelOld[i]='not yet defined';
+      LabelNew[i]='not yet defined';
     }
     for(int i=0;i<SelectedNode.getStateLabels().length;i++){
       LabelOld[i]=SelectedNode.getStateLabels()[i];
+      LabelNew[i]=SelectedNode.getStateLabels()[i];
     }
   }
 
@@ -149,10 +152,10 @@ class EditComponent implements OnInit {
       for(int j=0;j<LinkMatrix.getColumnCount();j++){
         valuesList.add(LinkMatrix[i][j]);
       }
-      print(valuesList);
+      //print(valuesList);
       MatrixValues.add(valuesList);
     }
-    print(MatrixValues);
+    //print(MatrixValues);
   }
 
   void fetchLinks(){
@@ -166,32 +169,37 @@ class EditComponent implements OnInit {
   }
 
 
-  void setPriorValue(int index, dynamic event){
-    PriorList[index] = double.parse(event.target.value);
-    print(event.target.value.toString());
-  }
 
-  //actually set the value
+
+  //TODO: avoid making all these lists
   void setPrior(){
-    Prior.setValues(PriorList);
+    List<double> PriorListExtra = new List(StateCount);
+    for(int i=0;i<PriorList.length;i++){
+      PriorListExtra[i]=double.parse(PriorList[i]);
+    }
+    Prior.setValues(PriorListExtra);
     SelectedNode.setPiEvidence(Prior); //Sets the prior.
     SelectedNode.setRootStatus(true);
     //node will now have isRootNode=true;
   }
 
-  //TODO: find a better implementation (that cant result in user error)
-  void setObservationValue(int index, dynamic event){
-    ObservationList[index] = double.parse(event.target.value);
-    print(event.target.value.toString());
-  }
 
+
+ //TODO: avoid making all these lists
   void setObservation(){
-    Observation.setValues(ObservationList);
+    List<double> ObservationListExtra = new List(StateCount);
+    print(ObservationList);
+    for(int i=0;i<ObservationList.length;i++){
+      ObservationListExtra[i]=double.parse(ObservationList[i]);
+    }
+    print(ObservationListExtra);
+    Observation.setValues(ObservationListExtra);
     SelectedNode.setProbability(Observation); //sets observation
+
     //node will now have Instantiated=true;
   }
 
-  //TODO: make this error proof, perhaps using forms?
+
   void setMatrixValue(int i, int j, dynamic event){
     LinkMatrix[i][j]=double.parse(event.target.value);
   }
@@ -205,11 +213,18 @@ class EditComponent implements OnInit {
   }
   void pushNewMatrix(){
     SelectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
+    LinkMatrix=SelectedNode.getLinkMatrix();
     SelectedNode.clearFlaggingNode();
     SelectedNode.FlagOtherNodes();
     fetchMatrixValues(); //we want to have the matrid values reflect the new matrix
     showMatrixEditor = false;
     //matrix. If no changes are made in the ui this wont change anything.
+  }
+
+  updateMatrixLabels(){
+    print(SelectedNode.getInComing().keys.length);
+    SelectedNode.clearMatrixLabels();
+    SelectedNode.generateMatrixLabels(0,SelectedNode.getInComing().keys.length,'');
   }
 
   void updateEdits(){

@@ -3,13 +3,13 @@
         <material-expansionpanel-set>
             <material-expansionpanel name="Set Evidence/Observation">
                 <div>
-                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setObservationValue(i,$event)" (blur)="setObservationValue(i,$event)" required label="Value {{i}}"></material-input>
+                    <material-input type="number" *ngFor="let value of Probability; let i=index" [(ngModel)]="ObservationList[i]" floatingLabel required label="Value {{i}}"></material-input>
                 </div>
                 <material-button (click)="setObservation()" raised class="red">Set Observation</material-button>
             </material-expansionpanel>
             <material-expansionpanel name="Set Prior">
                 <div>
-                    <material-input  *ngFor="let value of Probability; let i=index" (keyup.enter)="setPriorValue(i,$event)" (blur)="setPriorValue(i,$event)" required label="Value {{i}}"></material-input>
+                    <material-input type="number" *ngFor="let value of Probability; let i=index" [(ngModel)]="PriorList[i]" floatingLabel required label="Value {{i}}"></material-input>
                 </div>
                 <material-button (click)="setPrior()" raised class="red">Set Prior</material-button>
             </material-expansionpanel>
@@ -34,7 +34,7 @@
             </material-expansionpanel>
             <material-expansionpanel name="Set Labels for Node">
                 <div>
-                    <material-input  leadingText="[old:{{LabelOld[i]}}]" *ngFor="let label of LabelOld; let i=index" (keyup.enter)="setNewLabel(i,$event)" (blur)="setNewLabel(i,$event)" required label="New Label"></material-input>
+                    <material-input *ngFor="let label of LabelOld; let i=index"  [(ngModel)]="LabelNew[i]" floatingLabel label="{{LabelOld[i]}}"></material-input>
                 </div>
                 <material-button (click)="pushNewLabels()" raised class="red">Set Labels</material-button>
             </material-expansionpanel>
@@ -53,6 +53,7 @@
 
         </material-expansionpanel-set>
     </div>
+    <material-button (click)="updateMatrixLabels()" raised class="red">Update MatrixLabels</material-button>
     <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
     <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>
 </div>
@@ -79,25 +80,23 @@
                 <tr *ngFor="let label of LabelOld; let i=index">
                     <td class="mdl-data-table__cell--non-numeric">P({{label}}|Column)</td>
                     <td *ngFor="let value of MatrixValues[i]; let j=index">
-                        <div class="form-group ">
-                            <label for="matrix_name">{{value}}</label>
-                            <input type="number" class="form-control" id="matrix_name"
+                        <div class="form-group mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <label class="mdl-textfield__label" for="matrix_name">{{value}}</label>
+                            <input type="number" class="form-control mdl-textfield__input" id="matrix_name"
                                    [(ngModel)]="LinkMatrix[i][j]"
                                    #matrix_name="ngForm" [ngClass]="controlStateClasses(matrix_name)"
-                                   ngControl="matrix_name">
+                                   ngControl="matrix_name"
+                                   max="1" min="0" step="0.05"
+                                   style="width: 40px">
                         </div>
                     </td>
                 </tr>
-
-
+            </tbody>
+        </table>
             <div footer class="mdl-card__actions mdl-card--border">
                 <material-button autoFocus clear-size (trigger)="showMatrixEditor = false">Cancel</material-button>
                 <material-button type="submit" (click)="pushNewMatrix()" [disabled]="!heroForm.form.valid" class="green">Add</material-button>
             </div>
-
-            </tbody>
--->
-        </table>
         </form>
 
     </material-dialog>

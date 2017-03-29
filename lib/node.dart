@@ -155,6 +155,10 @@ class node{
     return stateLabels;
   }
 
+  clearMatrixLabels(){
+    matrixLabels.clear();
+  }
+
   List<String> getMatrixLabels(){
     return matrixLabels;
   }
@@ -271,14 +275,14 @@ class node{
   //given the values of the parents
   //(the amount of rows related to the amount of states of the node)
 
-  _generateMatrixLabels(int currentParent, int Limit,String matrixLabelToAdd){
+  void generateMatrixLabels(int currentParent, int Limit,String matrixLabelToAdd){
     for( int i =0; i<inComing.keys.elementAt(currentParent).getStateCount();i++){
       //print('Start-------------------');
-      //print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
-      //print('our limit is '+Limit.toString());
+     // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
+     // print('our limit is '+Limit.toString());
 
       if(currentParent+1<Limit) {
-        _generateMatrixLabels(currentParent+1,Limit, matrixLabelToAdd + '+' + inComing.keys.elementAt(currentParent).getName() + ':' + inComing.keys.elementAt(currentParent).getStateLabels()[i].toString());
+        generateMatrixLabels(currentParent+1,Limit, matrixLabelToAdd + '+' + inComing.keys.elementAt(currentParent).getName() + ':' + inComing.keys.elementAt(currentParent).getStateLabels()[i].toString());
       }
       else{
         matrixLabels.add(matrixLabelToAdd + '+' + inComing.keys.elementAt(currentParent).getName() + ':' + inComing.keys.elementAt(currentParent).getStateLabels()[i].toString());
@@ -286,6 +290,7 @@ class node{
       }
     }
   }
+
   _generateMatrixIndexes(int currentParent, int Limit,String matrixIndexToAdd){
     for( int i =0; i<inComing.keys.elementAt(currentParent).getStateCount();i++){
       //print('Start-------------------');
@@ -312,7 +317,7 @@ class node{
       LinkMatrix = updatedMatrix;
       matrixLabels.clear(); //clear before generating new ones
       matrixIndexes.clear(); //clear before generating new ones
-      _generateMatrixLabels(0,inComing.keys.length,'');
+      generateMatrixLabels(0,inComing.keys.length,'');
       _generateMatrixIndexes(0,inComing.keys.length,'');
       _setLinkMatrixStatus(true); //this should trigger if the updated matrix is valid
       print('New Matrix Set');
