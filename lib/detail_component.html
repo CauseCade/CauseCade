@@ -1,28 +1,34 @@
 <div [class.hidden]="ShouldBeHidden" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em">
     <div class="mdl-card__actions mdl-card--border">
-        Lambda and Pi Evidence
+        Detailed Information
     </div>
     <canvas id="BarChartHolder"></canvas>
-    <div class="mdl-card__actions mdl-card--border">
-        Parent Nodes
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <material-list>
-            <material-list-item  *ngFor="let node of IncomingNodes"  (trigger)="print('node')"> <!--(trigger)="selectColor('red')"-->
-                {{node.getName()}}
-            </material-list-item>
-        </material-list>
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        Daughter Nodes
-    </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <material-list>
-            <material-list-item  *ngFor="let node of OutGoingNodes" > <!--(trigger)="selectColor('red')"-->
-                {{node.getName()}}
-            </material-list-item>
-        </material-list>
-    </div>
+    <material-button (click)="resetChart()" raised class="red">View Total Pi/Lambda Evidence</material-button>
+    <material-expansionpanel-set>
+
+        <material-expansionpanel name="Lambda Evidence per Node">
+            <material-radio-group>
+                <material-radio (click)="setChartLambda(node)" *ngFor="let node of OutGoingNodes" >{{node.getName()}}
+                </material-radio>
+            </material-radio-group>
+        </material-expansionpanel>
+        <material-expansionpanel name="Parent Nodes">
+            <ul class='mdl-list'>
+                <li *ngFor="let node of IncomingNodes" class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">{{node.getName()}}</span>
+                </li>
+            </ul>
+        </material-expansionpanel>
+        <material-expansionpanel name="Daughter Nodes">
+            <ul class='mdl-list'>
+                <li *ngFor="let node of OutGoingNodes" class="mdl-list__item">
+                    <span class="mdl-list__item-primary-content">{{node.getName()}}</span>
+                </li>
+            </ul>
+        </material-expansionpanel>
+    </material-expansionpanel-set>
+
+
     <div class="mdl-card__actions mdl-card--border">
         Is properly Configured: {{LinkMatrixInfo}}
     </div>

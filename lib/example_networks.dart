@@ -695,7 +695,7 @@ import 'package:causecade/data_converter.dart';
 
     rootProb = new Vector(2);
     rootProb.setValues([0.995,0.005]);
-    myDAG.setPrior('StarterMotor',rootProb);
+    myDAG.setPrior('Starter motor',rootProb);
 
     rootProb = new Vector(2);
     rootProb.setValues([0.9,0.1]);

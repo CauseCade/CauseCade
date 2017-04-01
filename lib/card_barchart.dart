@@ -15,7 +15,7 @@ Chart GenerateBarchart(node NodeIn) {
   //var rnd = new math.Random();
   //var months = <String>["January", "February", "March", "April", "May", "June"];
   List ProbabilityHolderList = new List();
-  for(int i=0;i<Node.getProbability().getSize();i++){
+  for(int i=0;i<Node.getStateCount();i++){
     ProbabilityHolderList.add(Node.getProbability()[i]);
   }
 
@@ -32,6 +32,8 @@ Chart GenerateBarchart(node NodeIn) {
   return myChart;
 }
 
+
+//TODO conosider reworking this (see detailcomponent)
 Chart GenerateEvidenceBarChart(node NodeIn){
 
   List LambdaHolderList = new List();

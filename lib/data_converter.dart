@@ -19,10 +19,21 @@ Implement(InputData){
   NewNode[0]=(NodeHolder); //This must be a List (for some reason)
 
   //adds the links for the visual network
+
+  //adding parent connections
   for(var i = 0; i < InputData[1].length; i++){
     //print("what is index of target: ");
     //print(myNet.getNodeIndex(InputData[1][i]));
-    var LinkHolder = new JsObject.jsify({"source":myNet.getNodesSize(),"target":myNet.getNodeIndex(InputData[1][i]),"value":8}); //finding values is hard right now
+    var LinkHolder = new JsObject.jsify({"source":myNet.getNodeIndex(InputData[1][i]),"target":myNet.getNodesSize(),"value":10}); //finding values is hard right now
+
+    NewLink.add(LinkHolder);
+  }
+  //adding daughter connection
+  for(var i = 0; i < InputData[2].length; i++){
+    //print("what is index of target: ");
+    //print(myNet.getNodeIndex(InputData[1][i]));
+    var LinkHolder = new JsObject.jsify({"source":myNet.getNodesSize(),"target":myNet.getNodeIndex(InputData[2][i]),"value":10}); //finding values is hard right now
+
     NewLink.add(LinkHolder);
   }
 
@@ -56,6 +67,8 @@ Implement(InputData){
 
 }
 
+
+//deprecatd
 ImplementJson(InputData) {
   var currentNodeCount = myNet.getNodesSize();
 
@@ -102,7 +115,7 @@ visualiseNetwork(){
 
   myDAG.getLinks().forEach((link){
     // we cant add links by name, so we first have to fetch their index //TODO: Fix this waste of performance
-    newLinks.add(new JsObject.jsify({"source":myNet.getNodeIndex(link.getEndPoints()[0].getName()),"target":myNet.getNodeIndex(link.getEndPoints()[1].getName()),"value":100}));
+    newLinks.add(new JsObject.jsify({"source":myNet.getNodeIndex(link.getEndPoints()[0].getName()),"target":myNet.getNodeIndex(link.getEndPoints()[1].getName()),"value":10}));
     print('link added to:' + link.getEndPoints()[1].getName());
   });
 

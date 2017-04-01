@@ -13,6 +13,9 @@ class node{
   Map<node,link> outGoing = new Map();
   Map<node,link> inComing = new Map();
 
+  Map<node,Vector> incomingLambda; //this keeps track of the individual lambda
+  // messages that this node receives from its daughters
+
   // -------- Various State variables --------
 
   bool isInstantiated=false; //true = has hard evidence/observed state
@@ -43,20 +46,31 @@ class node{
 
   // ------------- CONSTRUCTOR --------------
 
+
+  //TODO see which statement is redundant here
   node(this.name, this.stateCount){ //constructor
     LinkMatrix = new Matrix2(stateCount,_getIncomingStates());
     LinkMatrix.identity();
     hasProperLinkMatrix = true;
 
+    incomingLambda = new Map<node,Vector>(); //Initialise map;
     Posterior = new Vector(stateCount);
+    Posterior.setAll(0.0);
+    print(Posterior.toString());
     PiMessage = new Vector(stateCount);
     LambdaMessage = new Vector(stateCount);
+    LambdaEvidence = new Vector(stateCount);
+    PiEvidence = new Vector(stateCount);
     for(int i=0; i< stateCount;i++){
       PiMessage[i]=1.0; //this is the default and is equivalent to no evidence
       LambdaMessage[i]=1.0; //this is the default and is equivalent to no evidence
+      PiEvidence[i]=1.0;
+      LambdaEvidence[i]=1.0;
     }
+
     //_ComputePiEvidence();
     ComputeLambdaEvidence();
+    UpdatePosterior();
 
   }
 
@@ -161,6 +175,10 @@ class node{
 
   List<String> getMatrixLabels(){
     return matrixLabels;
+  }
+
+  Vector getIndividualLambda(node nodeIn){
+    return incomingLambda[nodeIn];
   }
 
   //TODO: remove method
@@ -572,10 +590,13 @@ class node{
 
       //Lambda Evidence is the product of the lambda messages from all the
       //daughter nodes. we must multiply them together for this to work
+      incomingLambda.clear(); //we must reset this before we update it
       outGoing.keys.forEach((node) {
         //sendLambdaMessage calls the daughter nodes to send the lambda message
         //for this specific node. This then handles the multiplication.
-        LambdaMessage = LambdaMessage * node.sendLambdaMessage(this);
+        Vector incomingLambdaValue = node.sendLambdaMessage(this);
+        LambdaMessage = LambdaMessage*incomingLambdaValue;
+        incomingLambda.addAll({node:incomingLambdaValue}); //update the map
       });
 
       //The lambda evidence then just setting it to this product

@@ -31,6 +31,8 @@ class DetailComponent implements OnInit {
   bool LinkMatrixInfo;
   Chart ChartHolder;
 
+
+
   //holds information about the selected node
   bool HasEvidence;
 
@@ -40,7 +42,8 @@ class DetailComponent implements OnInit {
   //holds information about the selected node
   List OutGoingNodes;
 
-  //holds information about the selected node
+  //holds information about indivdual lambda evidences (of one of teh daughters)
+  List individualLambda;
 
   DetailComponent(this._routeParams);
 
@@ -62,6 +65,7 @@ class DetailComponent implements OnInit {
     OutGoingNodes = SelectedNode.getDaughters();
     ChartHolder = GenerateEvidenceBarChart(SelectedNode);
     LinkMatrixInfo = SelectedNode.getLinkMatrixStatus();
+    individualLambda = new List<double>();
     //Set Up the Flagging Name (name of node that last flagged this node)
     if (SelectedNode.getFlaggingNode()!=null){
       FlaggingName=SelectedNode.getFlaggingNode().getName();
@@ -70,4 +74,52 @@ class DetailComponent implements OnInit {
       FlaggingName='not flagged yet';
     }
   }
+
+  //TODO see how we can make this work better with card_bartchart.dart
+  void resetChart(){
+    List LambdaHolderList = new List();
+    List PiHolderList = new List();
+    /*Vector LambdaVector;
+  Vector PiVector;*/
+
+    for(int i=0;i<SelectedNode.getStateCount();i++){
+      LambdaHolderList.add(SelectedNode.getLambdaEvidence()[i]);
+      PiHolderList.add(SelectedNode.getPiEvidence()[i]);
+    }
+
+    var data = new LinearChartData(labels:SelectedNode.getStateLabels(), datasets: <ChartDataSets>[
+      new ChartDataSets(
+          label: 'Lambda Evidence of Node: ' + SelectedNode.getName(),
+          backgroundColor: "rgba(223,30,90,1.0)",
+          data: LambdaHolderList),
+      new ChartDataSets(
+          label: 'Pi Evidence of Node: ' + SelectedNode.getName(),
+          backgroundColor: "rgba(30,30,90,1.0)",
+          data: PiHolderList)
+    ]);
+
+    ChartHolder.config = new ChartConfiguration(
+        type: 'bar', data: data, options: new ChartOptions(responsive: true));
+    ChartHolder.update();
+  }
+
+  void setChartLambda(node nodeIn){
+    print('new chart requested for ' + nodeIn.getName());
+    individualLambda.clear(); //we must clear this
+    var lambdaVector = SelectedNode.getIndividualLambda(nodeIn);
+    for(int i=0;i<SelectedNode.getStateCount();i++){
+      individualLambda.add(lambdaVector[i]);
+    }
+
+    var data = new LinearChartData(labels: SelectedNode.getStateLabels(), datasets: <ChartDataSets>[
+      new ChartDataSets(
+          label: 'Lambda Evidence from Node: ' + nodeIn.getName(),
+          backgroundColor: "rgba(223,30,90,1.0)",
+          data: individualLambda)]);
+
+    ChartHolder.config = new ChartConfiguration(
+        type: 'bar', data: data, options: new ChartOptions(responsive: true));
+    ChartHolder.update();
+  }
+
 }

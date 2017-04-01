@@ -78,9 +78,8 @@ class Network {
 
   void refreshData(){
     print('refreshData() called');
-    link = g.selectAll(".link").data(links).enter().append("svg:marker") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
+    link = g.selectAll(".link").data(links).enter().append("line") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
       ..attr["class"] = "link"
-      ..styleFn["fill"] = color(16)
       ..styleFn["stroke-width"] = ((d) => math.sqrt(d['value']));
 
 

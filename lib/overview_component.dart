@@ -3,10 +3,12 @@ import 'package:angular2/core.dart';
 import 'package:angular2_components/angular2_components.dart';
 import 'package:angular2/router.dart';
 
+
 import 'node.dart';
 import 'package:causecade/app_component.dart';
 import 'package:causecade/card_barchart.dart';
 import 'package:chartjs/chartjs.dart';
+
 
 
 @Component(
@@ -18,7 +20,7 @@ import 'package:chartjs/chartjs.dart';
                       margin-top: 45em ;
                     }
                    '''],
-    directives: const [materialDirectives],
+    directives: const [materialDirectives,ROUTER_DIRECTIVES],
     providers: const [materialProviders])
 
 class OverviewComponent implements OnInit{
@@ -60,7 +62,8 @@ class OverviewComponent implements OnInit{
   }
 
   Navigate(String NameIn){
-    print('navigating trough roter');
-    _router.navigate(['overview',{'id':NameIn}]);
+    print('navigating trough router');
+
+
   }
 }

@@ -27,16 +27,20 @@
         Parent Nodes
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <material-chips *ngFor="let node of IncomingNodes">
-            <material-chip>{{node.getName()}}</material-chip>
-        </material-chips>
+        <ul class='mdl-list'>
+            <li *ngFor="let node of IncomingNodes" class="mdl-list__item">
+                <span (click)="Navigate(node.getName())" class="mdl-list__item-primary-content">{{node.getName()}}</span>
+            </li>
+        </ul>
     </div>
     <div class="mdl-card__actions mdl-card--border">
         Daughter Nodes
     </div>
     <div class="mdl-card__actions mdl-card--border">
-        <material-chips *ngFor="let node of OutGoingNodes">
-            <material-chip (click)="Navigate(node.getName())">{{node.getName()}}</material-chip>
-        </material-chips>
+        <ul class='mdl-list'>
+            <li *ngFor="let node of OutGoingNodes" class="mdl-list__item">
+                <span (click)="Navigate(node.getName())" class="mdl-list__item-primary-content">{{node.getName()}}</span>
+            </li>
+        </ul>
     </div>
 </div>
