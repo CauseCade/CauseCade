@@ -43,6 +43,9 @@ class AppComponent implements OnInit{
 
   String NodeName;
 
+  bool openLoadMenu;
+  String loadMessage;
+
   Router test;
 
   AppComponent(this.router){
@@ -62,7 +65,7 @@ class AppComponent implements OnInit{
     setScreenDimensions();
     window.onResize.listen((_) => setScreenDimensions());
 
-
+    openLoadMenu=false;
   }
 
   onKey(dynamic event) {
@@ -76,9 +79,19 @@ class AppComponent implements OnInit{
   }
 
   //when the ''LOAD'' button is clicked
-  loadData(){
+  loadData(String example_name){
     //This function will get improved functionality in the future
-    LoadExample_CarStart(); //loads the animals example
+    switch(example_name){
+      case "Animals":LoadExample_Animals();
+        loadMessage='Last Loaded: ' + example_name;
+        openLoadMenu=false;
+        break;
+      case "CarTest":LoadExample_CarStart();
+        loadMessage='Last Loaded: ' + example_name;
+        openLoadMenu=false;
+        break;
+      default: loadMessage='Sorry This is node a valid network';
+    }
   }
 
   void setScreenDimensions(){ /*sets the SVG Dimensions*/

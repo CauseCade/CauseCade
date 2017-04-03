@@ -120,12 +120,19 @@ class node{
     // is entered. This means other nodes can (logically) no longer affect it.
     Posterior=(observedProbability);
     Posterior.SumToOne();
-    LambdaEvidence=Posterior; //TODO: done at 08-17
-    PiEvidence=Posterior;//TODO: done at 08-17
+    LambdaEvidence=Posterior; //express no Lambda Evidence
+    PiEvidence=Posterior;//express no Pi Evidence
     isInstantiated=true;
     flaggingNode=null; //We now have no more memory of what updated the node
     FlagOtherNodes();// Networks needs to be updated
+  }
 
+  clearProbability(){
+    isInstantiated=false;
+    LambdaEvidence.setAll(1.0); //express no Lambda Evidence
+    PiEvidence.setAll(1.0); //express no Pi Evidence
+    flagged=true; //so that it will be updated soon
+    flaggingNode=null; //ensure no node has flagged this.
   }
 
   //false means the LinkMatrix has to be changed, true means the LinkMatrix
@@ -150,18 +157,26 @@ class node{
     return isRootNode;
   }
 
-  setRootStatus(bool BoolIn){
+  void setRootStatus(bool BoolIn){
     isRootNode = BoolIn;
   }
 
   //Should be called only when setting prior probability.
-  setPiEvidence(Vector ProbabilityIn){
+  void setPiEvidence(Vector ProbabilityIn){
     PiEvidence=ProbabilityIn;
     PiEvidence.SumToOne();
     FlagOtherNodes();
   }
 
-  clearFlaggingNode(){
+  //when you wish to clear the set prior
+  void clearPiEvidence(){
+    Vector defaultPiEvidence = new Vector(stateCount);
+    defaultPiEvidence.setAll(1.0); //equal to no evidence
+    PiEvidence=defaultPiEvidence;
+    //setRootStatus(false); //this may also be done from somewhere else
+  }
+
+  void clearFlaggingNode(){
     flaggingNode=null;
   }
 
@@ -169,7 +184,7 @@ class node{
     return stateLabels;
   }
 
-  clearMatrixLabels(){
+  void clearMatrixLabels(){
     matrixLabels.clear();
   }
 
@@ -476,10 +491,12 @@ class node{
     // P(0.9)|[0.7][0.5][0.5]
     //print('Lambda Process: Found ReducedMatrix: ' + LinkMatrix.toString());
     Vector ReducedMatrix= new Vector(LinkMatrix.getColumnCount());
+    print(LinkMatrix.getColumnCount());
     for (int i=0; i<LinkMatrix.getColumnCount();i++){
       double sum=0.0;
       for(int j=0; j<LinkMatrix.getRowCount();j++){
         sum=sum+LinkMatrix[j][i]*LambdaEvidence[j];
+        //print('lambda evidence for daughter node: ' + LambdaEvidence[j].toString());
       }
       ReducedMatrix[i]=sum;
     }//reduced Matrix is now a 1xn matrix, which we need to further work on.
@@ -498,18 +515,18 @@ class node{
       for (int i = 0; i < NodeIn.getStateCount(); i++) {
         lambdaToSend[i]=0.0;
         //print('Lambda Process: fetching state: ' + i.toString());
-        _RecursiveLambdaMessage(1.0,0,inComing.keys.length,NodeIn,i,lambdaToSend,ReducedMatrix,false);
+        _RecursiveLambdaMessage(1.0,0,inComing.keys.length,NodeIn,i,lambdaToSend,ReducedMatrix,false,'');
       }
       //this generates a new lambdaToSend
     }
 
     //lambdaToSend.SumToOne(); //optional rescaling;
-    //print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
+    print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
     return lambdaToSend;
   }
 
-  //TODO: automate this for all states of interest - would reduce compuational time
-  _RecursiveLambdaMessage(double probabilityIn,int currentParent,int Limit, node ParentOfInterest,int StateOfInterest, Vector LambdaMessageToChange,Vector ProbabilityVector,bool relevant){
+  //TODO: automate this for all states of interest - would reduce compuational time + dont have this be the most retarded way of computing these things
+  _RecursiveLambdaMessage(double probabilityIn,int currentParent,int Limit, node ParentOfInterest,int StateOfInterest, Vector LambdaMessageToChange,Vector ProbabilityVector,bool relevant, String matrixLabelToSearch){
     for( int i =0; i<inComing.keys.elementAt(currentParent).getStateCount();i++){
 
       double probability = probabilityIn; //to prevent other iterations of loop
@@ -520,6 +537,7 @@ class node{
       if((inComing.keys.elementAt(currentParent)==ParentOfInterest)&&(i==StateOfInterest)){
         relevant=true;
         //print('relevance found: ' + currentParent.toString()+ 'state: ' + StateOfInterest.toString());
+
       }
       //We should set it to false for the other states of this variable,
       //but not for any other layers (hard to explain)
@@ -528,10 +546,10 @@ class node{
         //print('no relevance');
       }
       else{
-        probability=inComing.keys.elementAt(currentParent).getProbability()[i]*probability; //TODO: risky move, check if correct
-        //print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
+        probability=inComing.keys.elementAt(currentParent).getPiEvidence()[i]*probability; //TODO: risky move, check if correct
+       // print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
       }
-      // print('Start-------------------');
+       //print('Start-------------------');
       // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
       // print('our probability is '+probability.toString());
       // print('our limit is '+Limit.toString());
@@ -539,20 +557,29 @@ class node{
       if(currentParent+1<Limit) {
         // print('is this broek?');
         // print('END-------------------');
-        _RecursiveLambdaMessage(probability, currentParent+1,Limit,ParentOfInterest,StateOfInterest,LambdaMessageToChange,ProbabilityVector,relevant);
+        //update the MatrixLabels that will be used to search
+
+
+        _RecursiveLambdaMessage(probability, currentParent+1,Limit,ParentOfInterest,StateOfInterest,LambdaMessageToChange,ProbabilityVector,relevant,matrixLabelToSearch + '+' + inComing.keys.elementAt(currentParent).getName() + ':' + inComing.keys.elementAt(currentParent).getStateLabels()[i].toString());
       }
       else{
-        //print('at limit');
+        //update the MatrixLabels that will be used to search
+
+
         if(relevant){
-          //print('Found; we are adding to LambdaMessage: ' + probability.toString());
-          for(int i=0; i<ProbabilityVector.getSize();i++) {
-            if(ProbabilityVector[i]!=null) { //TODO: very inefficient
-              LambdaMessageToChange[StateOfInterest] = LambdaMessageToChange[StateOfInterest] + probability*ProbabilityVector[i];
-              ProbabilityVector[i]=null;
-              //print(ProbabilityVector.toString());
-              break;
-            }
-          }
+         // print('Found; we are adding to LambdaMessage: ' + probability.toString());
+          //for(int i=0; i<ProbabilityVector.getSize();i++) {
+         //   if(ProbabilityVector[i]!=null) { //TODO: very inefficient
+                //print('Matrix Labels: ' + matrixLabels.toString() );
+                //print(matrixLabelToSearch);
+              LambdaMessageToChange[StateOfInterest] = LambdaMessageToChange[StateOfInterest] + probability*ProbabilityVector[matrixLabels.lastIndexOf(matrixLabelToSearch + '+' + inComing.keys.elementAt(currentParent).getName() + ':' + inComing.keys.elementAt(currentParent).getStateLabels()[i].toString())];
+           //   ProbabilityVector[i]=null;
+                //print('Lambda Process | prob and lambda vectors');
+                //print(ProbabilityVector.toString());
+                //print(LambdaMessageToChange.toString());
+              //break;
+            //}
+          //}
           //print(LambdaMessageToChange.toString());
         }
         // print('END-------------------');
@@ -595,8 +622,11 @@ class node{
         //sendLambdaMessage calls the daughter nodes to send the lambda message
         //for this specific node. This then handles the multiplication.
         Vector incomingLambdaValue = node.sendLambdaMessage(this);
+          //print('lambda message after clearing is: ' + LambdaMessage.toString());
         LambdaMessage = LambdaMessage*incomingLambdaValue;
+          //print('lambda message just before adding to map is: ' + LambdaMessage.toString());
         incomingLambda.addAll({node:incomingLambdaValue}); //update the map
+          //print('map is: ' + incomingLambda.values.toString());
       });
 
       //The lambda evidence then just setting it to this product

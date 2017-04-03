@@ -22,9 +22,9 @@ class NodeAdderComponent implements OnInit {
   Set<String> DaughtersToLink = new Set<String>();
   String NodeName;
   bool Visible;
-  int NodeCount =2; //default amount of states = 2
+  String NodeCount ='2'; //default amount of states = 2
 
-  List<int> AllowedStates = [2,3,4];
+  List<String> AllowedStates = ['2','3','4'];
 
 
   NodeAdderComponent();
@@ -49,9 +49,9 @@ class NodeAdderComponent implements OnInit {
   }
 */
 
-  void setStateCount(dynamic event){
+/*  void setStateCount(dynamic event){
     NodeCount=int.parse(event.target.value);
-  }
+  }*/
 
 /*  void increaseParents(){
     ParentsCounter.add('Parent' + ParentsCounter.length.toString());

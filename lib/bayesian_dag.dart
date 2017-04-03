@@ -253,7 +253,7 @@ class BayesianDAG{
     // Will eventually implement method that avoids these problems
     // and allows updating the whole network with one call
     int iterationTracker=1;
-    while(checkFlagsStatus()){
+    while(checkFlagsStatus()){ //TODO temporarily set to update once at a atime
       print('<<<<<<<<<<<<< We are on Iteration: '+ iterationTracker.toString() +' >>>>>>>>>>>>>>>>>>>>>>');
       for(var i=0; i<NodeList.length;i++) {
         if (NodeList[i].getFlaggedStatus()) {
@@ -275,7 +275,32 @@ class BayesianDAG{
         }
       }
       iterationTracker++;
+
     };
+  }
+
+  //should only be called for debugging
+  //forces single node to be updated
+  updateNode(node NodeIn){
+    print('<<<<<<<<<<<<< Forced Update >>>>>>>>>>>>>>>>>>>>>>');
+
+
+        print('updating node: ' + NodeIn.getName());
+        // print('fetching Pi Messages...');
+      NodeIn.ComputePiEvidence();
+
+        //This is currently not yet implemented
+        // - the network can only propagate downwards
+        //  print('fetching lambda Messages...');
+     NodeIn.ComputeLambdaEvidence();
+
+      NodeIn.UpdatePosterior();
+        print('Updating Probability...' +
+            NodeIn.getProbability().toString());
+        print('Single Update Cycle Complete.\n');
+        //break; //enable this if you only want one node updating at a time (useful for debugging)
+
+
   }
 
   //Enter Hard evidence for a node

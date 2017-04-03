@@ -54,7 +54,7 @@ Implement(InputData){
 
   // -------- adds info to the actual DAG (NETWORK BEHIND THE SCENES) ---------
 
-  myDAG.insertNode(InputData[0][0],InputData[0][1]);
+  myDAG.insertNode(InputData[0][0],int.parse(InputData[0][1]));
   //Creates a Link for to all the parents of the node you just created
   for (var i = 0; i < InputData[1].length; i++) {
     myDAG.insertLink(myDAG.findNode(InputData[1][i]), myDAG.findNode(InputData[0][0]));

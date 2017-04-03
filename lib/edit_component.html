@@ -6,12 +6,14 @@
                     <material-input type="number" *ngFor="let value of Probability; let i=index" [(ngModel)]="ObservationList[i]" floatingLabel required label="Value {{i}}"></material-input>
                 </div>
                 <material-button (click)="setObservation()" raised class="red">Set Observation</material-button>
+                <material-button (trigger)="clearObservation()" raised class="red">Clear Observation</material-button>
             </material-expansionpanel>
             <material-expansionpanel name="Set Prior">
                 <div>
                     <material-input type="number" *ngFor="let value of Probability; let i=index" [(ngModel)]="PriorList[i]" floatingLabel required label="Value {{i}}"></material-input>
                 </div>
-                <material-button (click)="setPrior()" raised class="red">Set Prior</material-button>
+                <material-button (trigger)="setPrior()" raised class="red">Set Prior</material-button>
+                <material-button (trigger)="clearPrior()" raised class="red">Clear Prior</material-button>
             </material-expansionpanel>
             <material-expansionpanel name="Add Link (new Parent)">
                 <div>
@@ -54,6 +56,7 @@
         </material-expansionpanel-set>
     </div>
     <material-button (click)="updateMatrixLabels()" raised class="red">Update MatrixLabels</material-button>
+    <material-button (click)="forceNodeUpdate()" raised class="red">Force Node Update</material-button>
     <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
     <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>
 </div>

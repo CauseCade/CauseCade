@@ -110,6 +110,7 @@ class DetailComponent implements OnInit {
     for(int i=0;i<SelectedNode.getStateCount();i++){
       individualLambda.add(lambdaVector[i]);
     }
+    print('individual lambda for chart: ' + individualLambda.toString());
 
     var data = new LinearChartData(labels: SelectedNode.getStateLabels(), datasets: <ChartDataSets>[
       new ChartDataSets(

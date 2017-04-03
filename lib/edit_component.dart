@@ -183,7 +183,10 @@ class EditComponent implements OnInit {
     //node will now have isRootNode=true;
   }
 
-
+  void clearPrior(){
+    SelectedNode.clearPiEvidence();
+    SelectedNode.setRootStatus(false);
+  }
 
  //TODO: avoid making all these lists
   void setObservation(){
@@ -197,6 +200,11 @@ class EditComponent implements OnInit {
     SelectedNode.setProbability(Observation); //sets observation
 
     //node will now have Instantiated=true;
+  }
+
+  void clearObservation(){
+    print('Cleared Observation.');
+    SelectedNode.clearProbability();
   }
 
 
@@ -259,6 +267,10 @@ class EditComponent implements OnInit {
   void setNewStateCount(){
     SelectedNode.setStateCount(state_count_new,LabelOld);
     print('updated the new count, but please change labels');
+  }
+
+  void forceNodeUpdate(){
+    myDAG.updateNode(SelectedNode);
   }
 
 }

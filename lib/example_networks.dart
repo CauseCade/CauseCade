@@ -311,6 +311,7 @@ import 'package:causecade/data_converter.dart';
         print('this network aint cyclic, cool!');
     }
 
+    //battery voltage
     Matrix2 TestMatrix = new Matrix2(3,6); //2^1=2
     TestMatrix[0][0]=0.95;
     TestMatrix[0][1]=0.008;
@@ -328,7 +329,7 @@ import 'package:causecade/data_converter.dart';
 
     TestMatrix[2][0]=0.01;
     TestMatrix[2][1]=0.692;
-    TestMatrix[2][2]=0.5;
+    TestMatrix[2][2]=0.05;
     TestMatrix[2][3]=0.796;
     TestMatrix[2][4]=0.1;
     TestMatrix[2][5]=0.898;
@@ -343,6 +344,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix2[1][1]=1.0;
     myDAG.getNodes()[3].enterLinkMatrix(TestMatrix2);
 
+    //headlights
     Matrix2 TestMatrix3 = new Matrix2(3,3); //2^1=2
     TestMatrix3[0][0]=0.94;
     TestMatrix3[0][1]=0.0;
@@ -570,6 +572,14 @@ import 'package:causecade/data_converter.dart';
     TestMatrix11[0][97]=0.0;
     TestMatrix11[0][98]=0.0;
     TestMatrix11[0][99]=0.0;
+    TestMatrix11[0][100]=0.0;
+    TestMatrix11[0][101]=0.0;
+    TestMatrix11[0][102]=0.0;
+    TestMatrix11[0][103]=0.0;
+    TestMatrix11[0][104]=0.0;
+    TestMatrix11[0][105]=0.0;
+    TestMatrix11[0][106]=0.0;
+    TestMatrix11[0][107]=0.0;
 
     TestMatrix11[1][0]=1.0;
     TestMatrix11[1][1]=1.0;
@@ -671,6 +681,14 @@ import 'package:causecade/data_converter.dart';
     TestMatrix11[1][97]=1.0;
     TestMatrix11[1][98]=1.0;
     TestMatrix11[1][99]=1.0;
+    TestMatrix11[1][100]=1.0;
+    TestMatrix11[1][101]=1.0;
+    TestMatrix11[1][102]=1.0;
+    TestMatrix11[1][103]=1.0;
+    TestMatrix11[1][104]=1.0;
+    TestMatrix11[1][105]=1.0;
+    TestMatrix11[1][106]=1.0;
+    TestMatrix11[1][107]=1.0;
     myDAG.getNodes()[19].enterLinkMatrix(TestMatrix11);
 
     Vector rootProb = new Vector(2);
