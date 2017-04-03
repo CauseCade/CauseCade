@@ -22,3 +22,5 @@ transformers:
     entry_points: web/main.dart
     platform_directives: 'package:angular2/common.dart#COMMON_DIRECTIVES'
 - dart_to_js_script_rewriter
+- $dart2js:
+    minify: true
