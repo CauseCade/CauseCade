@@ -7,10 +7,20 @@ class BayesianDAG{
 
   List<node> NodeList = new List();
   List<link> LinkList = new List();
+  String name;
 
   BayesianDAG(){
     print("DAG Created!");
+    name="Unnamed Network";
+  }
 
+  //name setting and getting
+  void setName(String nameIn){
+    name = nameIn;
+  }
+
+  String getName(){
+    return name;
   }
 
   //basic network query

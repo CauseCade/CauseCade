@@ -491,7 +491,7 @@ class node{
     // P(0.9)|[0.7][0.5][0.5]
     //print('Lambda Process: Found ReducedMatrix: ' + LinkMatrix.toString());
     Vector ReducedMatrix= new Vector(LinkMatrix.getColumnCount());
-    print(LinkMatrix.getColumnCount());
+        //print(LinkMatrix.getColumnCount());
     for (int i=0; i<LinkMatrix.getColumnCount();i++){
       double sum=0.0;
       for(int j=0; j<LinkMatrix.getRowCount();j++){
@@ -521,7 +521,7 @@ class node{
     }
 
     //lambdaToSend.SumToOne(); //optional rescaling;
-    print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
+    //print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
     return lambdaToSend;
   }
 

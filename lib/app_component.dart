@@ -42,6 +42,7 @@ class AppComponent implements OnInit{
   var svg;
 
   String NodeName;
+  String networkName;
 
   bool openLoadMenu;
   String loadMessage;
@@ -65,6 +66,7 @@ class AppComponent implements OnInit{
     setScreenDimensions();
     window.onResize.listen((_) => setScreenDimensions());
 
+    networkName=myDAG.getName();
     openLoadMenu=false;
   }
 
@@ -85,10 +87,12 @@ class AppComponent implements OnInit{
       case "Animals":LoadExample_Animals();
         loadMessage='Last Loaded: ' + example_name;
         openLoadMenu=false;
+        refreshNetName();
         break;
       case "CarTest":LoadExample_CarStart();
         loadMessage='Last Loaded: ' + example_name;
         openLoadMenu=false;
+        refreshNetName();
         break;
       default: loadMessage='Sorry This is node a valid network';
     }
@@ -105,6 +109,15 @@ class AppComponent implements OnInit{
       ..attr["height"] = height.toString();
 
     myNet.setSize(width,height);
+  }
+
+  void setNetworkName(dynamic event){
+    myDAG.setName(event.target.value);
+    refreshNetName();
+  }
+
+  void refreshNetName(){
+    networkName=myDAG.getName();
   }
 
 }

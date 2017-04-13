@@ -52,13 +52,15 @@
                     <material-input (keyup.enter)="setNewStateCountValue($event)" (blur)="setNewStateCountValue($event)" required label="New Amount"></material-input>
                     <material-button (click)="setNewStateCount()" raised class="red">Set New Amount</material-button>
             </material-expansionpanel>
-
+            <material-expansionpanel name="Debugging + Manual Controls">
+                <material-button (click)="updateMatrixLabels()" raised class="red">Update MatrixLabels</material-button>
+                <material-button (click)="forceNodeUpdate()" raised class="red">Force Node Update</material-button>
+                <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
+                <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>
+            </material-expansionpanel>
         </material-expansionpanel-set>
     </div>
-    <material-button (click)="updateMatrixLabels()" raised class="red">Update MatrixLabels</material-button>
-    <material-button (click)="forceNodeUpdate()" raised class="red">Force Node Update</material-button>
-    <material-button (click)="updateEdits()" raised class="red">Update Network</material-button>
-    <material-button (click)="printNetworkToConsole()" raised class="red">Print to Console</material-button>
+
 </div>
 
 <modal [(visible)]="showMatrixEditor">

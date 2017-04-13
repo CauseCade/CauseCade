@@ -237,7 +237,7 @@ import 'package:causecade/data_converter.dart';
     //  print(myDAG.getNodes()[2].getMatrixLabels());
       // print(myDAG.getNodes()[2].getMatrixIndexes());
      // print(myDAG.getNodes()[2].getLinkMatrixInfo());
-
+      myDAG.setName('Animals');
       visualiseNetwork();
   }
 
@@ -727,5 +727,7 @@ import 'package:causecade/data_converter.dart';
     rootProb.setValues([0.97,0.03]);
     myDAG.setPrior('Gas filter',rootProb);
 
+    myDAG.setName('Car Test');
+    myDAG.updateNetwork();
     visualiseNetwork();
   }

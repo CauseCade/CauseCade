@@ -26,6 +26,9 @@ class NodeAdderComponent implements OnInit {
 
   List<String> AllowedStates = ['2','3','4'];
 
+/*WIP -> will become available when (angular) material-components takes these out of alpha
+  SelectionModel<node> targetNode Selection = new SelectionModel
+      .withList(allowMulti: true);   //FIX TEMPORARY LINE*/
 
   NodeAdderComponent();
 
@@ -107,7 +110,7 @@ class NodeAdderComponent implements OnInit {
     NodeName=null;
     ParentsToLink.clear();
     DaughtersToLink.clear();
-    NodeCount=2; //reset the default NodeCount;
+    NodeCount= '2'; //reset the default NodeCount;
   }
 
   void onSubmit() {
