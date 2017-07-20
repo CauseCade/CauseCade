@@ -182,12 +182,13 @@ g > .node{
     height: 85%;
     background: #E91E63;
     box-shadow: 0px 1px 75px 0px rgba(0,0,0,0.4);
+    font-size: 0;
 }
 
 #welcomeMessageContent{
     width: 40%;
     margin: auto;
-
+    vertical-align: top
 }
 
 #welcomeMessageContent img{
@@ -224,10 +225,24 @@ g > .node{
     padding-bottom: 5%;
 }
 
-#welcomeText{
+#welcomeText p{
     font-size: 22px;
     color: #fafafa;
     font-family: Roboto;
+}
+
+#welcomeText a{
+    font-size: 22px;
+    color: #BDBDBD;
+    font-family: Roboto;
+    text-decoration: none;
+}
+
+#welcomeText a:hover{
+    font-size: 22px;
+    color:  #BDBDBD;
+    font-family: Roboto;
+    text-decoration: underline;
 }
 
 #overlay{
