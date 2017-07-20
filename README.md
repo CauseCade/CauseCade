@@ -6,9 +6,9 @@ This repository will contain my best efforts to both learn about the interesting
 
 In the end, I hope this project will result in a page that can teach others about bayesian networks and allow for some basic use cases (on the go). While there are currently great programs that can be used to locally compute solutions and solve problems using bayesian networks, I feel there is still room for an easy to use, educational tool focussing on them.
 
-## Update April 2017  ##
+## Blog  ##
 
-Current work is being done on saving and loading of networks. An online version of the network is now available at https://sandcrawler.github.io/CauseCade-deploy/. When I manage to find some free time again, I will start work on the educational/explanatory part of CauseCade.  
+Updates on the CauseCade project can be found on the [CauseCade blog](https://sandcrawler.github.io/CauseCade-blog/). This blog will hold information about large updates done to the project and much more. As of July 2017, the blog is operational, albeit with a few minor issues that will be fixed over the coming months.
 
 ## todo List for this Project ##
 
