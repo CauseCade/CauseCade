@@ -1,7 +1,23 @@
-<div *ngIf="isVisible" style="float: right; height: 100%;width: 20%"> <!---->
+<!--When the Course Menu is closed-->
+<div *ngIf="isExpanded==false" style="float: right;margin-left:-100%">
+    <material-button class="white" (click)="openCourseMenu()" raised >
+        <i class="material-icons">&#xE314;</i>
+    </material-button>
+</div>
 
-    <div style="background-color: red;height: 95%;width: 100%">
-        hello this is the course component, it is currently WIP
+<!--When the course menu is opened-->
+<div *ngIf="isExpanded" style="float: right; height: 100%;width: 30%;"> <!---->
+
+    <!--Main Compartment-->
+    <div class="mdl-card mdl-shadow--4dp" style="height: 95%;width: 100%;">
+
+        <div class="mdl-card__supporting-text mdl-card--border"style="background: white;height: {{navigationRatio}}%;width:100%;background: #E91E63;">
+            Select Your Lesson In this section
+            <material-button class="white" (click)="hideCourseMenu()">
+                <i class="material-icons">&#xE5CD;</i>
+            </material-button>
+        </div>
+        <course-lesson class="mdl-card__supporting-text lesson" style="height:{{navigationRatioComplement}}%;width: 100%"></course-lesson>
     </div>
-    <material-button class="white" (click)="HideCourseMenu()" raised>Hide Course Menu</material-button>
+
 </div>
