@@ -6,7 +6,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.29.10"
+    version: "0.29.5"
   angular2:
     description:
       name: angular2
@@ -30,13 +30,13 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.13.2"
+    version: "1.13.3"
   barback:
     description:
       name: barback
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.2+10"
+    version: "0.15.2+11"
   browser:
     description:
       name: browser
@@ -60,25 +60,25 @@ packages:
       name: chartjs
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.2"
+    version: "0.4.0"
   cli_util:
     description:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1+2"
+    version: "0.1.2"
   code_transformers:
     description:
       name: code_transformers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.1"
+    version: "0.5.1+3"
   collection:
     description:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.14.0"
+    version: "1.14.3"
   convert:
     description:
       name: convert
@@ -90,13 +90,13 @@ packages:
       name: crypto
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   csslib:
     description:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.4"
+    version: "0.14.0"
   d3:
     description:
       name: d3
@@ -114,13 +114,13 @@ packages:
       name: dart_to_js_script_rewriter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   fixnum:
     description:
       name: fixnum
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.5"
+    version: "0.10.6"
   func:
     description:
       name: func
@@ -138,7 +138,7 @@ packages:
       name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.1"
+    version: "0.13.2"
   http_parser:
     description:
       name: http_parser
@@ -156,7 +156,7 @@ packages:
       name: isolate
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "0.2.3"
   js:
     description:
       name: js
@@ -180,13 +180,13 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.0+2"
+    version: "0.12.1+1"
   meta:
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.5"
+    version: "1.1.1"
   mime:
     description:
       name: mime
@@ -204,13 +204,13 @@ packages:
       name: package_config
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "1.0.2"
   path:
     description:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.1"
+    version: "1.4.2"
   perf_api:
     description:
       name: perf_api
@@ -222,19 +222,19 @@ packages:
       name: plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
+    version: "0.2.0+1"
   pool:
     description:
       name: pool
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.3.1"
   protobuf:
     description:
       name: protobuf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.3+2"
+    version: "0.5.4"
   quiver:
     description:
       name: quiver
@@ -246,13 +246,13 @@ packages:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.7+2"
+    version: "0.6.8"
   shelf_static:
     description:
       name: shelf_static
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.4"
+    version: "0.2.5"
   source_maps:
     description:
       name: source_maps
@@ -264,13 +264,13 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.1"
+    version: "1.4.0"
   stack_trace:
     description:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.3"
+    version: "1.8.0"
   stream_channel:
     description:
       name: stream_channel
@@ -282,7 +282,7 @@ packages:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.2"
   typed_data:
     description:
       name: typed_data
@@ -307,18 +307,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7+3"
-  when:
-    description:
-      name: when
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
-  which:
-    description:
-      name: which
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
   yaml:
     description:
       name: yaml
@@ -326,4 +314,4 @@ packages:
     source: hosted
     version: "2.1.12"
 sdks:
-  dart: ">=1.22.0 <2.0.0"
+  dart: ">=1.22.0 <2.0.0-dev.infinity"

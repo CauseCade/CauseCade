@@ -47,9 +47,9 @@ main{
 }
 
 #node_adder{
-    position: absolute;
-    left:95%;
-    top: 90%;
+
+    right: 2%;
+    top: 91%;
 }
 
 #GraphHolder{

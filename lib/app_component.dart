@@ -5,6 +5,7 @@ import 'package:causecade/network.dart';
 import 'package:causecade/bayesian_dag.dart';
 
 import 'package:causecade/overview_component.dart';
+import 'package:causecade/course_navigator_component.dart';
 import 'package:causecade/detail_component.dart';
 import 'package:causecade/edit_component.dart';
 import 'package:causecade/node_adder_component.dart';
@@ -24,7 +25,7 @@ BayesianDAG myDAG;
 @Component(
     selector: 'causecade',
     templateUrl: 'app_component.html',
-directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent,WelcomeComponent], /**/
+directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent,WelcomeComponent,CourseNavigatorComponent],
 providers: const [ROUTER_PROVIDERS,materialProviders]
 )
 @RouteConfig(const [

@@ -8,14 +8,14 @@ import 'package:angular2_components/angular2_components.dart';
     providers: const [materialProviders])
 class WelcomeComponent {
 
-  bool IsVisible = true; //show by default;
+  bool isVisible = true; //show by default;
 
-  enterCauseCade(){
-    IsVisible=false;
+  void enterCauseCade(){
+    isVisible=false;
     print('Closed Welcome Modal');
   }
 
-  takeTour(){
+  void takeTour(){
     print('currently not supported');
   }
 }
