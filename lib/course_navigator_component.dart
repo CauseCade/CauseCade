@@ -6,6 +6,9 @@ import 'package:angular2_components/angular2_components.dart';
 import 'package:causecade/app_component.dart';
 import 'package:causecade/course_lesson_component.dart';
 
+
+
+
 @Component(
     selector: 'course-navigator',
     templateUrl: 'course_navigator_component.html',
@@ -21,6 +24,7 @@ class CourseNavigatorComponent {
   CourseNavigatorComponent(){
     print('Course Navigator Component loaded...');
     navigationRatioComplement=100-navigationRatio;
+
   }
 
   void hideCourseMenu(){

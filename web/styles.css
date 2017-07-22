@@ -263,3 +263,24 @@ g > .node{
     height: 100%;
     background-color: #E0E0E0;
 }
+
+/*Lesson Components Styling*/
+
+.numberCircle {
+    margin:3px;
+    display: inline-block;
+    border-radius: 50%;
+    width: 30px;
+    font-size: 18px;
+    border: 3px solid #E91E63;
+}
+.numberCircle span {
+    color: #212121;
+    text-align: center;
+    line-height: 30px;
+    display: block;
+}
+
+.lesson-content{
+    border-top: 1px solid rgba(0,0,0,.1);
+}

@@ -1,7 +1,25 @@
 <div>
-
     <div  *ngIf="lessonSelected==false" style="text-align:center; margin-top: 50%">
         <i class="material-icons" style="font-size: 4em">&#xE031;</i><br>
         Aw shucks,<br>no lesson selected!
+        <material-button class="white" (click)="selectLesson()">
+            <i class="material-icons">&#xE876;</i>
+        </material-button>
+    </div>
+    <div class="mdl-card" *ngIf="lessonSelected" style="height: 100%;">
+        <!--Load Lesson Progress-->
+        <div class="lessonProgress mdl-card__supporting-text " style="height: 10%;">
+            <div>Lesson  Goals Progress...</div>
+            <div  *ngFor="let goal of goalList; let i=index" class="numberCircle">
+                <span>{{i+1}}</span>
+            </div>
+
+            <material-button class="white" (click)="deselectLesson()" style="float:right">
+                <i class="material-icons">&#xE5CD;</i>
+            </material-button>
+        </div>
+        <!--Load Markdown Lesson Text-->
+        <div class="mdl-card__supporting-text lesson-content" [innerHTML]="htmlFromMarkdown"></div>
+
     </div>
 </div>
