@@ -2,10 +2,11 @@
 // CauseCade course (educational) part
 
 import 'package:angular2/core.dart';
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
 import 'course_navigator_component.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'dart:io';
+import 'package:causecade/teach_service.dart';
 
 
 //import 'package:causecade/tester_markdown.md';
@@ -18,17 +19,17 @@ import 'dart:io';
     providers: const [materialProviders,CourseNavigatorComponent])
 class CourseLessonComponent {
 
-  bool lessonSelected = false; //hide by default;
+  final TeachService _teachService;
+  bool lessonSelected; //hide by default;
   int goalCount = 6; //Dummy Value //FIX
   List<String> goalList;
-
-
   var htmlFromMarkdown = md.markdownToHtml("<h1>Lesson Test</h1> <br> Why is dart **incompetent**?");
 
 
-  CourseLessonComponent(){
+  CourseLessonComponent(this._teachService){
     print('Course Lesson Component loaded...');
     goalList = new List<String>(goalCount);
+    lessonSelected=_teachService.getSelectionStatus();
   }
 
   void deselectLesson(){

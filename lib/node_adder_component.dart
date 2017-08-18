@@ -1,8 +1,8 @@
 import 'package:angular2/core.dart';
-import 'package:angular2/common.dart';
+import 'package:angular2/common.dart'; //TODO remove?
 import 'app_component.dart';
 
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
 import 'data_converter.dart';
 import 'node.dart';
 @Component(

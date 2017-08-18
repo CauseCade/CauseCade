@@ -1,7 +1,7 @@
 import 'package:angular2/core.dart';
 import 'package:angular2/common.dart';
 
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
 import 'package:angular2/router.dart';
 
 import 'node.dart';

@@ -11,8 +11,8 @@ dependencies:
   browser: '>=0.10.0'
   dart_to_js_script_rewriter: '^1.0.1'
   angular2: any
+  angular_components: any
   d3: '^0.2.0'
-  angular2_components: '^0.2.2'
   quiver: any
   json: any
   chartjs: any

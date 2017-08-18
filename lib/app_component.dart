@@ -1,5 +1,5 @@
 import 'package:angular2/core.dart';
-import 'package:angular2_components/angular2_components.dart';
+import 'package:angular_components/angular_components.dart';
 
 import 'package:causecade/network.dart';
 import 'package:causecade/bayesian_dag.dart';
@@ -25,8 +25,8 @@ BayesianDAG myDAG;
 @Component(
     selector: 'causecade',
     templateUrl: 'app_component.html',
-directives: const [ROUTER_DIRECTIVES,materialDirectives,NodeAdderComponent,WelcomeComponent,CourseNavigatorComponent],
-providers: const [ROUTER_PROVIDERS,materialProviders]
+directives: const [ROUTER_DIRECTIVES,NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent], /**/
+providers: const [ROUTER_PROVIDERS,materialProviders] /**/
 )
 @RouteConfig(const [
   const Route(path: '/overview/:id',name: 'Overview',component: OverviewComponent),
@@ -58,7 +58,7 @@ class AppComponent implements OnInit{
     print('Appcomponent Initiated');
 
     networkHolder = querySelector('#GraphHolder');
-    svg = new Selection('#GraphHolder').append("svg"); /*svg file we draw on*/
+    svg = new Selection('#GraphHolder').append("svg");// svg file we draw on
     //uses d3 import in order to load this
 
     myNet = new Network(svg,width,height);
@@ -120,5 +120,4 @@ class AppComponent implements OnInit{
   void refreshNetName(){
     networkName=myDAG.getName();
   }
-
 }
