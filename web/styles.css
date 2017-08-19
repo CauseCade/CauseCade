@@ -66,7 +66,7 @@ main{
 }
 
 #controlmenu{
-    background: #E91E63;
+   /* background: #E91E63;*/
     width: 100%;
     color: #fafafa;
     font-family: 'Roboto', sans-serif;
@@ -283,4 +283,29 @@ g > .node{
 
 .lesson-content{
     border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.CourseNavigatorContext{
+    display: block;
+    color: white;
+    float: left;
+}
+
+#CourseNavigatorDropdowns{
+
+    float: left
+}
+
+#courseNavigatorSpacer{
+    clear: both;
+    height: 1em;
+}
+
+.courseNavigatorMinimise{
+    float:right;
+}
+
+/*For items that always have teaching colour*/
+.themeColourTeach{
+    background-color: #00A6D6;
 }

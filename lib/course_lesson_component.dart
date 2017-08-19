@@ -7,6 +7,7 @@ import 'course_navigator_component.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'dart:io';
 import 'package:causecade/teach_service.dart';
+import 'lesson.dart';
 
 
 //import 'package:causecade/tester_markdown.md';
@@ -18,9 +19,12 @@ import 'package:causecade/teach_service.dart';
     directives: const [materialDirectives],
     providers: const [materialProviders,CourseNavigatorComponent])
 class CourseLessonComponent {
+  @Input()
+  Lesson currentLesson;
+  @Input()
+  bool lessonSelected;
 
   final TeachService _teachService;
-  bool lessonSelected; //hide by default;
   int goalCount = 6; //Dummy Value //FIX
   List<String> goalList;
   var htmlFromMarkdown = md.markdownToHtml("<h1>Lesson Test</h1> <br> Why is dart **incompetent**?");
@@ -29,7 +33,6 @@ class CourseLessonComponent {
   CourseLessonComponent(this._teachService){
     print('Course Lesson Component loaded...');
     goalList = new List<String>(goalCount);
-    lessonSelected=_teachService.getSelectionStatus();
   }
 
   void deselectLesson(){

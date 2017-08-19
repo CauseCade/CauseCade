@@ -1,7 +1,8 @@
 // A course is a collection of Lessons, with a short description and version
 import 'package:causecade/lesson.dart';
+import 'package:angular_components/angular_components.dart'; //for uiDisplay
 
-class Course{
+class Course implements HasUIDisplayName{
 
   final String name;
   final String dateCreated;
@@ -25,6 +26,8 @@ class Course{
     category = newCategory;}
 
   String get courseCategory => category;
+
+  List<Lesson> get courseLessons => lessonList;
 
   void addLesson(Lesson lessonIn){
     lessonList.add(lessonIn);
@@ -50,4 +53,10 @@ class Course{
   void _updateLessonCount(){
     lessonCount = lessonList.length;
   }
+
+  @override
+  String get uiDisplayName => name; //just return the name
+
+  @override
+  String toString() => uiDisplayName;
 }

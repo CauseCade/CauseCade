@@ -1,25 +1,38 @@
-<!--When the Course Menu is closed-->
-<div *ngIf="isExpanded==false" style="float: right;margin-left:-100%">
-    <material-button class="white" (click)="openCourseMenu()" raised >
-        <i class="material-icons">&#xE314;</i>
-    </material-button>
-</div>
-
 <!--When the course menu is opened-->
-<div *ngIf="isExpanded" style="float: right; height: 100%;width: 30%;"> <!---->
+<div *ngIf="isActive" style="float: right; height: 100%;width: 30%;right: 20px"> <!---->
 
     <!--Main Compartment-->
-    <div class="mdl-card mdl-shadow--4dp" style="height: 95%;width: 100%;">
+    <div class="mdl-card mdl-shadow--4dp" style="height: 95%;width: 100%;margin-left: 0px;">
 
-        <div class="mdl-card__supporting-text mdl-card--border"style="background: white;height: {{navigationRatio}}%;width:100%;background: #E91E63;">
-            Select Your Lesson In this section
+        <div class="mdl-card__supporting-text mdl-card--border themeColourTeach"style="height: {{navigationRatio}}%;width:100%;">
 
+            <div id="CourseNavigatorDropdowns">
+                <div>
+                <span class="CourseNavigatorContext">Course Selection&nbsp; </span>
+                <material-dropdown-select [buttonText]="selectedCourseLabel"
+                                          [selection]="targetCourseSelection"
+                                          [options]="courseOptionsLong"
+                                          > <!--[itemRenderer]="courseNameRenderer"-->
+                </material-dropdown-select>
+              <!--  <p>Selected Course: {{ selectedCourseName}}</p>-->
+                </div>
+                <div id="courseNavigatorSpacer" ></div>
+                <div>
+                <span class="CourseNavigatorContext">Lesson Selection&nbsp; </span>
+                <material-dropdown-select [buttonText]="selectedLessonLabel"
+                                          [selection]="targetLessonSelection"
+                                          [options]="lessonOptionsLong"
+                > <!--[itemRenderer]="courseNameRenderer"-->
+                </material-dropdown-select>
+              <!--  <p>Selected Lesson: {{ selectedLessonName}}</p>-->
+                </div>
+            </div>
 
-            <material-button class="white" (click)="hideCourseMenu()">
+            <material-button class="white courseNavigatorMinimise" (click)="hideCourseMenu()">
                 <i class="material-icons">&#xE5CD;</i>
             </material-button>
         </div>
-        <course-lesson class="lesson" style="height:{{navigationRatioComplement}}%;width: 100%"></course-lesson>
+        <course-lesson [currentLesson]="LessonSelect" [lessonSelected]="lessonSelected" class="lesson" style="height:{{navigationRatioComplement}}%;width: 100%"></course-lesson>
     </div>
 
 </div>

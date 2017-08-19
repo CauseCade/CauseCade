@@ -46,7 +46,9 @@ class AppComponent implements OnInit{
   String networkName;
 
   bool openLoadMenu;
+  bool teachModeStatus; //user has teach mode on or off
   String loadMessage;
+  String MainColour; //holds dominant colour for the app
 
   Router test;
 
@@ -69,6 +71,8 @@ class AppComponent implements OnInit{
 
     networkName=myDAG.getName();
     openLoadMenu=false;
+    MainColour='#E91E63'; //Pink (default)
+    querySelectorAll('.themeColour').style.backgroundColor = MainColour;
   }
 
   onKey(dynamic event) {
@@ -119,5 +123,20 @@ class AppComponent implements OnInit{
 
   void refreshNetName(){
     networkName=myDAG.getName();
+  }
+
+  void toggleTeaching(){
+    if(teachModeStatus){
+      teachModeStatus=false;
+      print('Teach Mode Disabled');
+      MainColour='#E91E63'; //Pink.
+      querySelectorAll('.themeColour').style.backgroundColor = MainColour;
+    }
+    else{
+      teachModeStatus=true;
+      print('Teach Mode Enabled');
+      MainColour='#00A6D6'; //Blue
+      querySelectorAll('.themeColour').style.backgroundColor = MainColour;
+    }
   }
 }

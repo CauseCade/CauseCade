@@ -15,16 +15,20 @@ import 'lesson_data.dart'; //FIX
     templateUrl: 'course_navigator_component.html',
     directives: const [materialDirectives, CourseLessonComponent],
     providers: const [materialProviders,AppComponent,TeachService])
+
 class CourseNavigatorComponent {
+  @Input()
+  bool isActive;
+  bool lessonSelected;
 
   final TeachService _teachService;
-  bool isExpanded = false; //hide by default;
   int navigationRatio =15;  //What fraction of window should the navigation
                             //header be? (percentage)
   int navigationRatioComplement;
   List<Course> CourseList;
   Course CourseSelect; //selected course
   List<Lesson> LessonList;
+  Lesson LessonSelect; //selected lesson
 
   //bool =true; //any lesson selected?
 
@@ -32,17 +36,18 @@ class CourseNavigatorComponent {
     print('Course Navigator Component loaded...');
     navigationRatioComplement=100-navigationRatio;
     CourseList = _teachService.getCourses();
+    LessonList = new List<Lesson>();
     configureCourses();
     print('Configured Courses');
   }
 
   void hideCourseMenu(){
-    isExpanded=false;
+    isActive=false;
     print('User Closed Course Navigator');
   }
 
   void openCourseMenu(){
-    isExpanded=true;
+    isActive=true;
     print('User Opened Course Navigator');
   }
 
@@ -64,4 +69,62 @@ class CourseNavigatorComponent {
     _teachService.clearCurrentLesson();
   }
 
+  // Dropdowns (course)
+
+  final SelectionModel<Course> targetCourseSelection =
+    new SelectionModel.withList();/*..selectionChanges.listen(updateCourse);*/
+
+  StringSelectionOptions<Course> get courseOptionsLong => new StringSelectionOptions<Course>(CourseList);
+
+  static final ItemRenderer<Course> courseNameRenderer =
+      (HasUIDisplayName course) => course.uiDisplayName;
+
+ /* String get selectedCourseName {
+    if(  targetCourseSelection.selectedValues.isNotEmpty){
+        return targetCourseSelection.selectedValues.first.uiDisplayName;
+    }
+    else {
+      return 'No Course Selected';
+    }
+  }*/
+
+  String get selectedCourseLabel {
+    if(  targetCourseSelection.selectedValues.isNotEmpty){
+      CourseSelect=targetCourseSelection.selectedValues.first;
+      LessonList = CourseSelect.courseLessons;
+      return targetCourseSelection.selectedValues.first.uiDisplayName;
+    }
+    else {
+      CourseSelect=null;
+      LessonList = new List<Lesson>();
+      return 'Choose a course module';
+    }
+  }
+// Dropdowns (Lesson)
+
+  final SelectionModel<Lesson> targetLessonSelection =
+  new SelectionModel.withList();
+
+  StringSelectionOptions<Lesson> get lessonOptionsLong => new StringSelectionOptions<Lesson>(LessonList);
+
+  static final ItemRenderer<Lesson> lessonNameRenderer =
+      (HasUIDisplayName lesson) => lesson.uiDisplayName;
+
+ /* String get selectedLessonName =>
+      targetLessonSelection.selectedValues.isNotEmpty
+          ? targetLessonSelection.selectedValues.first.uiDisplayName
+          : 'No Lesson Selected';*/
+
+  String get selectedLessonLabel {
+    if(targetLessonSelection.selectedValues.length > 0){
+      LessonSelect=targetLessonSelection.selectedValues.first;
+      lessonSelected=true;
+      return (targetLessonSelection.selectedValues.first.uiDisplayName);
+    }
+    else {
+      lessonSelected=false;
+      LessonSelect=null;
+      return 'Choose a lesson';
+    }
+  }
 }
