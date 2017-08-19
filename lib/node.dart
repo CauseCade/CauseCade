@@ -1,8 +1,10 @@
 /*This dart file will contain the node class*/
 import 'link.dart';
 import 'package:causecade/vector_math.dart';
+import 'package:angular_components/angular_components.dart'; //for uiDisplay
 
-class node{
+
+class node  implements HasUIDisplayName{
 
   String name;
   int stateCount; //keeps track of how many states this node has (e.g. 2 for a true/false node)
@@ -689,4 +691,7 @@ class node{
   String toString(){
     return name;
   }
+
+  @override
+  String get uiDisplayName => name; //just return the name
 }

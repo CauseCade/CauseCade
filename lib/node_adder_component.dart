@@ -5,6 +5,7 @@ import 'app_component.dart';
 import 'package:angular_components/angular_components.dart';
 import 'data_converter.dart';
 import 'node.dart';
+import 'dart:html';
 @Component(
     selector: 'node-adder',
     templateUrl: 'node_adder_component.html',
@@ -16,113 +17,134 @@ class NodeAdderComponent implements OnInit {
 
   List<node> NodeList = new List<node>();
 
-  Set<String> ParentsToLink = new Set<String>();
+  Set<node> ParentsToLink = new Set<node>();
   //List<String> ParentsCounter = new List<String>();
 
-  Set<String> DaughtersToLink = new Set<String>();
+  Set<node> DaughtersToLink = new Set<node>();
   String NodeName;
   bool Visible;
-  String NodeCount ='2'; //default amount of states = 2
+  int NodeCount; //default amount of states = 2
 
-  List<String> AllowedStates = ['2','3','4'];
+  static List<int> AllowedStates = [2,3,4]; //Limited to 4 for now
 
-/*WIP -> will become available when (angular) material-components takes these out of alpha
-  SelectionModel<node> targetNode Selection = new SelectionModel
-      .withList(allowMulti: true);   //FIX TEMPORARY LINE*/
+  NodeAdderComponent(); //Constructor
 
-  NodeAdderComponent();
+  setName(dynamic event){
+    if(event.target.value!=null){
+     NodeName=event.target.value;
+    }
+  }
 
   void ngOnInit(){
     NodeList = myDAG.getNodes();
-    print(NodeList.length.toString());
     print('Ready To add Nodes');
   }
 
-  void setNodeName(dynamic event){
-    NodeName=event.target.value;
-  }
- /* void setParentValue(int index,dynamic event){
-    ParentsToLink[index]=event.target.value;
-  }*/
-
-/*
-  void setDaughterValue(int index,dynamic event){
-    DaughtersToLink[index]=event.target.value;
-
-  }
-*/
-
-/*  void setStateCount(dynamic event){
-    NodeCount=int.parse(event.target.value);
-  }*/
-
-/*  void increaseParents(){
-    ParentsCounter.add('Parent' + ParentsCounter.length.toString());
-    print(ParentsCounter.last.toString());
-  }*/
-
-  void addDaughter(String NodeIn){
-    DaughtersToLink.add(NodeIn);
-  }
-
-  void addParent(String NodeIn){
-    ParentsToLink.add(NodeIn);
-  }
   void makeVisible(){
-    if(!Visible){
-      /*increaseParents();*/
-      /*increaseDaughters();*/
-    }
     Visible=true;
   }
 
-  close(){
+  void close(){
+    resetSelections();
     Visible=false;
   }
 
-  prepareLists(){
-      ParentsToLink.remove('');
-      DaughtersToLink.remove('');
-  }
-
-  //TODO: move form to ngModel implementation
-  pushNodeLegacy(){
+  void pushNodeLegacy(){
     if(NodeName!=null){
-      print(NodeCount);
+      print('Pushing User Input...'); //debugging
+
       List MainList = new List(3);
       List NodeList = new List(2);
       NodeList[0]=NodeName;
       NodeList[1]=NodeCount;
       MainList[0]=NodeList;
-      prepareLists();
+      /*prepareLists();*/
       MainList[1]=ParentsToLink.toList();
       MainList[2]=DaughtersToLink.toList();
 
+      print('Sending off to data converter...'); //debugging
       Implement(MainList);
-      reset();
+      resetSelections();
       close();
     }
     else{
       print('you have not entered a valid option');
     }
   }
-  void reset(){
-    NodeName=null;
-    ParentsToLink.clear();
-    DaughtersToLink.clear();
-    NodeCount= '2'; //reset the default NodeCount;
+
+  // Dropdown (Node Multiplicity)
+
+  final SelectionModel<int> nodeMultiplicitySelection =
+    new SelectionModel.withList();
+
+  final SelectionOptions<int> nodeMultiplicityOptions =
+    new SelectionOptions<int>.fromList(AllowedStates);
+
+  String get nodeMultiplicityLabel {
+    if(nodeMultiplicitySelection.selectedValues.isNotEmpty){
+      NodeCount=nodeMultiplicitySelection.selectedValues.first;
+      return nodeMultiplicitySelection.selectedValues.first.toString();
+    }
+    else{
+      NodeCount=2;//default
+      return '2';
+    }
+  }
+    // Dropdown (renderer)
+
+    static final ItemRenderer<node> NodeRenderer =
+        (HasUIDisplayName node) => node.uiDisplayName;
+
+    // Dropdowns (DaughtePanent Node)
+
+    final SelectionModel<node> parentNodeSelection =
+    new SelectionModel.withList(allowMulti: true);
+
+    StringSelectionOptions<node> get parentNodeOptions
+         => new StringSelectionOptions<node>(NodeList);
+
+  String get parentNodeSelectionLabel {
+    var selectedValuesParent = parentNodeSelection.selectedValues;
+    if (selectedValuesParent.isEmpty) {
+      ParentsToLink.clear();
+      return "None Selected";
+    } else if (selectedValuesParent.length == 1) {
+      ParentsToLink=parentNodeSelection.selectedValues.toSet();
+      return NodeRenderer(selectedValuesParent.first);
+    } else {
+      ParentsToLink=parentNodeSelection.selectedValues.toSet();
+      return "${NodeRenderer(selectedValuesParent.first)} + ${selectedValuesParent
+          .length - 1} more";
+    }
   }
 
-  void onSubmit() {
-   print('pressed submit!');
+  // Dropdowns (Daughter Node)
+
+  final SelectionModel<node> daughterNodeSelection =
+  new SelectionModel.withList(allowMulti: true);
+
+  StringSelectionOptions<node> get daughterNodeOptions => new StringSelectionOptions<node>(NodeList);
+
+  String get daughterNodeSelectionLabel {
+    var selectedValues = daughterNodeSelection.selectedValues;
+    if (selectedValues.isEmpty) {
+      DaughtersToLink.clear();
+      return "None Selected";
+    } else if (selectedValues.length == 1) {
+      DaughtersToLink=daughterNodeSelection.selectedValues.toSet();
+      return NodeRenderer(selectedValues.first);
+    } else {
+      DaughtersToLink=daughterNodeSelection.selectedValues.toSet();
+      return "${NodeRenderer(selectedValues.first)} + ${selectedValues
+          .length - 1} more";
+    }
   }
-  /// Returns a map of CSS class names representing the state of [control].
-  Map<String, bool> controlStateClasses(NgControl control) => {
-    'ng-dirty': control.dirty ?? false,
-    'ng-pristine': control.pristine ?? false,
-    'ng-touched': control.touched ?? false,
-    'ng-untouched': control.untouched ?? false,
-    'ng-valid': control.valid ?? false,
-    'ng-invalid': control.valid == false
-  };
+
+  void resetSelections(){
+    daughterNodeSelection.clear();
+    parentNodeSelection.clear();
+    nodeMultiplicitySelection.clear();
+  }
+
+
 }

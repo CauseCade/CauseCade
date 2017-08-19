@@ -304,6 +304,10 @@ g > .node{
 .courseNavigatorMinimise{
     float:right;
 }
+/*COLOURS*/
+.themeColour{
+    background-color: #E91E63; /*to have some default colour*/
+}
 
 /*For items that always have teaching colour*/
 .themeColourTeach{

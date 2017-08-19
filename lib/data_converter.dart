@@ -4,7 +4,7 @@ import 'dart:html';
 
 Implement(InputData){
   print(myNet);
-  window.console.debug('inoutdata: ');
+  window.console.debug('inputdata: ');
   window.console.debug(InputData);
 
   //these can be cleared afterwards
@@ -14,6 +14,7 @@ Implement(InputData){
 
   // -------- adds info to the JS network (NETWORK REPRESENTATION) ---------
 
+  print('DataConverter: preparing inputs...');
   //Holds the New JsNodeObject
   var NodeHolder = new JsObject.jsify({"id":InputData[0][0],"group":20});
   NewNode[0]=(NodeHolder); //This must be a List (for some reason)
@@ -24,7 +25,7 @@ Implement(InputData){
   for(var i = 0; i < InputData[1].length; i++){
     //print("what is index of target: ");
     //print(myNet.getNodeIndex(InputData[1][i]));
-    var LinkHolder = new JsObject.jsify({"source":myNet.getNodeIndex(InputData[1][i]),"target":myNet.getNodesSize(),"value":10}); //finding values is hard right now
+    var LinkHolder = new JsObject.jsify({"source":myNet.getNodeIndex(InputData[1][i].toString()),"target":myNet.getNodesSize(),"value":10}); //finding values is hard right now
 
     NewLink.add(LinkHolder);
   }
@@ -32,7 +33,7 @@ Implement(InputData){
   for(var i = 0; i < InputData[2].length; i++){
     //print("what is index of target: ");
     //print(myNet.getNodeIndex(InputData[1][i]));
-    var LinkHolder = new JsObject.jsify({"source":myNet.getNodesSize(),"target":myNet.getNodeIndex(InputData[2][i]),"value":10}); //finding values is hard right now
+    var LinkHolder = new JsObject.jsify({"source":myNet.getNodesSize(),"target":myNet.getNodeIndex(InputData[2][i].toString()),"value":10}); //finding values is hard right now
 
     NewLink.add(LinkHolder);
   }
@@ -47,23 +48,28 @@ Implement(InputData){
                             //to call .addNewData() for this to have effect.
   //print("NetworkInfo: ");
   //print(networkInfo);
-
+  print('DataConverter: adding input to visual network...');
   myNet.addNewData(); //actually adding the nodes to the network
 
   networkInfo.clear(); //clearing stuff
 
   // -------- adds info to the actual DAG (NETWORK BEHIND THE SCENES) ---------
 
-  myDAG.insertNode(InputData[0][0],int.parse(InputData[0][1]));
+  print('DataConverter: adding input to DAG...');
+
+  myDAG.insertNode(InputData[0][0],InputData[0][1]);
   //Creates a Link for to all the parents of the node you just created
   for (var i = 0; i < InputData[1].length; i++) {
-    myDAG.insertLink(myDAG.findNode(InputData[1][i]), myDAG.findNode(InputData[0][0]));
+    myDAG.insertLink(InputData[1][i], myDAG.getNodes()[myDAG.numNodes()-1]);
+    //we use that the node that we just added is the last node in the DAG
   }
   //Creates a Link for to all the daughters of the node you just created
   for (var i = 0; i < InputData[2].length; i++) {
-    myDAG.insertLink(myDAG.findNode(InputData[0][0]), myDAG.findNode(InputData[2][i]));
+    myDAG.insertLink(myDAG.getNodes()[myDAG.numNodes()-1],InputData[2][i]);
+    //we use that the node that we just added is the last node in the DAG
   }
   //print(myDAG.toString());
+  print('DataConverter: Task Complete.');
 
 }
 
