@@ -9,6 +9,7 @@ import 'package:causecade/teach_service.dart';
 import 'package:causecade/course.dart';
 import 'package:causecade/lesson.dart';
 import 'lesson_data.dart'; //FIX
+import 'package:causecade/notification_service.dart';
 
 @Component(
     selector: 'course-navigator',
@@ -22,6 +23,8 @@ class CourseNavigatorComponent {
   bool lessonSelected;
 
   final TeachService _teachService;
+ /* NotificationService notifications;*/
+
   int navigationRatio =15;  //What fraction of window should the navigation
                             //header be? (percentage)
   int navigationRatioComplement;
@@ -54,10 +57,11 @@ class CourseNavigatorComponent {
   void selectCourse(Course courseIn){
     CourseSelect = courseIn; //set currently Selectd Course
     LessonList=CourseSelect.courseLessons; //find lessons (only) of this course
+
     //hasLessonSelected =false; //reset lesson selection status
   }
 
-  void selectLesson(Lesson lessonIn){
+  /*void selectLesson(Lesson lessonIn){
     _teachService.currentLesson = lessonIn;
   }
 
@@ -67,7 +71,7 @@ class CourseNavigatorComponent {
 
   test_clear(){ //fix
     _teachService.clearCurrentLesson();
-  }
+  }*/
 
   // Dropdowns (course)
 
@@ -119,6 +123,7 @@ class CourseNavigatorComponent {
     if(targetLessonSelection.selectedValues.length > 0){
       LessonSelect=targetLessonSelection.selectedValues.first;
       lessonSelected=true;
+
       return (targetLessonSelection.selectedValues.first.uiDisplayName);
     }
     else {

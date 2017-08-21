@@ -97,6 +97,8 @@ class node  implements HasUIDisplayName{
       stateCount = stateCountIn;
       resetLinkMatrixStructure(); //clearly, the link matrix must be altered
       stateLabels = labels; //also update the new labels
+      resetProbability(); //we need to reset the probability vector dimensions;
+      clearProbability(); //and set them all to 0;
     }
     else{
       print('this is already the current amount of states this node has \n');
@@ -127,6 +129,12 @@ class node  implements HasUIDisplayName{
     isInstantiated=true;
     flaggingNode=null; //We now have no more memory of what updated the node
     FlagOtherNodes();// Networks needs to be updated
+  }
+  resetProbability(){ //creates brand new probability vectors
+    LambdaEvidence=new Vector(stateCount);
+    PiEvidence=new Vector(stateCount);
+    Posterior = new Vector(stateCount);
+    print('node: reset probability');
   }
 
   clearProbability(){

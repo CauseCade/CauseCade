@@ -8,7 +8,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'dart:io';
 import 'package:causecade/teach_service.dart';
 import 'lesson.dart';
-
+import 'notification_service.dart';
 
 //import 'package:causecade/tester_markdown.md';
 
@@ -25,14 +25,16 @@ class CourseLessonComponent {
   bool lessonSelected;
 
   final TeachService _teachService;
+   NotificationService notifications;
   int goalCount = 6; //Dummy Value //FIX
   List<String> goalList;
   var htmlFromMarkdown = md.markdownToHtml("<h1>Lesson Test</h1> <br> Why is dart **incompetent**?");
 
 
-  CourseLessonComponent(this._teachService){
+  CourseLessonComponent(this._teachService,this.notifications){
     print('Course Lesson Component loaded...');
     goalList = new List<String>(goalCount);
+    notifications.addNotification(new NetNotification()..setLessonSelection()); //fix, make this work onchange
   }
 
   void deselectLesson(){

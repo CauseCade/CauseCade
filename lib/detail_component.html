@@ -13,18 +13,20 @@
             </material-radio-group>
         </material-expansionpanel>
         <material-expansionpanel name="Parent Nodes">
-            <ul class='mdl-list'>
-                <li *ngFor="let node of IncomingNodes" class="mdl-list__item">
-                    <span class="mdl-list__item-primary-content">{{node.getName()}}</span>
-                </li>
-            </ul>
+            <material-list class="nodeListDisplay_small"> <!--[size]="auto"-->
+                <!--<div label>click for node overview</div>-->
+                <material-list-item *ngFor="let node of IncomingNodes"> <!--(trigger)="changeNode(node)"-->
+                    {{node.getName()}}
+                </material-list-item>
+            </material-list>
         </material-expansionpanel>
         <material-expansionpanel name="Daughter Nodes">
-            <ul class='mdl-list'>
-                <li *ngFor="let node of OutGoingNodes" class="mdl-list__item">
-                    <span class="mdl-list__item-primary-content">{{node.getName()}}</span>
-                </li>
-            </ul>
+            <material-list class="nodeListDisplay_small"> <!--[size]="auto"-->
+                <!--<div label>click for node overview</div>-->
+                <material-list-item *ngFor="let node of OutGoingNodes"> <!--(trigger)="changeNode(node)"-->
+                    {{node.getName()}}
+                </material-list-item>
+            </material-list>
         </material-expansionpanel>
         <material-expansionpanel name='Technicalities'>
             <div class="mdl-card__actions mdl-card--border">

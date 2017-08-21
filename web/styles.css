@@ -90,19 +90,44 @@ main{
     font-weight: 600;
 }
 
+#detail_button{
+    padding-top: 16px;
+    width:90%;
+}
+
+
+#detail_button_alt{
+    padding-top: 16px;
+    display: flex;
+    width: 90%;
+    padding-right: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
 .header_card{
     color: rgba(0,0,0,0.87);
 }
 
 /*other*/
 
+#LowerNavigation{
+    display:flex;
+    justify-content: space-between;
+}
+
 #MenuOptions{
-    float: left;
+
 }
 
 #DisplayModes{
-    float: right;
+
 }
+
+#networkNameInput {
+    padding: 0px;
+}
+
 
 .mdl-tabs{
     padding-left: 3em;
@@ -164,7 +189,21 @@ g > .node{
 
     z-index:1002;
 }
+/* Overview Component */
 
+material-list.nodeListDisplay{
+    padding-top: 0px;
+}
+
+material-list.nodeListDisplay_small{
+    padding: 0px;
+}
+
+/*detail component*/
+
+.expansionPanelWide{
+    margin: 8px 0px !important;
+}
 /*////////////////////////// welcome Modal ///////////////////////////*/
 
 #welcomeModal{
@@ -309,7 +348,31 @@ g > .node{
     background-color: #E91E63; /*to have some default colour*/
 }
 
+.themeColourSecondary{
+    background-color: #D81B60; /*to have some default colour*/
+}
+
 /*For items that always have teaching colour*/
 .themeColourTeach{
-    background-color: #00A6D6;
+    background-color: #00BCD4;
+}
+
+/*haeder search*/
+material-input .spaceholder{
+    font-size: 0px !important;
+}
+
+/*notification Bar in appcomponent*/
+#notificationBar{
+    font-size: 12px;
+}
+
+#notificationBarSpan{
+    display: inline-block;
+    font-size: 14px;
+    font-family:;: Roboto;
+}
+
+#notificationBarChips{
+    display: inline-flex;
 }

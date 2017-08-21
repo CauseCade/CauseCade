@@ -54,16 +54,14 @@ class OverviewComponent implements OnInit{
     //else, hide the component
     ShouldBeHidden=true;
   }
-
   }
 
   makeBarChart(){
     ChartHolder = GenerateBarchart(SelectedNode);
   }
 
-  Navigate(String NameIn){
-    print('navigating trough router');
-
-
-  }
+ void changeNode(node NodeIn){
+   SelectedNode=NodeIn;
+   print('OverviewComponent: changed node to: ' + SelectedNode.getName());
+ }
 }

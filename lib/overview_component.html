@@ -1,4 +1,4 @@
-<div [class.hidden]="ShouldBeHidden" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em"> <!--*ngIf=HasNodeSelected-->
+<div [class.hidden]="ShouldBeHidden" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 11em"> <!--*ngIf=HasNodeSelected-->
 
     <div class="mdl-card__actions mdl-card--border">
         Node Information
@@ -26,21 +26,19 @@
     <div class="mdl-card__actions mdl-card--border">
         Parent Nodes
     </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <ul class='mdl-list'>
-            <li *ngFor="let node of IncomingNodes" class="mdl-list__item">
-                <span (click)="Navigate(node.getName())" class="mdl-list__item-primary-content">{{node.getName()}}</span>
-            </li>
-        </ul>
-    </div>
+    <material-list class="nodeListDisplay" > <!--[size]="auto"-->
+        <div label>click for node overview</div>
+        <material-list-item *ngFor="let node of IncomingNodes" (trigger)="changeNode(node)">
+            {{node.getName()}}
+        </material-list-item>
+    </material-list>
     <div class="mdl-card__actions mdl-card--border">
         Daughter Nodes
     </div>
-    <div class="mdl-card__actions mdl-card--border">
-        <ul class='mdl-list'>
-            <li *ngFor="let node of OutGoingNodes" class="mdl-list__item">
-                <span (click)="Navigate(node.getName())" class="mdl-list__item-primary-content">{{node.getName()}}</span>
-            </li>
-        </ul>
-    </div>
+    <material-list class="nodeListDisplay"> <!--[size]="auto"-->
+        <div label>click for node overview</div>
+        <material-list-item *ngFor="let node of OutGoingNodes" (trigger)="changeNode(node)">
+            {{node.getName()}}
+        </material-list-item>
+    </material-list>
 </div>

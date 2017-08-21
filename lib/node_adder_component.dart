@@ -6,6 +6,7 @@ import 'package:angular_components/angular_components.dart';
 import 'data_converter.dart';
 import 'node.dart';
 import 'dart:html';
+import 'package:causecade/notification_service.dart';
 @Component(
     selector: 'node-adder',
     templateUrl: 'node_adder_component.html',
@@ -14,6 +15,8 @@ import 'dart:html';
 )
 //TODO: give live feedback on validity of parents/daughter names
 class NodeAdderComponent implements OnInit {
+
+  NotificationService notifications;
 
   List<node> NodeList = new List<node>();
 
@@ -27,7 +30,7 @@ class NodeAdderComponent implements OnInit {
 
   static List<int> AllowedStates = [2,3,4]; //Limited to 4 for now
 
-  NodeAdderComponent(); //Constructor
+  NodeAdderComponent(this.notifications); //Constructor
 
   setName(dynamic event){
     if(event.target.value!=null){
@@ -63,6 +66,7 @@ class NodeAdderComponent implements OnInit {
       MainList[2]=DaughtersToLink.toList();
 
       print('Sending off to data converter...'); //debugging
+      notifications.addNotification(new NetNotification()..setNewNode());
       Implement(MainList);
       resetSelections();
       close();
@@ -95,13 +99,13 @@ class NodeAdderComponent implements OnInit {
     static final ItemRenderer<node> NodeRenderer =
         (HasUIDisplayName node) => node.uiDisplayName;
 
-    // Dropdowns (DaughtePanent Node)
+    // Dropdowns (parent Node)
 
-    final SelectionModel<node> parentNodeSelection =
-    new SelectionModel.withList(allowMulti: true);
+  final SelectionModel<node> parentNodeSelection =
+  new SelectionModel.withList(allowMulti: true);
 
-    StringSelectionOptions<node> get parentNodeOptions
-         => new StringSelectionOptions<node>(NodeList);
+  StringSelectionOptions<node> get parentNodeOptions
+  => new StringSelectionOptions<node>(NodeList);
 
   String get parentNodeSelectionLabel {
     var selectedValuesParent = parentNodeSelection.selectedValues;
