@@ -5,9 +5,12 @@ import 'package:angular_components/angular_components.dart';
 import 'package:angular2/router.dart';
 
 import 'node.dart';
+import 'link.dart';
 import 'vector_math.dart';
 import 'package:causecade/app_component.dart';
 import 'notification_service.dart';
+
+import  'dart:html'; //to set height on linkmatrix
 
 @Component(
     selector: 'edit-node',
@@ -39,7 +42,6 @@ class EditComponent implements OnInit {
   Matrix2 LinkMatrix;
   List<List<double>> MatrixValues;
 
-  int state_count_new;
   static List<int> AllowedStateCounts = [2,3,4]; //TODO make this a global variable
 
   List ObservationList;
@@ -91,12 +93,16 @@ class EditComponent implements OnInit {
  /* void setNewLinkDaughter(dynamic event){newLinkDaughter=event.target.value;} *///TODO remove
 
   void addNewParentLink(){
-    if((newLinkParent!=null)) {
+    newLinkParent=parentLinkSelection.selectedValues;
+    if((newLinkParent.isNotEmpty)) {
       newLinkParent.forEach((node){
         myDAG.insertLink(node,SelectedNode);
       });
       fetchLinks();
       parentLinkSelection.clear();
+      daughterLinkSelection.clear(); //to prevent selected option in daughter window
+      // to become disabled (not a huge problem,
+      // but its good practice and prevents errors)
       notifications.addNotification(new NetNotification()..setUpdateNodeLinks());
     }
     else{
@@ -105,12 +111,16 @@ class EditComponent implements OnInit {
   }
 
   void addNewDaughterLink(){
-    if((newLinkDaughter!=null)) {
+    newLinkDaughter=daughterLinkSelection.selectedValues;
+    if((newLinkDaughter.isNotEmpty)) {
       newLinkDaughter.forEach((node){
         myDAG.insertLink(SelectedNode,node);
       });
       fetchLinks();
       daughterLinkSelection.clear();
+      parentLinkSelection.clear(); //to prevent selected option in parent window
+      // to become disabled (not a huge problem,
+      // but its good practice and prevents errors)
       notifications.addNotification(new NetNotification()..setUpdateNodeLinks());
     }
     else{
@@ -187,9 +197,6 @@ class EditComponent implements OnInit {
       LinkList.add(link);
     });
   }
-
-
-
 
   //TODO: avoid making all these lists
   void setPrior(){
@@ -302,8 +309,9 @@ class EditComponent implements OnInit {
   //TODO: make this bulletproof, currently just breaks a lot of things, not
   // very user friendly at all
   void setNewStateCount(){
-    SelectedNode.setStateCount(state_count_new,LabelOld);
-    StateCount=state_count_new;
+    StateCount=nodeMultiplicitySelection.selectedValues.first;
+    nodeMultiplicitySelection.clear(); //clear selection
+    SelectedNode.setStateCount(StateCount,LabelOld);
     fetchOldLabels();
     pushNewLabels();
     print('updated the new count, but please change labels');
@@ -319,24 +327,25 @@ class EditComponent implements OnInit {
   static final ItemRenderer<node> NodeRenderer =
       (HasUIDisplayName node) => node.uiDisplayName;
 
+  //for both parents and daughter nodes
+  NewEditLinkSelectionOptions get LinkOptions
+  => new NewEditLinkSelectionOptions<node>(NodeList,SelectedNode);
+
   // Dropdowns (parent Link)
 
   final SelectionModel<node> parentLinkSelection =
   new SelectionModel.withList(allowMulti: true);
 
-  StringSelectionOptions<node> get parentLinkOptions
-  => new StringSelectionOptions<node>(NodeList);
-
   String get parentLinkSelectionLabel {
     var selectedValuesParent = parentLinkSelection.selectedValues;
     if (selectedValuesParent.isEmpty) {
-      newLinkParent.clear();
+      /*newLinkParent.clear();*/
       return "None Selected";
     } else if (selectedValuesParent.length == 1) {
-      newLinkParent=parentLinkSelection.selectedValues;
+      /*newLinkParent=parentLinkSelection.selectedValues;*/
       return NodeRenderer(selectedValuesParent.first);
     } else {
-      newLinkParent=parentLinkSelection.selectedValues;
+      /*newLinkParent=parentLinkSelection.selectedValues;*/
       return "${NodeRenderer(selectedValuesParent.first)} + ${selectedValuesParent
           .length - 1} more";
     }
@@ -347,19 +356,16 @@ class EditComponent implements OnInit {
   final SelectionModel<node> daughterLinkSelection =
   new SelectionModel.withList(allowMulti: true);
 
-  StringSelectionOptions<node> get daughterLinkOptions
-  => new StringSelectionOptions<node>(NodeList);
-
   String get daughterLinkSelectionLabel {
     var selectedValuesParent = daughterLinkSelection.selectedValues;
     if (selectedValuesParent.isEmpty) {
-      newLinkDaughter.clear();
+      /*newLinkDaughter.clear();*/
       return "None Selected";
     } else if (selectedValuesParent.length == 1) {
-      newLinkDaughter=selectedValuesParent;
+      /*newLinkDaughter=selectedValuesParent;*/
       return NodeRenderer(selectedValuesParent.first);
     } else {
-      newLinkDaughter=selectedValuesParent;
+      /*newLinkDaughter=selectedValuesParent;*/
       return "${NodeRenderer(selectedValuesParent.first)} + ${selectedValuesParent
           .length - 1} more";
     }
@@ -370,17 +376,60 @@ class EditComponent implements OnInit {
   final SelectionModel<int> nodeMultiplicitySelection =
   new SelectionModel.withList();
 
-  final SelectionOptions<int> nodeMultiplicityOptions =
-  new SelectionOptions<int>.fromList(AllowedStateCounts);
+  NewEditStateSelectionOptions<int> get nodeMultiplicityOptions
+  => new NewEditStateSelectionOptions<int>(AllowedStateCounts,StateCount);
 
   String get nodeMultiplicityLabel {
     if(nodeMultiplicitySelection.selectedValues.isNotEmpty){
-      state_count_new=nodeMultiplicitySelection.selectedValues.first;
-      return nodeMultiplicitySelection.selectedValues.first.toString();
+        return nodeMultiplicitySelection.selectedValues.first.toString();
     }
     else{
-      state_count_new=StateCount;//default
-      return StateCount.toString();
+      return 'None selected';
     }
   }
+}
+
+
+//so we can disable nodes (that are selected in other parent)
+//prevents users from selecting the same node as a parent AND a daughter
+//NOTE: slightly different to the one in node adder component
+class NewEditLinkSelectionOptions<T> extends StringSelectionOptions<T>
+    implements Selectable {
+
+    node currentNode;
+
+  NewEditLinkSelectionOptions(List<T> options,this.currentNode)
+      : super(options, toFilterableString: (T option) => option.toString());
+
+  NewEditLinkSelectionOptions.withOptionGroups(List<OptionGroup> optionGroups,this.currentNode)
+      : super.withOptionGroups(optionGroups,
+      toFilterableString: (T option) => option.toString());
+
+  @override
+  SelectableOption getSelectable(item) =>
+
+      item is node && (currentNode.getOutGoing().keys.contains(item) || currentNode.getInComing().keys.contains(item) || item==currentNode) //is this node contained in the list of the other selector?
+          ? SelectableOption.Disabled
+          : SelectableOption.Selectable;
+}
+
+//prevents user from setting the number of states that the node already has
+class NewEditStateSelectionOptions<T> extends StringSelectionOptions<T>
+    implements Selectable {
+
+  int currentStateCount;
+
+  NewEditStateSelectionOptions(List<T> options,this.currentStateCount)
+      : super(options, toFilterableString: (T option) => option.toString());
+
+  NewEditStateSelectionOptions.withOptionGroups(List<OptionGroup> optionGroups,this.currentStateCount)
+      : super.withOptionGroups(optionGroups,
+      toFilterableString: (T option) => option.toString());
+
+  @override
+  SelectableOption getSelectable(item) =>
+
+      item is int && (item==currentStateCount) //is this node contained in the list of the other selector?
+          ? SelectableOption.Disabled
+          : SelectableOption.Selectable;
 }

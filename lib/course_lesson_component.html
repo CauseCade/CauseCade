@@ -4,16 +4,24 @@
     Aw shucks,<br>no lesson selected!
 </div>
 
-<div class="mdl-card" *ngIf="lessonSelected" style="height: 100%;">
+<div class="mdl-card" *ngIf="lessonSelected" style="height: 100%;width: 100%">
     <!--Load Lesson Progress-->
-    <div class="lessonProgress mdl-card__supporting-text " style="height: 10%;">
-        Lesson  Goals Progress...
-        <div  *ngFor="let goal of goalList; let i=index" class="numberCircle">
+    <div class="mdl-card__title compactPadding" style="width: 100%">
+
+        <h2 class="mdl-card__title-text"><span style="color: #616161">Lesson</span>: {{currentLesson.lessonName}}</h2>
+
+        <div id='lessonDescription' style="margin-left: auto" [materialTooltip]="currentLesson.lessonDescription">view description</div>
+    </div>
+    <div *ngIf="currentLesson.goals!=null" class="lessonProgress mdl-card__actions mdl-card--border compactPadding">
+        Lesson  Tasks...
+        <div  *ngFor="let goal of currentLesson.goals; let i=index" class="numberCircle">
             <span>{{i+1}}</span>
         </div>
     </div>
+
+
     <!--Load Markdown Lesson Text-->
-    {{currentLesson.lessonName}}
+
     <div class="mdl-card__supporting-text lesson-content" [innerHTML]="htmlFromMarkdown"></div>
 
 </div>

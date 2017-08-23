@@ -11,6 +11,8 @@ class Lesson implements HasUIDisplayName{
                         //information and text for this lesson
   int CourseIndex;
 
+  List<String> goalList;
+
   Lesson(this.name,this.dateCreated);
 
   String get lessonName => name;
@@ -24,6 +26,20 @@ class Lesson implements HasUIDisplayName{
     markdownPath = newPath;}
 
   String get lessonMarkdownPath => markdownPath;
+
+  set goals(List<String> newGoalList) => goalList=newGoalList;
+
+  List<String> get goals => goalList;
+
+  void addGoal(String newGoal){
+    goalList.add(newGoal);
+    print('added goal to lesson: ' + name);
+  }
+
+  void clearGoals(){
+    goalList.clear();
+    print('cleared goals of lesson: ' + name);
+  }
 
   @override
   String get uiDisplayName => name; //just return the name

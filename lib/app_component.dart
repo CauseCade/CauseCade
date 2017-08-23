@@ -162,6 +162,7 @@ class AppComponent implements OnInit {
         break;
       case 'teach':
         querySelectorAll('.themeColour').style.backgroundColor = '#00BCD4'; //Blue
+
         querySelectorAll('.themeColourSecondary').style.backgroundColor = '#00ACC1'; //darker blue;
         print('Colours: teach');
         break;

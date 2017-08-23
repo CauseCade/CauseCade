@@ -25,7 +25,7 @@ class CourseNavigatorComponent {
   final TeachService _teachService;
  /* NotificationService notifications;*/
 
-  int navigationRatio =15;  //What fraction of window should the navigation
+  int navigationRatio =12;  //What fraction of window should the navigation
                             //header be? (percentage)
   int navigationRatioComplement;
   List<Course> CourseList;
@@ -44,10 +44,10 @@ class CourseNavigatorComponent {
     print('Configured Courses');
   }
 
-  void hideCourseMenu(){
+  /*void hideCourseMenu(){
     isActive=false;
     print('User Closed Course Navigator');
-  }
+  }*/
 
   void openCourseMenu(){
     isActive=true;
@@ -60,6 +60,8 @@ class CourseNavigatorComponent {
 
     //hasLessonSelected =false; //reset lesson selection status
   }
+
+
 
   /*void selectLesson(Lesson lessonIn){
     _teachService.currentLesson = lessonIn;
@@ -130,6 +132,22 @@ class CourseNavigatorComponent {
       lessonSelected=false;
       LessonSelect=null;
       return 'Choose a lesson';
+    }
+  }
+
+  void prevLesson(){
+    //if we have a lesson selected and it is not the first in the list
+    if(lessonSelected && LessonList.indexOf(LessonSelect)!=0){
+      targetLessonSelection.select(LessonList[(LessonList.indexOf(LessonSelect)-1)]);
+      print('Prev Lesson');
+    }
+  }
+
+  void nextLesson(){
+    //if we have a lesson selected and it is not the last in the list
+    if(lessonSelected && LessonList.indexOf(LessonSelect)!=LessonList.length-1){
+      targetLessonSelection.select(LessonList[(LessonList.indexOf(LessonSelect)+1)]);
+      print('Next Lesson');
     }
   }
 }

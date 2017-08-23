@@ -27,12 +27,22 @@
               <!--  <p>Selected Lesson: {{ selectedLessonName}}</p>-->
                 </div>
             </div>
-
-            <material-button class="white courseNavigatorMinimise" (click)="hideCourseMenu()">
-                <i class="material-icons">&#xE5CD;</i>
-            </material-button>
+            <div class="courseNavigatorSkip">
+                <div>
+                    <material-button [disabled]="!(lessonSelected && LessonList.indexOf(LessonSelect)!=0)"(click)="prevLesson()">
+                        <i class="material-icons">navigate_before</i>
+                    </material-button>
+                    <material-button [disabled]="!(lessonSelected && LessonList.indexOf(LessonSelect)!=LessonList.length-1)"  (click)="nextLesson()">
+                        <i class="material-icons">navigate_next</i>
+                    </material-button>
+                </div>
+                <div style="text-align: center;font-family: Roboto, sans-serif">
+                    Navigate Lessons
+                </div>
+            </div>
         </div>
-        <course-lesson [currentLesson]="LessonSelect" [lessonSelected]="lessonSelected" class="lesson" ></course-lesson><!--style="height:{{navigationRatioComplement}}%;width: 100%"-->
+        <course-lesson [currentLesson]="LessonSelect" [lessonSelected]="lessonSelected" class="lesson" style="height:{{navigationRatioComplement}}%" ></course-lesson><!--style="height:{{navigationRatioComplement}}%;width: 100%"-->
+
     </div>
 
 </div>

@@ -104,8 +104,8 @@ class NodeAdderComponent implements OnInit {
   final SelectionModel<node> parentNodeSelection =
   new SelectionModel.withList(allowMulti: true);
 
-  StringSelectionOptions<node> get parentNodeOptions
-  => new StringSelectionOptions<node>(NodeList);
+   NewLinkSelectionOptions<node> get parentNodeOptions
+  => new NewLinkSelectionOptions<node>(NodeList,daughterNodeSelection.selectedValues);
 
   String get parentNodeSelectionLabel {
     var selectedValuesParent = parentNodeSelection.selectedValues;
@@ -127,7 +127,8 @@ class NodeAdderComponent implements OnInit {
   final SelectionModel<node> daughterNodeSelection =
   new SelectionModel.withList(allowMulti: true);
 
-  StringSelectionOptions<node> get daughterNodeOptions => new StringSelectionOptions<node>(NodeList);
+  NewLinkSelectionOptions<node> get daughterNodeOptions
+  => new NewLinkSelectionOptions<node>(NodeList,parentNodeSelection.selectedValues);
 
   String get daughterNodeSelectionLabel {
     var selectedValues = daughterNodeSelection.selectedValues;
@@ -149,6 +150,26 @@ class NodeAdderComponent implements OnInit {
     parentNodeSelection.clear();
     nodeMultiplicitySelection.clear();
   }
+}
 
+//so we can disable nodes (that are selected in other parent)
+//prevents users from selecting the same node as a parent AND a daughter
+class NewLinkSelectionOptions<T> extends StringSelectionOptions<T>
+    implements Selectable {
 
+  List<node> nodesToExclude;
+
+  NewLinkSelectionOptions(List<T> options,this.nodesToExclude)
+      : super(options, toFilterableString: (T option) => option.toString());
+
+  NewLinkSelectionOptions.withOptionGroups(List<OptionGroup> optionGroups,this.nodesToExclude)
+      : super.withOptionGroups(optionGroups,
+      toFilterableString: (T option) => option.toString());
+
+  @override
+  SelectableOption getSelectable(item) =>
+
+      item is node && nodesToExclude.contains(item) //is this node contained in the list of the other selector?
+          ? SelectableOption.Disabled
+          : SelectableOption.Selectable;
 }
