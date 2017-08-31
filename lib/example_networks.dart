@@ -14,7 +14,7 @@ import 'package:causecade/data_converter.dart';
       // print(myDAG.numNodes());
       myDAG.insertNode("Class", 3);
       // myDAG.getNodes()[2].enterUnconditionalProbability(0.7,0.3);
-      myDAG.insertNode("HasSHell", 2);
+      myDAG.insertNode("HasShell", 2);
       //print(myDAG.numNodes());
       myDAG.insertNode('BearsYoungAs', 2);
       // myDAG.getNodes()[4].enterUnconditionalProbability(0.4,0.6);

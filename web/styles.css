@@ -177,6 +177,19 @@ g > .node{
    stroke: #fafafa;
 }
 
+g > .link{
+    stroke: #999;
+    stroke-opacity: 1;
+}
+
+defs > marker {
+
+}
+defs > marker > path{
+    fill: #999;
+    opacity: 1;
+}
+
 /*modals*/
 
 #modalContent {
@@ -361,6 +374,13 @@ material-list.nodeListDisplay_small{
     background-color: #D81B60; /*to have some default colour*/
 }
 
+.themeColourText{
+    font-family: 'Roboto', sans-serif;
+    font-size: 26px;
+    stroke: none;
+    fill:  #D81B60;
+}
+
 /*For items that always have teaching colour*/
 .themeColourTeach{
     background-color: #00BCD4;
@@ -413,4 +433,8 @@ td.linkMatrixTD{
 
 td.linkMatrixTD > div{
     width: 30px;
+}
+
+linkMatrixLabelHolder{
+    color:red;
 }

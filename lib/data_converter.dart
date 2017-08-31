@@ -25,7 +25,7 @@ Implement(InputData){
   for(var i = 0; i < InputData[1].length; i++){
     //print("what is index of target: ");
     //print(myNet.getNodeIndex(InputData[1][i]));
-    var LinkHolder = new JsObject.jsify({"source":myNet.getNodeIndex(InputData[1][i].toString()),"target":myNet.getNodesSize(),"value":10}); //finding values is hard right now
+    var LinkHolder = new JsObject.jsify({"source":myNet.getNodeIndex(InputData[1][i].toString()),"target":myNet.getNodesSize(),"value":40}); //finding values is hard right now
 
     NewLink.add(LinkHolder);
   }
@@ -33,7 +33,7 @@ Implement(InputData){
   for(var i = 0; i < InputData[2].length; i++){
     //print("what is index of target: ");
     //print(myNet.getNodeIndex(InputData[1][i]));
-    var LinkHolder = new JsObject.jsify({"source":myNet.getNodesSize(),"target":myNet.getNodeIndex(InputData[2][i].toString()),"value":10}); //finding values is hard right now
+    var LinkHolder = new JsObject.jsify({"source":myNet.getNodesSize(),"target":myNet.getNodeIndex(InputData[2][i].toString()),"value":40}); //finding values is hard right now
 
     NewLink.add(LinkHolder);
   }
@@ -121,7 +121,7 @@ visualiseNetwork(){
 
   myDAG.getLinks().forEach((link){
     // we cant add links by name, so we first have to fetch their index //TODO: Fix this waste of performance
-    newLinks.add(new JsObject.jsify({"source":myNet.getNodeIndex(link.getEndPoints()[0].getName()),"target":myNet.getNodeIndex(link.getEndPoints()[1].getName()),"value":10}));
+    newLinks.add(new JsObject.jsify({"source":myNet.getNodeIndex(link.getEndPoints()[0].getName()),"target":myNet.getNodeIndex(link.getEndPoints()[1].getName()),"value":40}));
     print('link added to:' + link.getEndPoints()[1].getName());
   });
 

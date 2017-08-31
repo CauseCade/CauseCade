@@ -20,18 +20,43 @@ class Network {
   Selection link;
   Selection node;
   var g;
+  var g_node;
+  var g_link;
   var activeSelection;
 
   /*constructor*/
   Network(svgIn,int width,int height) {
 
+
+
+
     svg = svgIn;
 
+    //set up arrow shape in svg
+    svg.append('defs').append('marker')
+      ..attr['id']='arrowhead'
+      ..attr['refX']='6'
+      ..attr['refY']='2'
+      ..attr['markerUnits']='strokeWidth'
+      ..attr['markerWidth']='10'
+      ..attr['markerHeight']='8'
+      ..attr['orient']='auto'
+      ..append('path');
+
+
+    svg.selectAll('marker > path')
+          ..attr['d']='M 0 0 L 5 2 L 0 4 Z';
+
     g = svg.append('g');
+    g_link=g.append('g')
+      ..attr['id']='link_holder';
+    g_node=g.append('g')
+      ..attr['id']='node_holder';
+
 
     force
-    ..charge = -120
-    ..linkDistance = 35
+    ..charge = -600
+    ..linkDistance = 220
     ..size = [width, height];
 
     /*var kappa =new JsObject.jsify({"id":"InitialNode","group":1});
@@ -64,63 +89,73 @@ class Network {
 
     /*this handles updating the network svg positions*/
      force.onTick.listen((_) {
-       g.selectAll(".link")
-         ..attrFn["x1"] = ((d) => d['source']['x'])
-         ..attrFn["y1"] = ((d) => d['source']['y'])
-         ..attrFn["x2"] = ((d) => d['target']['x'])
-         ..attrFn["y2"] = ((d) => d['target']['y']);
 
-       g.selectAll(".node")
+
+       g_node.selectAll(".node")
          ..attr["transform"] = ((d) => 'translate(' + d['x'].toString() + ',' + d['y'].toString() + ")");
          /*..attrFn["cy"] = ((d) => d['y']);*/
-       });
+
+
+      g_link.selectAll(".link")
+        ..attrFn["x1"] = ((d) => d['source']['x'])
+        ..attrFn["y1"] = ((d) => d['source']['y'])
+        ..attrFn["x2"] = ((d) => d['target']['x'])
+        ..attrFn["y2"] = ((d) => d['target']['y']);
+
+     });
   }
 
   void refreshData(){
     print('refreshData() called');
-    link = g.selectAll(".link").data(links).enter().append("line") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
-      ..attr["class"] = "link"
-      ..styleFn["stroke-width"] = ((d) => math.sqrt(d['value']));
 
-
-
-  node = g.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
+  node = g_node.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
         ..attr["class"]= "node";
     //node = g.selectAll(".node").data(nodes).exit(); //testing this
 
     node.append("circle") //FIX
       ..attr["class"] = "circlesvg"
-      ..attr["r"] = "8"
-      ..styleFn["fill"] = ((d) => color(d['group']));
+      ..attr["id"]= (d){return d['id'];}
+      ..attr["r"] = "16"
+      ..styleFn["fill"] = ((d) => color(d['group']))
+      ..on('click').listen( (event) {
+         print('clicked');
+         /*print(event.target.runtimeType);*/
+         node.styleFn['fill']=color(6);
+         svg.styleFn['cursor']="pointer";
+       })
+       ..on("mouseout").listen((d) {
+         svg.styleFn['cursor']="default";
+       });
+
+
       //..call((_) => force.drag());*/
 
     node.append("text")
-      ..attr["dx"] = "10"
-      ..attr["dy"] =  ".39em"
-      ..styleFn["stroke"] = "#9E9E9E"
-      ..styleFn['font-family'] = "roboto"
-      ..styleFn['font-weight'] = "100"
-      ..styleFn['font-size'] = "10px"
+      ..attr["dx"] = "15"
+      ..attr["dy"] =  ".35em"
+      ..attr["class"] = "themeColourText"
       ..text = (d) => d['id'];
+      /*..on.click.add((Event e) => print('clicked'));
+*/
+    //add lines to links
+    link = g_link.selectAll(".link").data(links).enter().append("line") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
+      ..attr["class"] = "link"
+      ..attr["marker-end"] = "url(#arrowhead)"
+      ..styleFn["stroke-width"] = ((d) => math.sqrt(d['value']));
 
-    node.on("mouseover").listen( (Selection) {
-      window.console.debug(node.toString());
-      node.styleFn['fill']=color(6);
-      svg.styleFn['cursor']="pointer";
-    });
-    node.on("mouseout").listen((d) {
-      svg.styleFn['cursor']="default";
-    });
+
   }
 
   void addNewData(){
-    //Adds the new nodes present in networkInfo
-    for (var i =0; i < networkInfo[0][0].length; i++){
-      nodes.add(networkInfo[0][0][i]);
-    }
+
     //Adds the new links present in networkInfo
     for (var j = 0; j < networkInfo[0][1].length; j++){
       links.add(networkInfo[0][1][j]);
+    }
+
+    //Adds the new nodes present in networkInfo
+    for (var i =0; i < networkInfo[0][0].length; i++){
+      nodes.add(networkInfo[0][0][i]);
     }
 
     force.nodes = nodes;
@@ -132,11 +167,13 @@ class Network {
 
   void addNewDataSet(InputDataSet){
 
-    for(var i =0; i< InputDataSet["nodes"].length;i++){
-      nodes.add(InputDataSet["nodes"][i]);
-    }
+
     for(var i =0; i< InputDataSet["links"].length;i++){
       links.add(InputDataSet["links"][i]);
+    }
+
+    for(var i =0; i< InputDataSet["nodes"].length;i++){
+      nodes.add(InputDataSet["nodes"][i]);
     }
 
     force.nodes = nodes;
