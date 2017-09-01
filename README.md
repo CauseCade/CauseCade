@@ -8,7 +8,7 @@ In the end, I hope this project will result in a page that can teach others abou
 
 ## Blog  ##
 
-Updates on the CauseCade project can be found on the [CauseCade blog](https://sandcrawler.github.io/CauseCade-blog/). This blog will hold information about large updates done to the project and much more. As of July 2017, the blog is operational, albeit with a few minor issues that will be fixed over the coming months.
+Updates on the CauseCade project can be found on the [CauseCade blog](https://nemoandrea.github.io/CauseCade-blog/). This blog will hold information about large updates done to the project and much more. As of July 2017, the blog is operational, albeit with a few minor issues that will be fixed over the coming months.
 
 ## todo List for this Project ##
 
@@ -28,5 +28,5 @@ Updates on the CauseCade project can be found on the [CauseCade blog](https://sa
    * Teach Bayesian Networks in Chapters
    * Create Exercises
    * Write out separate documents (as backup)
-* Create Help screen
-* Develop Alternative Canvas Views
+* Create Help screen (modal)
+* Develop Alternative Canvas Views (diagonal linkmatrix representation and histogram)     
