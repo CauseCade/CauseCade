@@ -182,6 +182,7 @@ class AppComponent implements OnInit {
   }
 
   void viewOverview(){ //when user has selected a node in dropdown and presses button
+    myNet.setNodeFocus(currentNode);
     router.navigate(['Overview',{'id':currentNode.getName()}]);
     notifications.addNotification(new NetNotification()..setNodeSelected());
   }

@@ -4,6 +4,7 @@ import 'dart:html';
 import 'dart:js';
 import 'dart:svg';
 import 'package:causecade/app_component.dart';
+import 'node.dart';
 
 var counter = 6; //not sure what this is //TODO
 
@@ -18,7 +19,7 @@ class Network {
   JsArray nodes = new JsArray();
   var svg;
   Selection link;
-  Selection node;
+  Selection node_selection;
   var g;
   var g_node;
   var g_link;
@@ -55,7 +56,7 @@ class Network {
 
 
     force
-    ..charge = -600
+    ..charge = -900
     ..linkDistance = 220
     ..size = [width, height];
 
@@ -108,19 +109,19 @@ class Network {
   void refreshData(){
     print('refreshData() called');
 
-  node = g_node.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
+  node_selection = g_node.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
         ..attr["class"]= "node";
     //node = g.selectAll(".node").data(nodes).exit(); //testing this
 
-    node.append("circle") //FIX
+    node_selection.append("circle") //FIX
       ..attr["class"] = "circlesvg"
-      ..attr["id"]= (d){return d['id'];}
+      ..attr["id"]= (d){return ('svgNodeObject_'+(d['id']).replaceAll(new RegExp(r"\s+\b|\b\s"), ""));}
       ..attr["r"] = "16"
       ..styleFn["fill"] = ((d) => color(d['group']))
       ..on('click').listen( (event) {
          print('clicked');
          /*print(event.target.runtimeType);*/
-         node.styleFn['fill']=color(6);
+         node_selection.styleFn['fill']=color(6);
          svg.styleFn['cursor']="pointer";
        })
        ..on("mouseout").listen((d) {
@@ -130,7 +131,7 @@ class Network {
 
       //..call((_) => force.drag());*/
 
-    node.append("text")
+    node_selection.append("text")
       ..attr["dx"] = "15"
       ..attr["dy"] =  ".35em"
       ..attr["class"] = "themeColourText"
@@ -194,7 +195,7 @@ class Network {
     /*link.exit();*/
     //print(node.data(nodes).exit().toString());
     print(g.selectAll('node').runtimeType);
-    node = g.selectAll(".node").exit().remove();
+    node_selection = g.selectAll(".node").exit().remove();
 
 
 
@@ -252,6 +253,44 @@ class Network {
       }
     }
     window.console.debug("no match found");
+  }
+
+
+  void setNodeFocus(node NodeSelected){
+    String nodeName = NodeSelected.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), "");
+    String defaultFillColour='#999'; // a type of grey
+    String defaultStrokeColour='#fafafa';
+    String defaultStrokeWidth='1.5px';
+    //set the fill of all circles to the default colours (resetting previous
+    //highlight colours)
+    var allNodes= querySelectorAll('.circlesvg');
+    allNodes.style.setProperty('fill', defaultFillColour.toString());
+    allNodes.style.setProperty('stroke', defaultStrokeColour.toString());
+    allNodes.style.setProperty('stroke-width', defaultStrokeWidth.toString());
+
+    /*allNodes.style.setProperty('fill-opacity', '0.5');*/
+
+    //Set new Highlight
+
+    //Set Main selected node fill
+    var mainNode= querySelector('#'+'svgNodeObject_'+nodeName);
+       mainNode.style.setProperty('fill', 'rgb(31, 119, 180)');
+       mainNode.style.setProperty('fill-opacity', '1.0');
+    //set parent fill colours
+    NodeSelected.getParents().forEach((node){
+      var parNode = querySelector('#'+'svgNodeObject_'+node.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+      parNode.style.setProperty('stroke', 'orange');
+      parNode.style.setProperty('stroke-width', '3px');
+      //parNode.style.setProperty('fill-opacity', '1.0');
+    });
+    //Set daughter fill colours
+    NodeSelected.getDaughters().forEach((node){
+      var dauNode = querySelector('#'+'svgNodeObject_'+node.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+      dauNode.style.setProperty('stroke', 'purple');
+      dauNode.style.setProperty('stroke-width', '3px');
+      //dauNode.style.setProperty('fill-opacity', '1.0');
+    });
+    print('completed node css highlights');
   }
 }
 

@@ -9,5 +9,5 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -m gh-pages
-git remote add origin https://github.com/sandcrawler/CauseCade-deploy.git
+git remote add origin https://github.com/nemoandrea/CauseCade-deploy.git
 git push -u origin gh-pages --force

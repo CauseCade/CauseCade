@@ -2,7 +2,7 @@ name: 'causecade'
 version: 0.0.1
 description: Web based Bayesian Networks
 author: Nemo Andrea nemoandrea@outlook.com
-homepage: sandcrawler.github.io
+homepage: nemoandrea.github.io
 
 environment:
   sdk: '>=1.22.0'
