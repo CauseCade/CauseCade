@@ -1,8 +1,7 @@
 import 'package:angular2/core.dart';
 
 import 'package:angular_components/angular_components.dart';
-import 'package:angular2/router.dart';
-
+import  'network_selection_service.dart';
 
 import 'node.dart';
 import 'package:causecade/app_component.dart';
@@ -20,14 +19,19 @@ import 'package:chartjs/chartjs.dart';
                       margin-top: 45em ;
                     }
                    '''],
-    directives: const [materialDirectives,ROUTER_DIRECTIVES],
+    directives: const [materialDirectives],
     providers: const [materialProviders])
 
-class OverviewComponent implements OnInit{
-  final RouteParams _routeParams;
-  final Router _router;
+class OverviewComponent implements OnInit, OnChanges{
 
-  node SelectedNode;
+  @Input()
+  bool shouldBeLoaded;
+  @Input()
+  node selectedNode;
+
+  NetworkSelectionService selectionService;
+
+
   Chart ChartHolder;
   bool ShouldBeHidden;
   bool IsRootNode; //holds information about the selected node
@@ -35,33 +39,41 @@ class OverviewComponent implements OnInit{
   List IncomingNodes; //holds information about the selected node
   List OutGoingNodes;//holds information about the selected node
 
-  OverviewComponent(this._routeParams,this._router);
+  OverviewComponent(this.selectionService);
 
- ngOnInit(){
-  print('node overview for: ' + _routeParams.get('id').toString()); //fetch searched string
-  if(_routeParams.get('id')!=null) {
-    print('not null, byos');
-    SelectedNode = myDAG.findNode(_routeParams.get('id'));
-    ChartHolder = GenerateBarchart(SelectedNode);
+ void ngOnInit(){
+   print('[overview component initialised]');
 
-    IsRootNode = SelectedNode.getRootStatus();
-    HasEvidence = SelectedNode.getEvidenceStatus();
-    IncomingNodes = SelectedNode.getParents();
-    OutGoingNodes = SelectedNode.getDaughters();
-    makeBarChart();
-  }
-  else{
-    //else, hide the component
-    ShouldBeHidden=true;
-  }
+    if(selectionService.selectedNode!=null){
+      setupCard();
+    }
   }
 
-  makeBarChart(){
-    ChartHolder = GenerateBarchart(SelectedNode);
+  void setupCard(){
+    selectedNode=selectionService.selectedNode;
+    //ChartHolder = GenerateBarchart(selectedNode);
+    IsRootNode = selectedNode.getRootStatus();
+    HasEvidence = selectedNode.getEvidenceStatus();
+    IncomingNodes = selectedNode.getParents();
+    OutGoingNodes = selectedNode.getDaughters();
+    //makeBarChart();
+    print('[overview]: refreshed data ');
+  }
+
+  void makeBarChart(){
+    ChartHolder = GenerateBarchart(selectedNode);
   }
 
  void changeNode(node NodeIn){
-   SelectedNode=NodeIn;
-   print('OverviewComponent: changed node to: ' + SelectedNode.getName());
+   selectedNode=NodeIn;
+   print('OverviewComponent: changed node to: ' + selectedNode.getName());
  }
+
+  //this function will be called if any of the @inputs change
+  void ngOnChanges(SimpleChange){
+    //print(SimpleChange);
+    if(selectionService.selectedNode!=null){
+      setupCard();
+    }
+  }
 }

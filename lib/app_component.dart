@@ -20,8 +20,9 @@ import 'dart:async';
 import 'package:d3/d3.dart';
 
 //injectable imports
-import 'package:angular2/router.dart';
 import  'notification_service.dart';
+import 'network_style_service.dart';
+import 'network_selection_service.dart';
 
 List networkInfo = new List();
 Network myNet;
@@ -30,24 +31,26 @@ BayesianDAG myDAG;
 @Component(
     selector: 'causecade',
     templateUrl: 'app_component.html',
-directives: const [ROUTER_DIRECTIVES,NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent], /**/
-providers: const [ROUTER_PROVIDERS,materialProviders,NotificationService] /**/
+directives: const [NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent,OverviewComponent,DetailComponent,EditComponent],
+providers: const [materialProviders,NotificationService,NetworkStyleService,NetworkSelectionService]
 )
-@RouteConfig(const [
-  const Route(path: '/overview/:id',name: 'Overview',component: OverviewComponent),
-  const Route(path: '/details/:id', name: 'Detail', component: DetailComponent),
-  const Route(path: '/edit/:id', name: 'Edit', component: EditComponent)
-])
 class AppComponent implements OnInit {
 
-  Router router;
   NotificationService notifications;
+  NetworkStyleService styleService;
+  NetworkSelectionService selectionService;
+
 
   //display settings
   var width = 900;
   var height = 900;
   var networkHolder;
   var svg;
+
+  //handles info cards
+  bool overviewActive;
+  bool detailActive;
+  bool editActive;
 
   String currentNodeName; //required due to tab interface FIX
   node currentNode;
@@ -68,7 +71,7 @@ class AppComponent implements OnInit {
   NetNotification newNotification= new NetNotification();
 
   //constructor
-  AppComponent(this.router,this.notifications) {
+  AppComponent(this.notifications,this.styleService,this.selectionService) {
     print('Appcomponent created');
   }
 
@@ -79,7 +82,7 @@ class AppComponent implements OnInit {
     svg = new Selection('#GraphHolder').append("svg"); // svg file we draw on
     //uses d3 import in order to load this
 
-    myNet = new Network(svg, width, height);
+    myNet = new Network(svg, width, height,styleService,selectionService);
     myDAG = new BayesianDAG();
 
     setScreenDimensions();
@@ -88,6 +91,8 @@ class AppComponent implements OnInit {
     networkName = 'Set Network Name';
     NodeList = myDAG.NodeList; //fetch the current nodes in the network
     openLoadMenu = false;
+
+
   }
 
   //when the ''LOAD'' button is clicked
@@ -182,9 +187,52 @@ class AppComponent implements OnInit {
   }
 
   void viewOverview(){ //when user has selected a node in dropdown and presses button
-    myNet.setNodeFocus(currentNode);
-    router.navigate(['Overview',{'id':currentNode.getName()}]);
+    selectionService.setNodeSelection(currentNode);
+    styleService.setNodeSelection(selectionService.selectedNode);
     notifications.addNotification(new NetNotification()..setNodeSelected());
+  }
+
+  //display the right cards
+  void displayCard(String userSelection){
+    switch (userSelection){
+      case 'overview':
+        if (!overviewActive){
+          overviewActive=true;
+          print('toggled overview card on');
+          detailActive=false;
+          editActive=false;
+        }
+        else{ //we must already be looking at overview, so toggle off
+          overviewActive=false;
+        }
+        break;
+      case 'detail':
+        if (!detailActive){
+          detailActive=true;
+          print('toggled detail card on');
+          overviewActive=false;
+          editActive=false;
+        }
+        else{ //we must already be looking at overview, so toggle off
+          detailActive=false;
+        }
+        break;
+      case 'edit':
+        if (!editActive){
+          editActive=true;
+          print('toggled edit card on');
+          detailActive=false;
+          overviewActive=false;
+        }
+        else{ //we must already be looking at overview, so toggle off
+          editActive=false;
+        }
+        break;
+      default:
+        overviewActive=false;
+        detailActive=false;
+        editActive=false;
+    }
   }
 
 

@@ -7,12 +7,12 @@
 
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation">
-                <material-button raised materialTooltip="View Interactive Courses"  (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
+                <material-button raised materialTooltip="View Interactive Courses" (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
                 <br/>
 
                 <a class="mdl-navigation__link  mdl-color-text--white" id="button1" href="#" target="_blank">HELP</a>
                 <!--<div id="about_ref" >-->
-                    <a class="mdl-navigation__link  mdl-color-text--white" id="button2" href="https://sandcrawler.github.io/CauseCade-blog/" target="_blank">BLOG</a>
+                <a class="mdl-navigation__link  mdl-color-text--white" id="button2" href="https://nemoandrea.github.io/CauseCade-blog/" target="_blank">BLOG</a>
                    <!-- <div class="mdl-tooltip" for="about_ref">More information</div>-->
                <!-- </div>-->
                 <a class="mdl-navigation__link  mdl-color-text--white" id="button3" href="https://plus.google.com/communities/118385244039152342634/stream/4c822d21-5434-4dfa-b76f-109668f85b2b" target="_blank">REPORT BUG</a>
@@ -27,9 +27,9 @@
         <div id="LowerNavigation">
             <div id="MenuOptions" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs_menu">
                 <div  class="mdl-tabs__tab-bar">
-                    <a href="#starks-panel" [routerLink]="['Overview', {id: currentNodeName}]" class="mdl-tabs__tab is-active">Overview</a>
-                    <a href="#lannisters-panel" [routerLink]="['Detail', {id: currentNodeName}]" class="mdl-tabs__tab">Details</a>
-                    <a href="#targaryens-panel" [routerLink]="['Edit', {id: currentNodeName}]" class="mdl-tabs__tab">Edit</a>
+                    <a (click)='displayCard("overview")' href="#starks-panel"  class="mdl-tabs__tab is-active">Overview</a>
+                    <a (click)='displayCard("detail")' href="#lannisters-panel"  class="mdl-tabs__tab">Details</a>
+                    <a (click)='displayCard("edit")' href="#targaryens-panel"  class="mdl-tabs__tab">Edit</a>
                 </div>
             </div>
 
@@ -88,7 +88,9 @@
                 </div>
             </div>
         </div>
-        <router-outlet></router-outlet>
+        <overview [shouldBeLoaded]="overviewActive" [selectedNode]='selectionService.selectedNode' ></overview>
+        <detail [shouldBeLoaded]="detailActive" [selectedNode]='selectionService.selectedNode'></detail>
+        <edit-node [shouldBeLoaded]="editActive" [selectedNode]='selectionService.selectedNode'></edit-node>
 
         <div id="GraphHolder"></div>
 

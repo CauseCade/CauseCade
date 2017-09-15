@@ -1,12 +1,13 @@
 import 'package:angular2/core.dart';
 
 import 'package:angular_components/angular_components.dart';
-import 'package:angular2/router.dart';
 
 import 'node.dart';
 import 'package:causecade/app_component.dart';
 import 'package:causecade/card_barchart.dart';
 import 'package:chartjs/chartjs.dart';
+
+import 'network_selection_service.dart';
 
 @Component(
     selector: 'detail',
@@ -22,15 +23,18 @@ import 'package:chartjs/chartjs.dart';
 
 // THIS IS STILL WIP
 class DetailComponent implements OnInit {
-  final RouteParams _routeParams;
+  @Input()
+  bool shouldBeLoaded;
+  @Input()
+  node selectedNode;
 
-  node SelectedNode;
+  NetworkSelectionService selectionService;
+
+
   String FlaggingName;
-  bool ShouldBeHidden;
   bool IsRootNode;
   bool LinkMatrixInfo;
   Chart ChartHolder;
-
 
 
   //holds information about the selected node
@@ -45,30 +49,26 @@ class DetailComponent implements OnInit {
   //holds information about indivdual lambda evidences (of one of teh daughters)
   List individualLambda;
 
-  DetailComponent(this._routeParams);
+  DetailComponent(this.selectionService);
 
-  ngOnInit() {
-    if(_routeParams.get('id')!=null) {
+  void ngOnInit() {
+    if(selectionService.selectedNode!=null) {
       setupCard();
-    }
-    else{
-      //else, we should hide this component
-      ShouldBeHidden=true;
     }
   }
 
-  setupCard(){
-    SelectedNode = myDAG.findNode(_routeParams.get('id'));
-    IsRootNode = SelectedNode.getRootStatus();
-    HasEvidence = SelectedNode.getEvidenceStatus();
-    IncomingNodes = SelectedNode.getParents();
-    OutGoingNodes = SelectedNode.getDaughters();
-    ChartHolder = GenerateEvidenceBarChart(SelectedNode);
-    LinkMatrixInfo = SelectedNode.getLinkMatrixStatus();
+  void setupCard(){
+    selectedNode = selectionService.selectedNode;
+    IsRootNode = selectedNode.getRootStatus();
+    HasEvidence = selectedNode.getEvidenceStatus();
+    IncomingNodes = selectedNode.getParents();
+    OutGoingNodes = selectedNode.getDaughters();
+    ChartHolder = GenerateEvidenceBarChart(selectedNode);
+    LinkMatrixInfo = selectedNode.getLinkMatrixStatus();
     individualLambda = new List<double>();
     //Set Up the Flagging Name (name of node that last flagged this node)
-    if (SelectedNode.getFlaggingNode()!=null){
-      FlaggingName=SelectedNode.getFlaggingNode().getName();
+    if (selectedNode.getFlaggingNode()!=null){
+      FlaggingName=selectedNode.getFlaggingNode().getName();
     }
     else{
       FlaggingName='not flagged yet';
@@ -82,18 +82,18 @@ class DetailComponent implements OnInit {
     /*Vector LambdaVector;
   Vector PiVector;*/
 
-    for(int i=0;i<SelectedNode.getStateCount();i++){
-      LambdaHolderList.add(SelectedNode.getLambdaEvidence()[i]);
-      PiHolderList.add(SelectedNode.getPiEvidence()[i]);
+    for(int i=0;i<selectedNode.getStateCount();i++){
+      LambdaHolderList.add(selectedNode.getLambdaEvidence()[i]);
+      PiHolderList.add(selectedNode.getPiEvidence()[i]);
     }
 
-    var data = new LinearChartData(labels:SelectedNode.getStateLabels(), datasets: <ChartDataSets>[
+    var data = new LinearChartData(labels:selectedNode.getStateLabels(), datasets: <ChartDataSets>[
       new ChartDataSets(
-          label: 'Lambda Evidence of Node: ' + SelectedNode.getName(),
+          label: 'Lambda Evidence of Node: ' + selectedNode.getName(),
           backgroundColor: "rgba(223,30,90,1.0)",
           data: LambdaHolderList),
       new ChartDataSets(
-          label: 'Pi Evidence of Node: ' + SelectedNode.getName(),
+          label: 'Pi Evidence of Node: ' + selectedNode.getName(),
           backgroundColor: "rgba(30,30,90,1.0)",
           data: PiHolderList)
     ]);
@@ -106,13 +106,13 @@ class DetailComponent implements OnInit {
   void setChartLambda(node nodeIn){
     print('new chart requested for ' + nodeIn.getName());
     individualLambda.clear(); //we must clear this
-    var lambdaVector = SelectedNode.getIndividualLambda(nodeIn);
-    for(int i=0;i<SelectedNode.getStateCount();i++){
+    var lambdaVector = selectedNode.getIndividualLambda(nodeIn);
+    for(int i=0;i<selectedNode.getStateCount();i++){
       individualLambda.add(lambdaVector[i]);
     }
     print('individual lambda for chart: ' + individualLambda.toString());
 
-    var data = new LinearChartData(labels: SelectedNode.getStateLabels(), datasets: <ChartDataSets>[
+    var data = new LinearChartData(labels: selectedNode.getStateLabels(), datasets: <ChartDataSets>[
       new ChartDataSets(
           label: 'Lambda Evidence from Node: ' + nodeIn.getName(),
           backgroundColor: "rgba(223,30,90,1.0)",
@@ -121,6 +121,14 @@ class DetailComponent implements OnInit {
     ChartHolder.config = new ChartConfiguration(
         type: 'bar', data: data, options: new ChartOptions(responsive: true));
     ChartHolder.update();
+  }
+
+  //this function will be called if any of the @inputs change
+  void ngOnChanges(SimpleChange){
+    //print(SimpleChange);
+    if(selectionService.selectedNode!=null){
+     //
+    }
   }
 
 }

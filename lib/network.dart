@@ -5,6 +5,9 @@ import 'dart:js';
 import 'dart:svg';
 import 'package:causecade/app_component.dart';
 import 'node.dart';
+//services
+import 'network_style_service.dart';
+import 'network_selection_service.dart';
 
 var counter = 6; //not sure what this is //TODO
 
@@ -25,11 +28,11 @@ class Network {
   var g_link;
   var activeSelection;
 
+  NetworkStyleService styleService;
+  NetworkSelectionService selectionService;
+
   /*constructor*/
-  Network(svgIn,int width,int height) {
-
-
-
+  Network(svgIn,int width,int height, this.styleService,this.selectionService) {
 
     svg = svgIn;
 
@@ -118,13 +121,16 @@ class Network {
       ..attr["id"]= (d){return ('svgNodeObject_'+(d['id']).replaceAll(new RegExp(r"\s+\b|\b\s"), ""));}
       ..attr["r"] = "16"
       ..styleFn["fill"] = ((d) => color(d['group']))
-      ..on('click').listen( (event) {
-         print('clicked');
-         /*print(event.target.runtimeType);*/
-         node_selection.styleFn['fill']=color(6);
-         svg.styleFn['cursor']="pointer";
+      ..on('click').listen( (jsNode) {
+        selectionService.setNodeSelectionString(jsNode.data['id']);
+        styleService.setNodeSelection(selectionService.selectedNode);
        })
-       ..on("mouseout").listen((d) {
+      ..on("mouseover").listen((jsNode) {
+        styleService.setNodeHover(jsNode.data);
+        svg.styleFn['cursor']="pointer";
+      })
+       ..on("mouseout").listen((jsNode) {
+         styleService.clearNodeHover(jsNode.data);
          svg.styleFn['cursor']="default";
        });
 
@@ -255,43 +261,6 @@ class Network {
     window.console.debug("no match found");
   }
 
-
-  void setNodeFocus(node NodeSelected){
-    String nodeName = NodeSelected.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), "");
-    String defaultFillColour='#999'; // a type of grey
-    String defaultStrokeColour='#fafafa';
-    String defaultStrokeWidth='1.5px';
-    //set the fill of all circles to the default colours (resetting previous
-    //highlight colours)
-    var allNodes= querySelectorAll('.circlesvg');
-    allNodes.style.setProperty('fill', defaultFillColour.toString());
-    allNodes.style.setProperty('stroke', defaultStrokeColour.toString());
-    allNodes.style.setProperty('stroke-width', defaultStrokeWidth.toString());
-
-    /*allNodes.style.setProperty('fill-opacity', '0.5');*/
-
-    //Set new Highlight
-
-    //Set Main selected node fill
-    var mainNode= querySelector('#'+'svgNodeObject_'+nodeName);
-       mainNode.style.setProperty('fill', 'rgb(31, 119, 180)');
-       mainNode.style.setProperty('fill-opacity', '1.0');
-    //set parent fill colours
-    NodeSelected.getParents().forEach((node){
-      var parNode = querySelector('#'+'svgNodeObject_'+node.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
-      parNode.style.setProperty('stroke', 'orange');
-      parNode.style.setProperty('stroke-width', '3px');
-      //parNode.style.setProperty('fill-opacity', '1.0');
-    });
-    //Set daughter fill colours
-    NodeSelected.getDaughters().forEach((node){
-      var dauNode = querySelector('#'+'svgNodeObject_'+node.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
-      dauNode.style.setProperty('stroke', 'purple');
-      dauNode.style.setProperty('stroke-width', '3px');
-      //dauNode.style.setProperty('fill-opacity', '1.0');
-    });
-    print('completed node css highlights');
-  }
 }
 
 

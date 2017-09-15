@@ -2,7 +2,7 @@ import 'package:angular2/core.dart';
 import 'package:angular2/common.dart';
 
 import 'package:angular_components/angular_components.dart';
-import 'package:angular2/router.dart';
+import 'network_selection_service.dart';
 
 import 'node.dart';
 import 'link.dart';
@@ -11,6 +11,7 @@ import 'package:causecade/app_component.dart';
 import 'notification_service.dart';
 
 import  'dart:html'; //to set height on linkmatrix
+import 'dart:math';
 
 @Component(
     selector: 'edit-node',
@@ -25,11 +26,17 @@ import  'dart:html'; //to set height on linkmatrix
     providers: const [materialProviders])
 
 
-class EditComponent implements OnInit {
-  final RouteParams _routeParams;
+class EditComponent implements OnInit, OnChanges {
+
+  @Input()
+  bool shouldBeLoaded;
+  @Input()
+  node selectedNode;
+
+  NetworkSelectionService selectionService;
   NotificationService notifications;
 
-   node SelectedNode;
+   
   bool ShouldBeHidden;
   bool showMatrixEditor;
   int StateCount;
@@ -67,7 +74,7 @@ class EditComponent implements OnInit {
 
   //holds information about the selected node
 
-  EditComponent(this._routeParams,this.notifications);
+  EditComponent(this.selectionService,this.notifications);
 
   //TODO Remove
   String TestString;
@@ -77,7 +84,7 @@ class EditComponent implements OnInit {
 
   void ngOnInit() {
     showMatrixEditor = false;
-    if(_routeParams.get('id')!=null) {
+    if(selectionService.selectedNode!=null) {
       setupCard();
     }
     else{
@@ -96,7 +103,7 @@ class EditComponent implements OnInit {
     newLinkParent=parentLinkSelection.selectedValues;
     if((newLinkParent.isNotEmpty)) {
       newLinkParent.forEach((node){
-        myDAG.insertLink(node,SelectedNode);
+        myDAG.insertLink(node,selectedNode);
       });
       fetchLinks();
       parentLinkSelection.clear();
@@ -114,7 +121,7 @@ class EditComponent implements OnInit {
     newLinkDaughter=daughterLinkSelection.selectedValues;
     if((newLinkDaughter.isNotEmpty)) {
       newLinkDaughter.forEach((node){
-        myDAG.insertLink(SelectedNode,node);
+        myDAG.insertLink(selectedNode,node);
       });
       fetchLinks();
       daughterLinkSelection.clear();
@@ -136,11 +143,11 @@ class EditComponent implements OnInit {
 
   void setupCard(){
 
-    SelectedNode = myDAG.findNode(_routeParams.get('id'));
-    IncomingNodes = SelectedNode.getParents();
-    OutGoingNodes = SelectedNode.getDaughters();
-    StateCount = SelectedNode.getStateCount();
-    LinkMatrix=SelectedNode.getLinkMatrix();
+    selectedNode = selectionService.selectedNode;
+    IncomingNodes = selectedNode.getParents();
+    OutGoingNodes = selectedNode.getDaughters();
+    StateCount = selectedNode.getStateCount();
+    LinkMatrix=selectedNode.getLinkMatrix();
     fetchOldLabels();
     fetchMatrixValues();
     LabelNew= new List<String>(StateCount);
@@ -153,9 +160,11 @@ class EditComponent implements OnInit {
     PriorList = new List(StateCount);
     Prior = new Vector(StateCount);
 
-    for(int i =0;i<SelectedNode.getStateCount();i++){
-      Probability.add(SelectedNode.getProbability()[i]);
+    for(int i =0;i<selectedNode.getStateCount();i++){
+      Probability.add(selectedNode.getProbability()[i]);
     }
+    print('[edit]: refreshed data ');
+
   }
 
   void fetchOldLabels(){
@@ -165,9 +174,9 @@ class EditComponent implements OnInit {
       LabelOld[i]='not yet defined';
       LabelNew[i]='not yet defined';
     }
-    for(int i=0;i<SelectedNode.getStateLabels().length;i++){
-      LabelOld[i]=SelectedNode.getStateLabels()[i];
-      LabelNew[i]=SelectedNode.getStateLabels()[i];
+    for(int i=0;i<selectedNode.getStateLabels().length;i++){
+      LabelOld[i]=selectedNode.getStateLabels()[i];
+      LabelNew[i]=selectedNode.getStateLabels()[i];
     }
     print(LabelOld.toString());
     print(LabelNew.toString());
@@ -175,7 +184,7 @@ class EditComponent implements OnInit {
 
   //TODO: less duct-tape
   void fetchMatrixValues(){
-    MatrixValueLabels=SelectedNode.getMatrixLabels();
+    MatrixValueLabels=selectedNode.getMatrixLabels();
     MatrixValues = new List<List<double>>(); //pointless type specification here
     for(int i=0;i<LinkMatrix.getRowCount();i++){
       List<double> valuesList = new List<double>();
@@ -190,10 +199,10 @@ class EditComponent implements OnInit {
 
   void fetchLinks(){
     LinkList.clear();
-    SelectedNode.getInComing().values.forEach((link){
+    selectedNode.getInComing().values.forEach((link){
       LinkList.add(link);
     });
-    SelectedNode.getOutGoing().values.forEach((link){
+    selectedNode.getOutGoing().values.forEach((link){
       LinkList.add(link);
     });
   }
@@ -205,15 +214,15 @@ class EditComponent implements OnInit {
       PriorListExtra[i]=double.parse(PriorList[i]);
     }
     Prior.setValues(PriorListExtra);
-    SelectedNode.setPiEvidence(Prior); //Sets the prior.
-    SelectedNode.setRootStatus(true);
+    selectedNode.setPiEvidence(Prior); //Sets the prior.
+    selectedNode.setRootStatus(true);
     //node will now have isRootNode=true;
     notifications.addNotification(new NetNotification()..setNodePrior());
   }
 
   void clearPrior(){
-    SelectedNode.clearPiEvidence();
-    SelectedNode.setRootStatus(false);
+    selectedNode.clearPiEvidence();
+    selectedNode.setRootStatus(false);
     notifications.addNotification(new NetNotification()..clearNodPrior());
   }
 
@@ -226,14 +235,14 @@ class EditComponent implements OnInit {
     }
     print(ObservationListExtra);
     Observation.setValues(ObservationListExtra);
-    SelectedNode.setProbability(Observation); //sets observation
+    selectedNode.setProbability(Observation); //sets observation
     notifications.addNotification(new NetNotification()..setNodeEvidence());
     //node will now have Instantiated=true;
   }
 
   void clearObservation(){
     print('Cleared Observation.');
-    SelectedNode.clearProbability();
+    selectedNode.clearProbability();
     notifications.addNotification(new NetNotification()..clearNodeEvidence());
   }
 
@@ -247,15 +256,15 @@ class EditComponent implements OnInit {
   }
 
   void pushNewLabels(){
-    SelectedNode.setStateLabels(LabelNew);
+    selectedNode.setStateLabels(LabelNew);
     print('EditComponent: pushed labels to node');
     notifications.addNotification(new NetNotification()..setUpdateNodeLabels());
   }
   void pushNewMatrix(){
-    SelectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
-    LinkMatrix=SelectedNode.getLinkMatrix();
-    SelectedNode.clearFlaggingNode();
-    SelectedNode.FlagOtherNodes();
+    selectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
+    LinkMatrix=selectedNode.getLinkMatrix();
+    selectedNode.clearFlaggingNode();
+    selectedNode.FlagOtherNodes();
     fetchMatrixValues(); //we want to have the matrid values reflect the new matrix
     showMatrixEditor = false;
     //matrix. If no changes are made in the ui this wont change anything.
@@ -264,9 +273,9 @@ class EditComponent implements OnInit {
   }
 
   updateMatrixLabels(){
-    print(SelectedNode.getInComing().keys.length);
-    SelectedNode.clearMatrixLabels();
-    SelectedNode.generateMatrixLabels(0,SelectedNode.getInComing().keys.length,'');
+    print(selectedNode.getInComing().keys.length);
+    selectedNode.clearMatrixLabels();
+    selectedNode.generateMatrixLabels(0,selectedNode.getInComing().keys.length,'');
   }
 
   void updateEdits(){
@@ -311,7 +320,7 @@ class EditComponent implements OnInit {
   void setNewStateCount(){
     StateCount=nodeMultiplicitySelection.selectedValues.first;
     nodeMultiplicitySelection.clear(); //clear selection
-    SelectedNode.setStateCount(StateCount,LabelOld);
+    selectedNode.setStateCount(StateCount,LabelOld);
     fetchOldLabels();
     pushNewLabels();
     print('updated the new count, but please change labels');
@@ -319,7 +328,25 @@ class EditComponent implements OnInit {
   }
 
   void forceNodeUpdate(){
-    myDAG.updateNode(SelectedNode);
+    myDAG.updateNode(selectedNode);
+  }
+
+  void openMatrixEditor(){
+    showMatrixEditor=true;
+    print('opened matrixeditor');
+    //prepare the window
+    double constant = 4.5; //TODO make this more robust, now just trial and error
+    double newheight=min((querySelector('.linkMatrixLabelHolder').text.length*1.41*constant),1000.0);
+    print(newheight.toString()+'is the height');
+    querySelectorAll('.linkMatrixLabelTop').style.height=(newheight.toString()+'px');
+  }
+
+  //this function will be called if any of the @inputs change
+  void ngOnChanges(SimpleChange){
+    //print(SimpleChange);
+    if(selectionService.selectedNode!=null){
+      setupCard();
+    }
   }
 
   // Dropdown (renderer)
@@ -329,7 +356,7 @@ class EditComponent implements OnInit {
 
   //for both parents and daughter nodes
   NewEditLinkSelectionOptions get LinkOptions
-  => new NewEditLinkSelectionOptions<node>(NodeList,SelectedNode);
+  => new NewEditLinkSelectionOptions<node>(NodeList,selectedNode);
 
   // Dropdowns (parent Link)
 
