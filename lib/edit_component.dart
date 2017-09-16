@@ -53,7 +53,7 @@ class EditComponent implements OnInit, OnChanges {
 
   List ObservationList;
   List PriorList;
-  List<double> Probability = new List<double>();
+  List<double> Probability;
   List<String> LabelNew;
   List<String> LabelOld;
   List<String> MatrixValueLabels;
@@ -76,21 +76,9 @@ class EditComponent implements OnInit, OnChanges {
 
   EditComponent(this.selectionService,this.notifications);
 
-  //TODO Remove
-  String TestString;
-  testTestString(double In){
-    TestString=In.toString();
-  }
-
   void ngOnInit() {
+    print('[edit component initialised]');
     showMatrixEditor = false;
-    if(selectionService.selectedNode!=null) {
-      setupCard();
-    }
-    else{
-      //else, we should hide this component
-      ShouldBeHidden=true;
-    }
     NodeList=myDAG.NodeList;
     newLinkDaughter = new List<node>();
     newLinkParent = new List<node>();
@@ -135,14 +123,13 @@ class EditComponent implements OnInit, OnChanges {
     }
   }
 
-  removeLink(LinkIn){
+  void removeLink(LinkIn){
     myDAG.removeEdge(LinkIn);
     notifications.addNotification(new NetNotification()..setRemoveNodeLinks());
     fetchLinks();
   }
 
   void setupCard(){
-
     selectedNode = selectionService.selectedNode;
     IncomingNodes = selectedNode.getParents();
     OutGoingNodes = selectedNode.getDaughters();
@@ -150,8 +137,8 @@ class EditComponent implements OnInit, OnChanges {
     LinkMatrix=selectedNode.getLinkMatrix();
     fetchOldLabels();
     fetchMatrixValues();
-    LabelNew= new List<String>(StateCount);
 
+    LabelNew= new List<String>(StateCount);
 
    fetchLinks();
 
@@ -160,6 +147,7 @@ class EditComponent implements OnInit, OnChanges {
     PriorList = new List(StateCount);
     Prior = new Vector(StateCount);
 
+    Probability = new List<double>();
     for(int i =0;i<selectedNode.getStateCount();i++){
       Probability.add(selectedNode.getProbability()[i]);
     }
@@ -251,9 +239,9 @@ class EditComponent implements OnInit, OnChanges {
     LinkMatrix[i][j]=double.parse(event.target.value);
   }
 
-  void setNewLabel(int index, dynamic event){
+/*  void setNewLabel(int index, dynamic event){
     LabelNew[index] = event.target.value;
-  }
+  }*/
 
   void pushNewLabels(){
     selectedNode.setStateLabels(LabelNew);
@@ -305,6 +293,8 @@ class EditComponent implements OnInit, OnChanges {
   void onSubmit() {
     print('pressed submit matrix!');
   }
+
+  //toDO (remove?)
   /// Returns a map of CSS class names representing the state of [control].
   Map<String, bool> controlStateClasses(NgControl control) => {
     'ng-dirty': control.dirty ?? false,
@@ -315,8 +305,6 @@ class EditComponent implements OnInit, OnChanges {
     'ng-invalid': control.valid == false
   };
 
-  //TODO: make this bulletproof, currently just breaks a lot of things, not
-  // very user friendly at all
   void setNewStateCount(){
     StateCount=nodeMultiplicitySelection.selectedValues.first;
     nodeMultiplicitySelection.clear(); //clear selection
@@ -335,8 +323,8 @@ class EditComponent implements OnInit, OnChanges {
     showMatrixEditor=true;
     print('opened matrixeditor');
     //prepare the window
-    double constant = 4.5; //TODO make this more robust, now just trial and error
-    double newheight=min((querySelector('.linkMatrixLabelHolder').text.length*1.41*constant),1000.0);
+    double constant = 4.0; //TODO make this more robust, now just trial and error
+    double newheight=min((querySelector('.linkMatrixLabelHolder').text.length*1.41*constant)+20,1000.0);
     print(newheight.toString()+'is the height');
     querySelectorAll('.linkMatrixLabelTop').style.height=(newheight.toString()+'px');
   }

@@ -1,8 +1,8 @@
-<div *ngIf="(selectionService.selectedNode!=null&&shouldBeLoaded)" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em">
+<div [hidden]="!(selectionService.selectedNode!=null&&shouldBeLoaded)" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em">
     <div class="mdl-card__actions mdl-card--border">
         Detailed Information
     </div>
-    <canvas id="BarChartHolder"></canvas>
+    <canvas id="BarChartHolderDetail"></canvas>
     <material-button (click)="resetChart()" class="red">View Total Pi/Lambda Evidence</material-button>
     <material-expansionpanel-set>
 
@@ -15,7 +15,7 @@
         <material-expansionpanel name="Parent Nodes">
             <material-list class="nodeListDisplay_small"> <!--[size]="auto"-->
                 <!--<div label>click for node overview</div>-->
-                <material-list-item *ngFor="let node of IncomingNodes"> <!--(trigger)="changeNode(node)"-->
+                <material-list-item *ngFor="let node of IncomingNodes" (trigger)="changeNode(node)">
                     {{node.getName()}}
                 </material-list-item>
             </material-list>
@@ -23,12 +23,12 @@
         <material-expansionpanel name="Daughter Nodes">
             <material-list class="nodeListDisplay_small"> <!--[size]="auto"-->
                 <!--<div label>click for node overview</div>-->
-                <material-list-item *ngFor="let node of OutGoingNodes"> <!--(trigger)="changeNode(node)"-->
+                <material-list-item *ngFor="let node of OutGoingNodes" (trigger)="changeNode(node)">
                     {{node.getName()}}
                 </material-list-item>
             </material-list>
         </material-expansionpanel>
-        <material-expansionpanel name='Technicalities'>
+        <material-expansionpanel name='Status'>
             <div class="mdl-card__actions mdl-card--border">
                 Is properly Configured: {{LinkMatrixInfo}}
             </div>

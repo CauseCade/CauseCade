@@ -7,7 +7,7 @@
 
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation">
-                <material-button raised materialTooltip="View Interactive Courses" (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
+                <material-button raised materialTooltip="View Interactive Courses" disabled (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
                 <br/>
 
                 <a class="mdl-navigation__link  mdl-color-text--white" id="button1" href="#" target="_blank">HELP</a>
@@ -107,7 +107,7 @@
 
         <div header>
             <h3>Load an Example Network</h3>
-            <p>Click to load one of the networks into causecade. At the moment weird things happen if you load two at a time, so please just refresh the page if you wish to change networks.</p>
+            <p>Click to load one of the networks into causecade.</p>
         </div>
         {{loadMessage}}<!--This holds debugging/error info-->
         <material-button clear-size (trigger)="loadData('Animals')">Animals</material-button>

@@ -92,6 +92,7 @@ class AppComponent implements OnInit {
     NodeList = myDAG.NodeList; //fetch the current nodes in the network
     openLoadMenu = false;
 
+    overviewActive=true; //set the default card info to 'overview'
 
   }
 

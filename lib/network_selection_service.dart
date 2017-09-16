@@ -15,13 +15,28 @@ class NetworkSelectionService {
   node get selection => selectedNode;
 
   void setNodeSelectionString(String nodeName){
-    selectedNode= myDAG.findNode(nodeName);
-    print('[selectionService] set node:' + nodeName);
+    if (myDAG.findNode(nodeName)!=selectedNode) {
+      selectedNode = myDAG.findNode(nodeName);
+      print('[selectionService] set node:' + nodeName);
+    }
+    else{
+      resetSelection();
+    }
   }
 
   void setNodeSelection(node nodeIn){
-    selectedNode=nodeIn;
-    print('[selectionService] set node:' + nodeIn.getName());
+    if (nodeIn!=selectedNode) {
+      selectedNode = nodeIn;
+      print('[selectionService] set node:' + nodeIn.getName());
+    }
+    else{
+      resetSelection();
+    }
+  }
+
+  void resetSelection(){
+    selectedNode=null;
+    print('[selectionService] reset selection');
   }
 
 }

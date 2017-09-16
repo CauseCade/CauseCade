@@ -10,6 +10,20 @@ var height = 300; //?
 
 //------------- THIS could be made more flexible -----------------------------
 
+Chart generateEmptyBarChart(){
+  var data = new LinearChartData(labels: ['none'], datasets: <ChartDataSets>[
+    new ChartDataSets(
+        label: 'empty chart',
+        backgroundColor: "rgba(223,30,90,1.0)",
+        data: [1.0])]);
+
+  var config = new ChartConfiguration(
+      type: 'bar', data: data, options: new ChartOptions(responsive: true));
+
+  Chart myChart = new Chart(querySelector('#BarChartHolderOverview') as CanvasElement, config);
+  return myChart;
+}
+
 Chart GenerateBarchart(node NodeIn) {
   node Node = NodeIn;
   //var rnd = new math.Random();
@@ -28,7 +42,7 @@ Chart GenerateBarchart(node NodeIn) {
   var config = new ChartConfiguration(
       type: 'bar', data: data, options: new ChartOptions(responsive: true));
 
-  Chart myChart = new Chart(querySelector('#BarChartHolder') as CanvasElement, config);
+  Chart myChart = new Chart(querySelector('#BarChartHolderOverview') as CanvasElement, config);
   return myChart;
 }
 
@@ -60,6 +74,6 @@ Chart GenerateEvidenceBarChart(node NodeIn){
   var config = new ChartConfiguration(
       type: 'bar', data: data, options: new ChartOptions(responsive: true));
 
-  Chart myChart = new Chart(querySelector('#BarChartHolder') as CanvasElement, config);
+  Chart myChart = new Chart(querySelector('#BarChartHolderDetail') as CanvasElement, config);
   return myChart;
 }

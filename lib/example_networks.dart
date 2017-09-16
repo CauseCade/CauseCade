@@ -5,6 +5,8 @@ import 'package:causecade/data_converter.dart';
 
 
   LoadExample_Animals(){
+      int index=myDAG.getNodes().length;
+      print('currently ' + index.toString() + ' nodes in the network.');
 
       myDAG.insertNode("Animal", 5);
       // myDAG.getNodes()[0].enterUnconditionalProbability(0.99,0.01);
@@ -23,13 +25,13 @@ import 'package:causecade/data_converter.dart';
       myDAG.insertNode('BodyCovering', 3);
       myDAG.insertNode('Speed', 2);
 
-      myDAG.insertLink(myDAG.getNodes()[0], myDAG.getNodes()[1]);
-      myDAG.insertLink(myDAG.getNodes()[7], myDAG.getNodes()[2]);
-      myDAG.insertLink(myDAG.getNodes()[0], myDAG.getNodes()[2]);
-      myDAG.insertLink(myDAG.getNodes()[0], myDAG.getNodes()[3]);
-      myDAG.insertLink(myDAG.getNodes()[0], myDAG.getNodes()[4]);
-      myDAG.insertLink(myDAG.getNodes()[2], myDAG.getNodes()[5]);
-      myDAG.insertLink(myDAG.getNodes()[2], myDAG.getNodes()[6]);
+      myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+1]);
+      myDAG.insertLink(myDAG.getNodes()[index+7], myDAG.getNodes()[index+2]);
+      myDAG.insertLink(myDAG.getNodes()[index+0], myDAG.getNodes()[index+2]);
+      myDAG.insertLink(myDAG.getNodes()[index+0], myDAG.getNodes()[index+3]);
+      myDAG.insertLink(myDAG.getNodes()[index+0], myDAG.getNodes()[index+4]);
+      myDAG.insertLink(myDAG.getNodes()[index+2], myDAG.getNodes()[index+5]);
+      myDAG.insertLink(myDAG.getNodes()[index+2], myDAG.getNodes()[index+6]);
 
 
 
@@ -51,14 +53,14 @@ import 'package:causecade/data_converter.dart';
       //print(myDAG.getNodes()[5].getLinkMatrixInfo());
 
 
-      myDAG.getNodes()[0].setStateLabels(['monkey','penguin','platypus','robin','turtle']);
-      myDAG.getNodes()[1].setStateLabels(['air','land','water']);
-      myDAG.getNodes()[2].setStateLabels(['bird','mammal','reptile']);
-      myDAG.getNodes()[3].setStateLabels(['true','false']);
-      myDAG.getNodes()[4].setStateLabels(['live','egg']);
-      myDAG.getNodes()[5].setStateLabels(['true','false']);
-      myDAG.getNodes()[6].setStateLabels(['fur','feathers','scales']);
-      myDAG.getNodes()[7].setStateLabels(['Fast','Slow']);
+      myDAG.getNodes()[index].setStateLabels(['monkey','penguin','platypus','robin','turtle']);
+      myDAG.getNodes()[index+1].setStateLabels(['air','land','water']);
+      myDAG.getNodes()[index+2].setStateLabels(['bird','mammal','reptile']);
+      myDAG.getNodes()[index+3].setStateLabels(['true','false']);
+      myDAG.getNodes()[index+4].setStateLabels(['live','egg']);
+      myDAG.getNodes()[index+5].setStateLabels(['true','false']);
+      myDAG.getNodes()[index+6].setStateLabels(['fur','feathers','scales']);
+      myDAG.getNodes()[index+7].setStateLabels(['Fast','Slow']);
 
 
       Matrix2 TestMatrix = new Matrix2(3,5); //2^1=2
@@ -79,7 +81,7 @@ import 'package:causecade/data_converter.dart';
       TestMatrix[2][2]=1.0;
       TestMatrix[2][3]=0.0;
       TestMatrix[2][4]=0.5;
-      myDAG.getNodes()[1].enterLinkMatrix(TestMatrix);
+      myDAG.getNodes()[index+1].enterLinkMatrix(TestMatrix);
 
 
 
@@ -116,7 +118,7 @@ import 'package:causecade/data_converter.dart';
       TestMatrix2[2][7]=0.0;
       TestMatrix2[2][8]=1.0;//
       TestMatrix2[2][9]=0.4;
-      myDAG.getNodes()[2].enterLinkMatrix(TestMatrix2);
+      myDAG.getNodes()[index+2].enterLinkMatrix(TestMatrix2);
       print(TestMatrix2.toString());
 
 
@@ -132,7 +134,7 @@ import 'package:causecade/data_converter.dart';
       TestMatrix3[1][2]=1.0;
       TestMatrix3[1][3]=1.0;
       TestMatrix3[1][4]=0.0;
-      myDAG.getNodes()[3].enterLinkMatrix(TestMatrix3);
+      myDAG.getNodes()[index+3].enterLinkMatrix(TestMatrix3);
 
       Matrix2 TestMatrix4 = new Matrix2(2,5); //2^1=2
       TestMatrix4[0][0]=1.0;
@@ -146,7 +148,7 @@ import 'package:causecade/data_converter.dart';
       TestMatrix4[1][2]=1.0;
       TestMatrix4[1][3]=1.0;
       TestMatrix4[1][4]=1.0;
-      myDAG.getNodes()[4].enterLinkMatrix(TestMatrix4);
+      myDAG.getNodes()[index+4].enterLinkMatrix(TestMatrix4);
 
       Matrix2 TestMatrix5 = new Matrix2(2,3); //2^1=2
       TestMatrix5[0][0]=1.0;
@@ -156,7 +158,7 @@ import 'package:causecade/data_converter.dart';
       TestMatrix5[1][0]=0.0;
       TestMatrix5[1][1]=0.0;
       TestMatrix5[1][2]=1.0;
-      myDAG.getNodes()[5].enterLinkMatrix(TestMatrix5);
+      myDAG.getNodes()[index+5].enterLinkMatrix(TestMatrix5);
 
       Matrix2 TestMatrix6 = new Matrix2(3,3); //2^1=2
       TestMatrix6[0][0]=0.0; //true given input = true
@@ -170,7 +172,7 @@ import 'package:causecade/data_converter.dart';
       TestMatrix6[2][0]=0.0; //true given input = true
       TestMatrix6[2][1]=0.0; //false given input = true
       TestMatrix6[2][2]=1.0; //true given input = false
-      myDAG.getNodes()[6].enterLinkMatrix(TestMatrix6);
+      myDAG.getNodes()[index+6].enterLinkMatrix(TestMatrix6);
 
 
       Vector rootProb2 =new Vector(2);
@@ -241,7 +243,11 @@ import 'package:causecade/data_converter.dart';
       visualiseNetwork();
   }
 
-  LoadExample_CarStart(){
+  void LoadExample_CarStart(){
+
+    int index=myDAG.getNodes().length;
+    print('currently ' + index.toString() + ' nodes in the network.');
+
     myDAG.insertNode("Main fuse", 2); //0
     myDAG.insertNode("Battery age", 3); //1
     myDAG.insertNode("Alternator", 2); //2
@@ -263,46 +269,46 @@ import 'package:causecade/data_converter.dart';
     myDAG.insertNode("Car cranks", 2); //18
     myDAG.insertNode("Car starts", 2); //19
 
-    myDAG.getNodes()[0].setStateLabels(['okay','blown']);
-    myDAG.getNodes()[1].setStateLabels(['new','old','very old']);
-    myDAG.getNodes()[2].setStateLabels(['okay','faulty']);
-    myDAG.getNodes()[3].setStateLabels(['okay','faulty']);
-    myDAG.getNodes()[4].setStateLabels(['bright','dim','off']);
-    myDAG.getNodes()[5].setStateLabels(['strong','weak','dead']);
-    myDAG.getNodes()[6].setStateLabels(['strong','weak','none']);
-    myDAG.getNodes()[7].setStateLabels(['okay','faulty']);
-    myDAG.getNodes()[8].setStateLabels(['okay','too wide','fouled']);
-    myDAG.getNodes()[9].setStateLabels(['good','bad','very bad']);
-    myDAG.getNodes()[10].setStateLabels(['good','bad','very bad']);
-    myDAG.getNodes()[11].setStateLabels(['has gas','empty']);
-    myDAG.getNodes()[12].setStateLabels(['clean','dirty']);
-    myDAG.getNodes()[13].setStateLabels(['clean','dirty']);
-    myDAG.getNodes()[14].setStateLabels(['good','poor', 'faulty']);
-    myDAG.getNodes()[15].setStateLabels(['okay','faulty']);
-    myDAG.getNodes()[16].setStateLabels(['okay','faulty']);
-    myDAG.getNodes()[17].setStateLabels(['okay','faulty']);
-    myDAG.getNodes()[18].setStateLabels(['true','false']);
-    myDAG.getNodes()[19].setStateLabels(['true','false']);
+    myDAG.getNodes()[index+0].setStateLabels(['okay','blown']);
+    myDAG.getNodes()[index+1].setStateLabels(['new','old','very old']);
+    myDAG.getNodes()[index+2].setStateLabels(['okay','faulty']);
+    myDAG.getNodes()[index+3].setStateLabels(['okay','faulty']);
+    myDAG.getNodes()[index+4].setStateLabels(['bright','dim','off']);
+    myDAG.getNodes()[index+5].setStateLabels(['strong','weak','dead']);
+    myDAG.getNodes()[index+6].setStateLabels(['strong','weak','none']);
+    myDAG.getNodes()[index+7].setStateLabels(['okay','faulty']);
+    myDAG.getNodes()[index+8].setStateLabels(['okay','too wide','fouled']);
+    myDAG.getNodes()[index+9].setStateLabels(['good','bad','very bad']);
+    myDAG.getNodes()[index+10].setStateLabels(['good','bad','very bad']);
+    myDAG.getNodes()[index+11].setStateLabels(['has gas','empty']);
+    myDAG.getNodes()[index+12].setStateLabels(['clean','dirty']);
+    myDAG.getNodes()[index+13].setStateLabels(['clean','dirty']);
+    myDAG.getNodes()[index+14].setStateLabels(['good','poor', 'faulty']);
+    myDAG.getNodes()[index+15].setStateLabels(['okay','faulty']);
+    myDAG.getNodes()[index+16].setStateLabels(['okay','faulty']);
+    myDAG.getNodes()[index+17].setStateLabels(['okay','faulty']);
+    myDAG.getNodes()[index+18].setStateLabels(['true','false']);
+    myDAG.getNodes()[index+19].setStateLabels(['true','false']);
 
-    myDAG.insertLink(myDAG.getNodes()[0], myDAG.getNodes()[6]);
-    myDAG.insertLink(myDAG.getNodes()[1], myDAG.getNodes()[5]);
-    myDAG.insertLink(myDAG.getNodes()[2], myDAG.getNodes()[3]);
-    myDAG.insertLink(myDAG.getNodes()[3], myDAG.getNodes()[5]);
-    myDAG.insertLink(myDAG.getNodes()[5], myDAG.getNodes()[4]);
-    myDAG.insertLink(myDAG.getNodes()[5], myDAG.getNodes()[6]);
-    myDAG.insertLink(myDAG.getNodes()[7], myDAG.getNodes()[9]);
-    myDAG.insertLink(myDAG.getNodes()[6], myDAG.getNodes()[10]);
-    myDAG.insertLink(myDAG.getNodes()[8], myDAG.getNodes()[10]);
-    myDAG.insertLink(myDAG.getNodes()[9], myDAG.getNodes()[19]);
-    myDAG.insertLink(myDAG.getNodes()[10], myDAG.getNodes()[19]);
-    myDAG.insertLink(myDAG.getNodes()[16], myDAG.getNodes()[17]);
-    myDAG.insertLink(myDAG.getNodes()[17], myDAG.getNodes()[18]);
-    myDAG.insertLink(myDAG.getNodes()[18], myDAG.getNodes()[19]);
-    myDAG.insertLink(myDAG.getNodes()[11], myDAG.getNodes()[14]);
-    myDAG.insertLink(myDAG.getNodes()[13], myDAG.getNodes()[14]);
-    myDAG.insertLink(myDAG.getNodes()[12], myDAG.getNodes()[15]);
-    myDAG.insertLink(myDAG.getNodes()[15], myDAG.getNodes()[19]);
-    myDAG.insertLink(myDAG.getNodes()[14], myDAG.getNodes()[19]);
+    myDAG.insertLink(myDAG.getNodes()[index+0], myDAG.getNodes()[index+6]);
+    myDAG.insertLink(myDAG.getNodes()[index+1], myDAG.getNodes()[index+5]);
+    myDAG.insertLink(myDAG.getNodes()[index+2], myDAG.getNodes()[index+3]);
+    myDAG.insertLink(myDAG.getNodes()[index+3], myDAG.getNodes()[index+5]);
+    myDAG.insertLink(myDAG.getNodes()[index+5], myDAG.getNodes()[index+4]);
+    myDAG.insertLink(myDAG.getNodes()[index+5], myDAG.getNodes()[index+6]);
+    myDAG.insertLink(myDAG.getNodes()[index+7], myDAG.getNodes()[index+9]);
+    myDAG.insertLink(myDAG.getNodes()[index+6], myDAG.getNodes()[index+10]);
+    myDAG.insertLink(myDAG.getNodes()[index+8], myDAG.getNodes()[index+10]);
+    myDAG.insertLink(myDAG.getNodes()[index+9], myDAG.getNodes()[index+19]);
+    myDAG.insertLink(myDAG.getNodes()[index+10], myDAG.getNodes()[index+19]);
+    myDAG.insertLink(myDAG.getNodes()[index+16], myDAG.getNodes()[index+17]);
+    myDAG.insertLink(myDAG.getNodes()[index+17], myDAG.getNodes()[index+18]);
+    myDAG.insertLink(myDAG.getNodes()[index+18], myDAG.getNodes()[index+19]);
+    myDAG.insertLink(myDAG.getNodes()[index+11], myDAG.getNodes()[index+14]);
+    myDAG.insertLink(myDAG.getNodes()[index+13], myDAG.getNodes()[index+14]);
+    myDAG.insertLink(myDAG.getNodes()[index+12], myDAG.getNodes()[index+15]);
+    myDAG.insertLink(myDAG.getNodes()[index+15], myDAG.getNodes()[index+19]);
+    myDAG.insertLink(myDAG.getNodes()[index+14], myDAG.getNodes()[index+19]);
 
     if (myDAG.checkCyclic()) {
         print('this network is cyclic, dammit');
@@ -333,7 +339,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix[2][3]=0.796;
     TestMatrix[2][4]=0.1;
     TestMatrix[2][5]=0.898;
-    myDAG.getNodes()[5].enterLinkMatrix(TestMatrix);
+    myDAG.getNodes()[index+5].enterLinkMatrix(TestMatrix);
 
 
     //charging system
@@ -342,7 +348,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix2[0][1]=0.0;
     TestMatrix2[1][0]=0.5;
     TestMatrix2[1][1]=1.0;
-    myDAG.getNodes()[3].enterLinkMatrix(TestMatrix2);
+    myDAG.getNodes()[index+3].enterLinkMatrix(TestMatrix2);
 
     //headlights
     Matrix2 TestMatrix3 = new Matrix2(3,3); //2^1=2
@@ -357,7 +363,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix3[2][0]=0.05;
     TestMatrix3[2][1]=0.05;
     TestMatrix3[2][2]=1.0;
-    myDAG.getNodes()[4].enterLinkMatrix(TestMatrix3);
+    myDAG.getNodes()[index+4].enterLinkMatrix(TestMatrix3);
 
     //voltage at plugs
     Matrix2 TestMatrix4 = new Matrix2(3,6); //2^1=2
@@ -381,7 +387,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix4[2][3]=1.0;
     TestMatrix4[2][4]=1.0;
     TestMatrix4[2][5]=1.0;
-    myDAG.getNodes()[6].enterLinkMatrix(TestMatrix4);
+    myDAG.getNodes()[index+6].enterLinkMatrix(TestMatrix4);
 
     //spark timing
     Matrix2 TestMatrix5 = new Matrix2(3,2); //2^1=2
@@ -393,7 +399,7 @@ import 'package:causecade/data_converter.dart';
 
     TestMatrix5[2][0]=0.01;
     TestMatrix5[2][1]=0.50;
-    myDAG.getNodes()[9].enterLinkMatrix(TestMatrix5);
+    myDAG.getNodes()[index+9].enterLinkMatrix(TestMatrix5);
 
     //starter system
     Matrix2 TestMatrix6 = new Matrix2(2,2); //2^1=2
@@ -401,7 +407,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix6[0][1]=0.02;
     TestMatrix6[1][0]=0.02;
     TestMatrix6[1][1]=0.98;
-    myDAG.getNodes()[17].enterLinkMatrix(TestMatrix6);
+    myDAG.getNodes()[index+17].enterLinkMatrix(TestMatrix6);
 
     //car cranks
     Matrix2 TestMatrix7 = new Matrix2(2,2); //2^1=2
@@ -409,7 +415,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix7[0][1]=0.05;
     TestMatrix7[1][0]=0.2;
     TestMatrix7[1][1]=0.95;
-    myDAG.getNodes()[18].enterLinkMatrix(TestMatrix7);
+    myDAG.getNodes()[index+18].enterLinkMatrix(TestMatrix7);
 
     //Air system
     Matrix2 TestMatrix8 = new Matrix2(2,2); //2^1=2
@@ -417,7 +423,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix8[0][1]=0.3;
     TestMatrix8[1][0]=0.1;
     TestMatrix8[1][1]=0.7;
-    myDAG.getNodes()[15].enterLinkMatrix(TestMatrix8);
+    myDAG.getNodes()[index+15].enterLinkMatrix(TestMatrix8);
 
     //Air system
     Matrix2 TestMatrix9 = new Matrix2(3,4); //2^1=2
@@ -435,7 +441,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix9[2][1]=0.1;
     TestMatrix9[2][2]=1.0;
     TestMatrix9[2][3]=1.0;
-    myDAG.getNodes()[14].enterLinkMatrix(TestMatrix9);
+    myDAG.getNodes()[index+14].enterLinkMatrix(TestMatrix9);
 
     //ASpark Quality
     Matrix2 TestMatrix10 = new Matrix2(3,9); //2^1=2
@@ -468,7 +474,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix10[2][6]=0.0;
     TestMatrix10[2][7]=1.0;
     TestMatrix10[2][8]=1.0;
-    myDAG.getNodes()[10].enterLinkMatrix(TestMatrix10);
+    myDAG.getNodes()[index+10].enterLinkMatrix(TestMatrix10);
 
     //Car Starts
     Matrix2 TestMatrix11 = new Matrix2(2,108); //2^1=2
@@ -689,7 +695,7 @@ import 'package:causecade/data_converter.dart';
     TestMatrix11[1][105]=1.0;
     TestMatrix11[1][106]=1.0;
     TestMatrix11[1][107]=1.0;
-    myDAG.getNodes()[19].enterLinkMatrix(TestMatrix11);
+    myDAG.getNodes()[index+19].enterLinkMatrix(TestMatrix11);
 
     Vector rootProb = new Vector(2);
     rootProb.setValues([0.99,0.01]);

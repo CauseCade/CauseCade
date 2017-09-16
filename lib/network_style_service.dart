@@ -8,7 +8,8 @@ import 'dart:html';
 
 class NetworkStyleService {
 
-  String defaultFillColour='#999'; // a type of grey
+  String defaultFillColour='rgb(31, 119, 180)';
+  String inactiveFillColour = '#999'; // a type of grey
   String defaultStrokeColour='#fafafa'; //background colour of canvas
   String defaultStrokeWidth='1.5px';
   String defaultRadius='16';
@@ -17,16 +18,26 @@ class NetworkStyleService {
   String hoverRadius = '18';
 
   //style the network for the selected node
-  void setNodeSelection(node nodeSelected){
+  void setNodeSelection(node nodeSelected) {
     //clear any possible old selection
     clearNodeSelection();
+    var allNodes = querySelectorAll('.circlesvg').style.setProperty(
+        'fill', inactiveFillColour);
     //get  the svg element of the selectged node
-    var selectedNode= querySelector(generateSvgNodeNameFromString(nodeSelected.getName()));
-      selectedNode.style.setProperty('fill', 'rgb(31, 119, 180)');
-      //selectedNode.style.setProperty('fill-opacity', '1.0');
+
+    if (nodeSelected != null){ //would be null if we just reset the selection
+    var selectedNode = querySelector(
+        generateSvgNodeNameFromString(nodeSelected.getName()));
+    selectedNode.style.setProperty('fill', 'rgb(31, 119, 180)');
+    //selectedNode.style.setProperty('fill-opacity', '1.0');
+
 
     setParentSelection(nodeSelected);
     setDaughterSelection(nodeSelected);
+    }
+    else{ //selectionservice has null selected (no node)
+      clearNodeSelection();
+    }
   }
 
   void setParentSelection(node nodeSelected){
@@ -47,9 +58,9 @@ class NetworkStyleService {
 
   void clearNodeSelection(){
     var allNodes= querySelectorAll('.circlesvg');
-    allNodes.style.setProperty('fill', defaultFillColour.toString());
-    allNodes.style.setProperty('stroke', defaultStrokeColour.toString());
-    allNodes.style.setProperty('stroke-width', defaultStrokeWidth.toString());
+    allNodes.style.setProperty('fill', defaultFillColour);
+    allNodes.style.setProperty('stroke', defaultStrokeColour);
+    allNodes.style.setProperty('stroke-width', defaultStrokeWidth);
   }
 
   void setNodeHover(JsObject jsNode){

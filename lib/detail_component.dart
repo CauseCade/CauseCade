@@ -8,6 +8,7 @@ import 'package:causecade/card_barchart.dart';
 import 'package:chartjs/chartjs.dart';
 
 import 'network_selection_service.dart';
+import 'network_style_service.dart';
 
 @Component(
     selector: 'detail',
@@ -22,13 +23,14 @@ import 'network_selection_service.dart';
     providers: const [materialProviders])
 
 // THIS IS STILL WIP
-class DetailComponent implements OnInit {
+class DetailComponent implements OnInit,OnChanges {
   @Input()
   bool shouldBeLoaded;
   @Input()
   node selectedNode;
 
   NetworkSelectionService selectionService;
+  NetworkStyleService styleService;
 
 
   String FlaggingName;
@@ -47,14 +49,12 @@ class DetailComponent implements OnInit {
   List OutGoingNodes;
 
   //holds information about indivdual lambda evidences (of one of teh daughters)
-  List individualLambda;
+  List<double> individualLambda;
 
-  DetailComponent(this.selectionService);
+  DetailComponent(this.selectionService,this.styleService);
 
   void ngOnInit() {
-    if(selectionService.selectedNode!=null) {
-      setupCard();
-    }
+    print('[detail component initialised]');
   }
 
   void setupCard(){
@@ -63,15 +63,28 @@ class DetailComponent implements OnInit {
     HasEvidence = selectedNode.getEvidenceStatus();
     IncomingNodes = selectedNode.getParents();
     OutGoingNodes = selectedNode.getDaughters();
-    ChartHolder = GenerateEvidenceBarChart(selectedNode);
     LinkMatrixInfo = selectedNode.getLinkMatrixStatus();
     individualLambda = new List<double>();
+
     //Set Up the Flagging Name (name of node that last flagged this node)
     if (selectedNode.getFlaggingNode()!=null){
       FlaggingName=selectedNode.getFlaggingNode().getName();
     }
     else{
       FlaggingName='not flagged yet';
+    }
+
+    testChart();
+  }
+
+  void testChart(){
+    if (ChartHolder==null){ // generate a new chart
+      ChartHolder = GenerateEvidenceBarChart(selectedNode);
+        print('generating brand new chart');
+    }
+    else{ //already have a chart, just update its data
+        print('updating existing chart');
+      resetChart();
     }
   }
 
@@ -107,6 +120,7 @@ class DetailComponent implements OnInit {
     print('new chart requested for ' + nodeIn.getName());
     individualLambda.clear(); //we must clear this
     var lambdaVector = selectedNode.getIndividualLambda(nodeIn);
+    print(lambdaVector);
     for(int i=0;i<selectedNode.getStateCount();i++){
       individualLambda.add(lambdaVector[i]);
     }
@@ -123,11 +137,15 @@ class DetailComponent implements OnInit {
     ChartHolder.update();
   }
 
+  void changeNode(node nodeClicked){
+    selectionService.setNodeSelection(nodeClicked);
+    styleService.setNodeSelection(selectionService.selectedNode);
+  }
+
   //this function will be called if any of the @inputs change
-  void ngOnChanges(SimpleChange){
-    //print(SimpleChange);
+  void ngOnChanges(simpleChange){
     if(selectionService.selectedNode!=null){
-     //
+     setupCard(); //update card info
     }
   }
 

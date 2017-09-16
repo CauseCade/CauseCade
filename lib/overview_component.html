@@ -1,9 +1,9 @@
-<div *ngIf="selectionService.selectedNode!=null&&shouldBeLoaded" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 11em"> <!--*ngIf=HasNodeSelected-->
+<div [hidden]="!(selectionService.selectedNode!=null&&shouldBeLoaded)" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 11em"> <!--*ngIf=HasNodeSelected-->
 
     <div class="mdl-card__actions mdl-card--border">
-        Node Information
+        Node Information - {{nodeName}}
     </div>
-    <canvas id="BarChartHolder"></canvas>
+    <canvas id="BarChartHolderOverview"></canvas>
     <div class="mdl-card__actions mdl-card--border">
         Node Status
     </div>
@@ -13,14 +13,14 @@
                 [selected]=IsRootNode
                 label="Is Root Node:"
                 value={{IsRootNode}}
-                description="Node has no parents">
+                description={{cardStringRoot}}>
         </acx-scorecard>
         <acx-scorecard
                 selectable
                 [selected]=HasEvidence
                 label="has Evidence: "
                 value={{HasEvidence}}
-                description="State has been observed">
+                description={{cardStringEvidence}}>
         </acx-scorecard>
     </div>
     <div class="mdl-card__actions mdl-card--border">

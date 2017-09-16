@@ -48,7 +48,7 @@
                 </div>
                 <material-button (click)="pushNewLabels()" raised class="expansionPanelWide">Set Labels</material-button>
             </material-expansionpanel>
-            <material-expansionpanel name="Set LinkMatrix">
+            <material-expansionpanel name="Set LinkMatrix (buggy)">
                 <material-button (trigger)="openMatrixEditor()"
                                  [disabled]="showMatrixEditor"
                                  raised
@@ -56,7 +56,7 @@
                     Edit Matrix
                 </material-button>
             </material-expansionpanel>
-            <material-expansionpanel name="Change Amount of States (buggy)">
+            <material-expansionpanel name="Change Amount of States">
                 <material-dropdown-select
                         [buttonText]="nodeMultiplicityLabel"
                         [selection]="nodeMultiplicitySelection"
@@ -74,7 +74,6 @@
     </div>
 
 </div>
-<!--
 
 <modal [(visible)]="showMatrixEditor">
     <material-dialog headered class="headered-dialog">
@@ -85,18 +84,18 @@
         </div>
 
         <form (ngSubmit)="onSubmit()" #heroForm="ngForm">
-        <table class="mdl-data-table mdl-js-data-table mdl-data-table&#45;&#45;selectable mdl-shadow&#45;&#45;2dp">
+        <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
             <thead>
             <tr >
-                <th class="mdl-data-table__cell&#45;&#45;non-numeric">Parent States -></th>
-                <th *ngFor="let label of MatrixValueLabels" class="mdl-data-table__cell&#45;&#45;non-numeric linkMatrixLabelTop" style="height:{{tester}}px;"><div><span class='linkMatrixLabelHolder'>{{label}}</span></div></th>
+                <th class="mdl-data-table__cell--non-numeric">Parent States -></th>
+                <th *ngFor="let label of MatrixValueLabels" class="mdl-data-table__cell--non-numeric linkMatrixLabelTop"><div><span class='linkMatrixLabelHolder'>{{label}}</span></div></th>
             </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let label of LabelOld; let i=index">
-                    <td class="mdl-data-table__cell&#45;&#45;non-numeric">P({{label}}|Column)</td>
+                    <td class="mdl-data-table__cell--non-numeric">P({{label}}|Column)</td>
                     <td class="linkMatrixTD" *ngFor="let value of MatrixValues[i]; let j=index">
-                        <div class="form-group mdl-textfield mdl-js-textfield mdl-textfield&#45;&#45;floating-label">
+                        <div class="form-group mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <label class="mdl-textfield__label " for="matrix_name">{{value}}</label>
                             <input type="number" class="form-control mdl-textfield__input" id="matrix_name"
                                    [(ngModel)]="LinkMatrix[i][j]"
@@ -110,11 +109,11 @@
             </tbody>
 
         </table>
-            <div footer class="mdl-card__actions mdl-card&#45;&#45;border">
+            <div footer class="mdl-card__actions mdl-card--border">
                 <material-button autoFocus clear-size (trigger)="showMatrixEditor = false">Cancel</material-button>
                 <material-button type="submit" (click)="pushNewMatrix()" [disabled]="!heroForm.form.valid" class="green">Add</material-button>
             </div>
         </form>
 
     </material-dialog>
-</modal>-->
+</modal>
