@@ -10,13 +10,14 @@ environment:
 dependencies:
   browser: '>=0.10.0'
   dart_to_js_script_rewriter: '^1.0.1'
-  angular2: any
+  angular2: '>=3.0.0-beta'
   angular_components: any
   d3: '^0.2.0'
   quiver: any
   json: any
-  chartjs: any
+  chartjs: '>=0.4.0'
   markdown: "^0.11.4"
+  http: "^0.11.3+14"
 
 
 transformers:

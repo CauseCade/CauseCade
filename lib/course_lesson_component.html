@@ -8,7 +8,7 @@
     <!--Load Lesson Progress-->
     <div class="mdl-card__title compactPadding" style="width: 100%">
 
-        <h2 class="mdl-card__title-text"><span style="color: #616161">Lesson</span>: {{currentLesson.lessonName}}</h2>
+        <div><h2 class="mdl-card__title-text"><span style="color: #616161">Lesson</span>: {{currentLesson.lessonName}}</h2></div>
 
         <div id='lessonDescription' style="margin-left: auto" [materialTooltip]="currentLesson.lessonDescription">view description</div>
     </div>
@@ -22,6 +22,6 @@
 
     <!--Load Markdown Lesson Text-->
 
-    <div class="mdl-card__supporting-text lesson-content" [innerHTML]="htmlFromMarkdown"></div>
+    <div class="mdl-card__supporting-text lesson-content" id="lesson_text" [innerHTML]="htmlFromMarkdown"></div>
 
 </div>
