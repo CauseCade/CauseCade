@@ -1,0 +1,27 @@
+/*LinkMatrix Styling*/
+th.linkMatrixLabelTop {
+    height: 140px;
+    white-space: nowrap;
+}
+
+th.linkMatrixLabelTop > div{
+    transform:
+            rotate(315deg);
+    width: 30px;
+}
+
+th.linkMatrixLabelTop > div > span{
+    padding: 5px 10px;
+}
+
+td.linkMatrixTD{
+
+}
+
+td.linkMatrixTD > div{
+    width: 30px;
+}
+
+.linkMatrixLabelHolder{
+
+}

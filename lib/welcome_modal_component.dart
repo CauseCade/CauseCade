@@ -4,6 +4,7 @@ import 'package:angular_components/angular_components.dart';
 @Component(
     selector: 'welcome-modal',
     templateUrl: 'welcome_modal_component.html',
+    styleUrls: const ['welcome_modal_component.css'],
     directives: const [materialDirectives],
     providers: const [materialProviders])
 class WelcomeComponent {

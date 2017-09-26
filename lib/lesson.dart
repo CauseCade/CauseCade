@@ -1,5 +1,6 @@
 // These are the most fundamental components of our course platform
 import 'package:angular_components/angular_components.dart'; //for uiDisplay
+import 'notification_service.dart'; //to handle NetNotifications
 
 
 class Lesson implements HasUIDisplayName{
@@ -11,7 +12,7 @@ class Lesson implements HasUIDisplayName{
                         //information and text for this lesson
   int CourseIndex;
 
-  List<String> goalList;
+  List<NetNotification> goalList;
 
   Lesson(this.name,this.dateCreated);
 
@@ -27,11 +28,11 @@ class Lesson implements HasUIDisplayName{
 
   String get lessonMarkdownPath => markdownPath;
 
-  set goals(List<String> newGoalList) => goalList=newGoalList;
+  set goals(List<NetNotification> newGoalList) => goalList=newGoalList;
 
-  List<String> get goals => goalList;
+  List<NetNotification> get goals => goalList;
 
-  void addGoal(String newGoal){
+  void addGoal(NetNotification newGoal){
     goalList.add(newGoal);
     print('added goal to lesson: ' + name);
   }

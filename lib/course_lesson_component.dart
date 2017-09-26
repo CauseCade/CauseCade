@@ -19,13 +19,14 @@ import 'dart:html' as htmlDart;
 @Component(
     selector: 'course-lesson',
     templateUrl: 'course_lesson_component.html',
+    styleUrls: const ['course_lesson_component.css'],
     directives: const [materialDirectives],
     providers: const [materialProviders,CourseNavigatorComponent])
 class CourseLessonComponent implements OnChanges{
   @Input()
   Lesson currentLesson;
-  @Input()
-  bool lessonSelected;
+  @Input() //this is another workaround (to listen to changes)
+  NetNotification lastNotification;
 
   //services
   TeachService _teachService;
@@ -37,7 +38,7 @@ class CourseLessonComponent implements OnChanges{
   var response;
 
   int goalCount = 6; //Dummy Value //FIX
-  List<String> goalList;
+  List<NetNotification> goalList;
   var htmlFromMarkdown;// = md.markdownToHtml("#Lesson Test \n Why is dart *incompetent*?");
 
 
@@ -56,22 +57,40 @@ class CourseLessonComponent implements OnChanges{
       ..open('GET', path)
       ..onLoadEnd.listen((e){
         ///print(req.responseText);
-        htmlFromMarkdown=md.markdownToHtml(req.responseText);
+        htmlFromMarkdown=md.markdownToHtml(req.responseText,inlineSyntaxes: [new md.InlineHtmlSyntax()]);
       })
       ..send('');
+    goalList=currentLesson.goalList;
+
   }
 
-  void deselectLesson(){
-    lessonSelected=false;
+  void checkGoals(){
+    //this is called every time a new notificaiton is added
+    NetNotification newNotification = lastNotification;
+    //check if this netNotificaiton is in the list of goals (i.e. notifications)
+    goalList.forEach((goal){
+      if(goal.notificationText==newNotification.notificationText){
+        htmlDart.querySelector('#goal_'+(goalList.indexOf(goal)+1).toString()).style.backgroundColor='green';
+        htmlDart.querySelector('.goal_icon_'+(goalList.indexOf(goal)+1).toString()).style.borderColor='green';
+
+      }
+    });
+    // most of the time this will evaluate to false.
   }
 
-  void selectLesson(){
-    lessonSelected = true;
-  }
-
-  void ngOnChanges(SimpleChange){
-    if(currentLesson!=null){
-      refreshLesson();
+  void ngOnChanges(Map<String, SimpleChange> changes){
+    //print('[lesson] change to: '+changes.keys.last);
+    if (changes.keys.last=='lastNotification'&&goalList!= null){
+      checkGoals();
     }
+    else if (changes.keys.last=='currentLesson'){
+      if (currentLesson != null) {
+        refreshLesson();
+      }
+    }
+    else{
+      print('[lesson]: unknown change detected.');
+    }
+
   }
 }

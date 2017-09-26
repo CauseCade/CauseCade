@@ -1,0 +1,92 @@
+/*////////////////////////// welcome Modal ///////////////////////////*/
+#welcomeModal{
+    width:100%;
+    height: 60%;
+    display: block;
+    position: absolute;
+    top: 20%;
+    background:#D81B60;
+    z-index: 9999;
+
+}
+
+#welcomeMessage{
+    height: 85%;
+    background: #E91E63;
+    box-shadow: 0px 1px 75px 0px rgba(0,0,0,0.4);
+    font-size: 0;
+}
+
+#welcomeMessageContent{
+    width: 40%;
+    margin: auto;
+    vertical-align: top
+}
+
+#welcomeMessageContent img{
+    width: 15%;
+    height: 15%;
+    display: block;
+    margin: auto;
+    padding-top: 4%;
+}
+
+#welcomeButtonRegion{
+    height: 15%;
+}
+
+#welcomeButtonHolder{
+    display: block;
+    margin: auto;
+    width: 28%; /*FIX*/
+    padding-top: 1.5%;
+}
+
+#welcomeButtonRegion button{
+    margin: 10px;
+    font-weight: 600;
+}
+
+#welcomeTitle{
+    font-size: 44px;
+    line-height: 100%;
+    color: #fafafa;
+    text-align: center;
+    font-family: Roboto;
+    padding-top: 2%;
+    padding-bottom: 5%;
+}
+
+#welcomeText p{
+    font-size: 22px;
+    color: #fafafa;
+    font-family: Roboto;
+}
+
+#welcomeText a{
+    font-size: 22px;
+    color: #BDBDBD;
+    font-family: Roboto;
+    text-decoration: none;
+}
+
+#welcomeText a:hover{
+    font-size: 22px;
+    color:  #BDBDBD;
+    font-family: Roboto;
+    text-decoration: underline;
+}
+
+#overlay{
+    display: block;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index:9998;
+    -moz-opacity: 0.8;
+    opacity:.55;
+    filter: alpha(opacity=50);
+}

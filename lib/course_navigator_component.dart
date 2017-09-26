@@ -14,6 +14,7 @@ import 'package:causecade/notification_service.dart';
 @Component(
     selector: 'course-navigator',
     templateUrl: 'course_navigator_component.html',
+    styleUrls: const ['course_navigator_component.css'],
     directives: const [materialDirectives, CourseLessonComponent],
     providers: const [materialProviders,AppComponent,TeachService])
 
@@ -23,7 +24,7 @@ class CourseNavigatorComponent {
   bool lessonSelected;
 
   final TeachService _teachService;
- /* NotificationService notifications;*/
+  NotificationService notifications;
 
   int navigationRatio =12;  //What fraction of window should the navigation
                             //header be? (percentage)
@@ -35,7 +36,7 @@ class CourseNavigatorComponent {
 
   //bool =true; //any lesson selected?
 
-  CourseNavigatorComponent(this._teachService){/*this._teachService*/
+  CourseNavigatorComponent(this._teachService,this.notifications){/*this._teachService*/
     print('Course Navigator Component loaded...');
     navigationRatioComplement=100-navigationRatio;
     CourseList = _teachService.getCourses();
@@ -57,8 +58,6 @@ class CourseNavigatorComponent {
   void selectCourse(Course courseIn){
     CourseSelect = courseIn; //set currently Selectd Course
     LessonList=CourseSelect.courseLessons; //find lessons (only) of this course
-
-    //hasLessonSelected =false; //reset lesson selection status
   }
 
 
@@ -124,12 +123,12 @@ class CourseNavigatorComponent {
   String get selectedLessonLabel {
     if(targetLessonSelection.selectedValues.length > 0){
       LessonSelect=targetLessonSelection.selectedValues.first;
-      lessonSelected=true;
+      //lessonSelected=true;
 
       return (targetLessonSelection.selectedValues.first.uiDisplayName);
     }
     else {
-      lessonSelected=false;
+      //lessonSelected=false;
       LessonSelect=null;
       return 'Choose a lesson';
     }
@@ -137,7 +136,7 @@ class CourseNavigatorComponent {
 
   void prevLesson(){
     //if we have a lesson selected and it is not the first in the list
-    if(lessonSelected && LessonList.indexOf(LessonSelect)!=0){
+    if((LessonSelect!=null) && LessonList.indexOf(LessonSelect)!=0){
       targetLessonSelection.select(LessonList[(LessonList.indexOf(LessonSelect)-1)]);
       print('Prev Lesson');
     }
@@ -145,7 +144,7 @@ class CourseNavigatorComponent {
 
   void nextLesson(){
     //if we have a lesson selected and it is not the last in the list
-    if(lessonSelected && LessonList.indexOf(LessonSelect)!=LessonList.length-1){
+    if((LessonSelect!=null)  && LessonList.indexOf(LessonSelect)!=LessonList.length-1){
       targetLessonSelection.select(LessonList[(LessonList.indexOf(LessonSelect)+1)]);
       print('Next Lesson');
     }

@@ -1,0 +1,146 @@
+/*notification Bar*/
+#notificationBar{
+    font-size: 12px;
+}
+
+#notificationBarSpan{
+    display: inline-block;
+    font-size: 14px;
+    font-family: Roboto,sans-serif;
+}
+
+#notificationBarChips{
+    display: inline-flex;
+}
+
+/*section break*/
+
+#main_title{
+    font-family: 'Monoton';
+    font-size: 50px;
+    color: #fafafa;
+}
+
+#main_card{
+    width: 22%;
+    align-items: stretch;
+    position: absolute;
+}
+
+#GraphHolder{
+    height:100%;
+    width: 100%;
+    position: absolute;
+
+    /* display: inline-block;
+     position: relative;
+     width: 100%;
+     padding-bottom: 100%;
+     vertical-align: top;
+     overflow: hidden;*/
+}
+
+#controlmenu{
+    /* background: #E91E63;*/
+    width: 100%;
+    color: #fafafa;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+#button_holder{
+
+    padding-right: 16px ;
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+}
+
+#button_holder button.mdl-button    {
+    padding-left: 32px;
+    padding-right: 32px ;
+    background: #fafafa;
+    /* color: black;*/
+    font-weight: 600;
+}
+
+/*dropdown menu to select node from list*/
+#detail_button{
+    padding-top: 16px;
+    width:90%;
+}
+
+
+/*dropdown menu to select node from list*/
+/*alternate version (when network has no nodes)*/
+#detail_button_alt{
+    padding-top: 16px;
+    display: flex;
+    width: 90%;
+    padding-right: 0px;
+    justify-content: center;
+    align-items: center;
+}
+
+/*section break*/
+
+.mdl-layout__header-row{
+    color: #fafafa;
+    font-family: 'Roboto', sans-serif;
+    padding-left: 0;
+}
+
+.mdl-layout__header .mdl-layout-icon{
+    height: 60px;
+    width: 60px;
+}
+
+.mdl-layout__header-row img{
+    padding-left: 25px;
+    padding-right: 25px;
+}
+
+
+.header_card{
+    color: rgba(0,0,0,0.87);
+}
+
+/*other*/
+
+#LowerNavigation{
+    display:flex;
+    justify-content: space-between;
+}
+
+
+
+#networkNameInput {
+    padding: 0px;
+}
+
+
+.mdl-tabs{
+    padding-left: 3em;
+    padding-right: 3em;
+    width: auto;
+}
+
+.mdl-tabs__tab-bar{
+
+    display: inline ;
+}
+
+.tabs_menu .mdl-tabs__tab-bar{
+    border-bottom: none ;
+    -webkit-justify-content: inherit;
+}
+
+#DisplayModes.mdl-tabs__tab-bar {
+    margin-left: auto;
+    -webkit-justify-content:center;
+}
+
+.tabs_menu .mdl-tabs__tab-bar .mdl-tabs__tab, .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active{
+    color: #fafafa;
+}

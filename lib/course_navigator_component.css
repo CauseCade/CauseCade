@@ -1,0 +1,30 @@
+/*Course Components Styling*/
+.lesson{
+    width:100%;
+    background-color: #E0E0E0;
+
+}
+
+.compactPadding{
+    padding: 8px;
+}
+
+.CourseNavigatorContext{
+    display: block;
+    color: white;
+    float: left;
+}
+
+#CourseNavigatorDropdowns{
+
+    float: left
+}
+
+#courseNavigatorSpacer{
+    clear: both;
+    height: 1em;
+}
+
+.courseNavigatorSkip{
+    float:right;
+}

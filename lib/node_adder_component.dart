@@ -10,6 +10,7 @@ import 'package:causecade/notification_service.dart';
 @Component(
     selector: 'node-adder',
     templateUrl: 'node_adder_component.html',
+    styleUrls: const ['node_adder_component.css'],
     directives: const [materialDirectives],
     providers: const [materialProviders]
 )

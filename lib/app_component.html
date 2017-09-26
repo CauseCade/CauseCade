@@ -7,7 +7,7 @@
 
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation">
-                <material-button raised materialTooltip="View Interactive Courses" disabled (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
+                <material-button raised materialTooltip="View Interactive Courses"  (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
                 <br/>
 
                 <a class="mdl-navigation__link  mdl-color-text--white" id="button1" href="#" target="_blank">HELP</a>
@@ -27,9 +27,9 @@
         <div id="LowerNavigation">
             <div id="MenuOptions" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs_menu">
                 <div  class="mdl-tabs__tab-bar">
-                    <a (click)='displayCard("overview")' href="#starks-panel"  class="mdl-tabs__tab is-active">Overview</a>
-                    <a (click)='displayCard("detail")' href="#lannisters-panel"  class="mdl-tabs__tab">Details</a>
-                    <a (click)='displayCard("edit")' href="#targaryens-panel"  class="mdl-tabs__tab">Edit</a>
+                    <a (click)='displayCard("overview")'  class="mdl-tabs__tab is-active">Overview</a>
+                    <a (click)='displayCard("detail")'  class="mdl-tabs__tab">Details</a>
+                    <a (click)='displayCard("edit")'  class="mdl-tabs__tab">Edit</a>
                 </div>
             </div>
 
@@ -37,9 +37,9 @@
 
             <div id="DisplayModes" class="mdl-tabs mdl-js-tabs mdl-js-ripple-effect tabs_menu">
                 <div  class="mdl-tabs__tab-bar">
-                    <a href="#starks-panel" class="mdl-tabs__tab is-active">Network</a>
-                    <a href="#lannisters-panel" class="mdl-tabs__tab">Histogram</a>
-                    <a href="#targaryens-panel" class="mdl-tabs__tab">Alternate Canvas 2</a>
+                    <a href="#" disabled class="mdl-tabs__tab is-active">Network</a>
+                    <!--<a href="#lannisters-panel"  class="mdl-tabs__tab">Histogram</a>
+                    <a href="#targaryens-panel"  class="mdl-tabs__tab">Alternate Canvas</a>-->
                 </div>
             </div>
         </div>

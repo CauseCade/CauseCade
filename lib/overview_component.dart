@@ -14,6 +14,7 @@ import 'package:chartjs/chartjs.dart';
 @Component(
     selector: 'overview',
     templateUrl: 'overview_component.html',
+    styleUrls: const ['overview_component.css'],
     styles: const ['''
                     main{
                       margin-left: 4em ;

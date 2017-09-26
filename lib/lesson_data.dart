@@ -1,5 +1,6 @@
 import 'lesson.dart';
 import 'course.dart';
+import 'notification_service.dart'; //acces to class NetNotification
 
 
  List<Course> courseData = [
@@ -16,9 +17,9 @@ Lesson lesson1 = new Lesson('Tutorial Pt 1','01-07-2017')
 courseData[0].addLesson(lesson1);
 
 Lesson lesson2 = new Lesson('Tutorial Pt 2','19-07-2017')
-..lessonDescription = 'The very Basics of CauseCade 2'
+..lessonDescription = 'Manipulating A loaded network'
 ..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Tutorial_Pt_2.md'
-..goals=(['doggo','snek','pupper','test4']);
+..goals=([new NetNotification()..setLoadStatus(),new NetNotification()..setNewNode()]);
 courseData[0].addLesson(lesson2);
 
 Lesson lesson3 = new Lesson('Probability','20-07-2017')
@@ -26,7 +27,7 @@ Lesson lesson3 = new Lesson('Probability','20-07-2017')
 ..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Probability.md';
 courseData[1].addLesson(lesson3);
 
-Lesson lesson4 = new Lesson('x1','01-07-2017')
+/*Lesson lesson4 = new Lesson('x1','01-07-2017')
 ..lessonDescription = 'dummy x1'
 ..lessonMarkdownPath = '/not/selected/yet.md';
 courseData[2].addLesson(lesson4);
@@ -34,7 +35,7 @@ courseData[2].addLesson(lesson4);
 Lesson lesson5 = new Lesson('x2','01-07-2017')
 ..lessonDescription = 'dummy x2'
 ..lessonMarkdownPath = '/not/selected/yet.md';
-courseData[2].addLesson(lesson5);
+courseData[2].addLesson(lesson5);*/
 
 print('All Lessons configured in proper Courses');
 }

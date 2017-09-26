@@ -13,6 +13,7 @@ import 'network_style_service.dart';
 @Component(
     selector: 'detail',
     templateUrl: 'detail_component.html',
+    styleUrls: const ['detail_component.css'],
     styles: const ['''
                     main{
                       margin-left: 4em ;

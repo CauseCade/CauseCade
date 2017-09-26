@@ -16,6 +16,7 @@ import 'dart:math';
 @Component(
     selector: 'edit-node',
     templateUrl: 'edit_component.html',
+    styleUrls: const ['edit_component.css'],
     styles: const ['''
                     main{
                       margin-left: 4em ;

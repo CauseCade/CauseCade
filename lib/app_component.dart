@@ -31,6 +31,7 @@ BayesianDAG myDAG;
 @Component(
     selector: 'causecade',
     templateUrl: 'app_component.html',
+    styleUrls: const ['app_component.css'],
 directives: const [NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent,OverviewComponent,DetailComponent,EditComponent],
 providers: const [materialProviders,NotificationService,NetworkStyleService,NetworkSelectionService]
 )
