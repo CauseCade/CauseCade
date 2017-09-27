@@ -331,10 +331,11 @@ class EditComponent implements OnInit, OnChanges {
   }
 
   //this function will be called if any of the @inputs change
-  void ngOnChanges(SimpleChange){
-    //print(SimpleChange);
-    if(selectionService.selectedNode!=null){
+  void ngOnChanges(changes){
+
+    if( (changes.keys.last=='selectedNode')&&selectionService.selectedNode!=null){
       setupCard();
+      notifications.addHiddenNotification(new NetNotification()..setNodeSelectedDetail(selectedNode.getName()));
     }
   }
 

@@ -144,9 +144,9 @@ class DetailComponent implements OnInit,OnChanges {
   }
 
   //this function will be called if any of the @inputs change
-  void ngOnChanges(simpleChange){
-    if(selectionService.selectedNode!=null){
-     setupCard(); //update card info
+  void ngOnChanges(changes){
+    if( (changes.keys.last=='selectedNode')&&selectionService.selectedNode!=null){
+      setupCard();
     }
   }
 

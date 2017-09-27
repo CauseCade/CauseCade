@@ -8,21 +8,37 @@ import 'package:causecade/vector_math.dart';
 
 class NotificationService {
   List<NetNotification> notificationList = new List<NetNotification>();
+  List<NetNotification> hiddenNotificationList = new List<NetNotification>();
+  int notificationCountLimit = 20; //how many notifications do we allow
 
   List<NetNotification> get notifications => notificationList;
 
+  List<NetNotification> get hiddenNotifications => hiddenNotificationList;
+
   void addNotification(NetNotification newNotification){
     notificationList.add(newNotification);
-    print('NotificationService: new added: ' + newNotification.text);
-   /* StringBuffer kappa = new StringBuffer();
-    notificationList.forEach((notification){
-      kappa.write(notification.text);
-    });
-    print('NotificationService: ' + kappa.toString());*/
+    addHiddenNotification(newNotification);// also add to hidden
+
+    //print('NotificationService: new added: ' + newNotification.text);
+    //avoid list from growing too far.
+    if (notificationList.length>notificationCountLimit){
+      notificationList.removeAt(0); //clear oldest item
+      print(notificationList.length.toString() + 'length visible'); //debugging
+    }
+  }
+
+  void addHiddenNotification(NetNotification newNotification){
+    hiddenNotificationList.add(newNotification);
+    //avoid list from growing too far.
+    if (hiddenNotificationList.length>notificationCountLimit){
+      hiddenNotificationList.removeAt(0); //clear oldest item
+      print(hiddenNotificationList.length.toString() + 'length hidden'); //debugging
+    }
   }
 
   void clear(){
     notificationList.clear();
+    hiddenNotificationList.clear();
     print('NotificationService: cleared notifications');
   }
 
@@ -79,7 +95,8 @@ class NetNotification { //holds all possible notifications;
   }
 
   void setLoadStatus([String netName]){
-    notificationText = 'Loaded Network';
+    netName!=null ? notificationText = "Loaded Network:"+netName:
+    notificationText = "Loaded Network";
   }
 
   void setSaveStatus([String netName]){
@@ -114,6 +131,37 @@ class NetNotification { //holds all possible notifications;
 
   void setLessonSelection([Lesson LessonIn]){
     notificationText = 'Loaded Lesson';
+  }
+
+  //hidden only (should only be used for hidden
+  void setNodeDisplayMode([String mode]){
+    mode!=null ? notificationText = "set node display:"+mode:
+    notificationText = "set node display";
+    print(notificationText);
+  }
+
+  void setNotificationDisplayStatus([bool active]){
+    active!=null ? notificationText="notifications:"+active.toString() :
+      notificationText = "notifications:toggled";
+  }
+
+  void setNewNetworkName([String newName]){
+    newName!=null ? notificationText="newNetworkName:"+newName.toString() :
+    notificationText = "newNetworkName:modified";
+  }
+
+  void setLoadMenuStatus([bool loadMenuStatus]){
+    loadMenuStatus!=null ? notificationText="load menu active:"+loadMenuStatus.toString() :
+    notificationText = "load menu active:changed";
+  }
+
+  void setNodeSelectedDetail(String nodeIn){
+    notificationText ="node selected:"+nodeIn;
+  }
+
+  void setNodeAdderMenuStatus([bool active]){
+    active!=null ? notificationText="nodeAdder:"+active.toString() :
+    notificationText = "nodeAdder:toggled";
   }
 
 }

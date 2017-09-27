@@ -109,9 +109,9 @@ class OverviewComponent implements OnInit, OnChanges{
   }
 
   //this function will be called if any of the @inputs change
-  void ngOnChanges(SimpleChange){
+  void ngOnChanges(changes){
     //print(SimpleChange);
-    if(selectionService.selectedNode!=null){
+    if( (changes.keys.last=='selectedNode')&&selectionService.selectedNode!=null){
       setupCard();
     }
   }

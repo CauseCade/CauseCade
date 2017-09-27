@@ -60,7 +60,7 @@
 
                     <material-button raised disabled materialTooltip="Saves the network as file" class="white">Save</material-button>
 
-                    <material-button (trigger)="openLoadMenu = true"
+                    <material-button (trigger)="activateLoadMenu()"
                                      [disabled]="openLoadMenu" materialTooltip="Choose from a list of networks to load" raised class="white">Load</material-button>
 
                     <material-button raised disabled materialTooltip="remove all nodes and links" class="white">Reset</material-button>

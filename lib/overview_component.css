@@ -7,3 +7,8 @@ material-list.nodeListDisplay{
 material-list.nodeListDisplay_small{
     padding: 0px;
 }
+
+.mdl-card{
+    float:left  ;
+    margin: 1em ;
+}

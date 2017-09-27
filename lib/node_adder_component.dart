@@ -41,11 +41,13 @@ class NodeAdderComponent implements OnInit {
 
   void ngOnInit(){
     NodeList = myDAG.getNodes();
+
     print('Ready To add Nodes');
   }
 
   void makeVisible(){
     Visible=true;
+    notifications.addHiddenNotification(new NetNotification()..setNodeAdderMenuStatus(true));
   }
 
   void close(){

@@ -97,6 +97,11 @@ class AppComponent implements OnInit {
 
   }
 
+  void activateLoadMenu(){
+    openLoadMenu = true;
+    notifications.addHiddenNotification(new NetNotification()..setLoadMenuStatus(openLoadMenu));
+  }
+
   //when the ''LOAD'' button is clicked
   loadData(String example_name) {
     //This function will get improved functionality in the future
@@ -106,14 +111,14 @@ class AppComponent implements OnInit {
         loadMessage = 'Last Loaded: ' + example_name;
         openLoadMenu = false;
         refreshNetName();
-        notifications.addNotification(new NetNotification()..setLoadStatus());
+        notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.getName()));
         break;
       case "CarTest":
         LoadExample_CarStart();
         loadMessage = 'Last Loaded: ' + example_name;
         openLoadMenu = false;
         refreshNetName();
-        notifications.addNotification(new NetNotification()..setLoadStatus());
+        notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.getName()));
         break;
       default:
         loadMessage = 'Sorry This is node a valid network';
@@ -141,6 +146,7 @@ class AppComponent implements OnInit {
 
   void refreshNetName() {
     networkName = ('Net Name: ' +myDAG.getName());
+    notifications.addHiddenNotification(new NetNotification()..setNewNetworkName());
   }
 
   void toggleTeaching() {
@@ -180,11 +186,11 @@ class AppComponent implements OnInit {
   void toggleNotifications(){
     if (notificationModeStatus) {
       notificationModeStatus = false;
-      print('Notification Menu Disabled');
+      notifications.addHiddenNotification(new NetNotification()..setNotificationDisplayStatus(false));
     }
     else{
       notificationModeStatus = true;
-      print('Notification Menu Enabled');
+      notifications.addHiddenNotification(new NetNotification()..setNotificationDisplayStatus(true));
     }
   }
 
@@ -201,6 +207,7 @@ class AppComponent implements OnInit {
         if (!overviewActive){
           overviewActive=true;
           print('toggled overview card on');
+          notifications.addHiddenNotification(new NetNotification()..setNodeDisplayMode("overview"));
           detailActive=false;
           editActive=false;
         }
@@ -212,6 +219,7 @@ class AppComponent implements OnInit {
         if (!detailActive){
           detailActive=true;
           print('toggled detail card on');
+          notifications.addHiddenNotification(new NetNotification()..setNodeDisplayMode("details"));
           overviewActive=false;
           editActive=false;
         }
@@ -223,6 +231,7 @@ class AppComponent implements OnInit {
         if (!editActive){
           editActive=true;
           print('toggled edit card on');
+          notifications.addHiddenNotification(new NetNotification()..setNodeDisplayMode("edit"));
           detailActive=false;
           overviewActive=false;
         }

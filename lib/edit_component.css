@@ -25,3 +25,8 @@ td.linkMatrixTD > div{
 .linkMatrixLabelHolder{
 
 }
+
+.mdl-card{
+    float:left  ;
+    margin: 1em ;
+}

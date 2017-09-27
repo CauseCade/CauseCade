@@ -5,3 +5,8 @@
 .expansionPanelWide{
     margin: 8px 0px !important;
 }
+
+.mdl-card{
+    float:left  ;
+    margin: 1em ;
+}

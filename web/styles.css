@@ -11,12 +11,6 @@ main{
 
 }
 
-.mdl-card{
-    float:left  ;
-    margin: 1em ;
-
-}
-
 /*bar charts*/
 
 .bar{
@@ -62,7 +56,6 @@ defs > marker > path{
     top: 25%;
     left: 25%;
     width: 50%;
-
     z-index:1002;
 }
 
@@ -92,4 +85,8 @@ material-input .spaceholder{
     font-size: 0px !important;
 }
 
-/*testting*/
+/*for lesson text that represents a goal/target/activity*/
+.lessonGoal{
+    background-color: red;
+    white-space: nowrap;
+}

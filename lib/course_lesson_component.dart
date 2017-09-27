@@ -39,9 +39,9 @@ class CourseLessonComponent implements OnChanges{
 
   int goalCount = 6; //Dummy Value //FIX
   List<NetNotification> goalList;
-  var htmlFromMarkdown;// = md.markdownToHtml("#Lesson Test \n Why is dart *incompetent*?");
+  var htmlFromMarkdown;
 
-
+  String lessonName;
 
    CourseLessonComponent(this._teachService,this.notifications)  {
       print('Course Lesson Component loaded...');
@@ -51,6 +51,7 @@ class CourseLessonComponent implements OnChanges{
     //update notifications
     notifications.addNotification(new NetNotification()..setLessonSelection());
     //load the markdown from github repo
+    lessonName=currentLesson.lessonName;
     String path = currentLesson.markdownPath;
     htmlDart.HttpRequest req = new htmlDart.HttpRequest();
     req
@@ -61,20 +62,19 @@ class CourseLessonComponent implements OnChanges{
       })
       ..send('');
     goalList=currentLesson.goalList;
-
   }
 
   void checkGoals(){
     //this is called every time a new notificaiton is added
     NetNotification newNotification = lastNotification;
     //check if this netNotificaiton is in the list of goals (i.e. notifications)
-    goalList.forEach((goal){
-      if(goal.notificationText==newNotification.notificationText){
-        htmlDart.querySelector('#goal_'+(goalList.indexOf(goal)+1).toString()).style.backgroundColor='green';
-        htmlDart.querySelector('.goal_icon_'+(goalList.indexOf(goal)+1).toString()).style.borderColor='green';
-
+    for (int i=0;i<goalList.length;i++){
+      if(goalList[i].notificationText==newNotification.notificationText){
+        htmlDart.querySelector('#goal_'+(i+1).toString()).style.backgroundColor='green';
+        htmlDart.querySelector('.goal_icon_'+(i+1).toString()).style.borderColor='green';
+        break; //to allow for the same command twice in a single lesson
       }
-    });
+    };
     // most of the time this will evaluate to false.
   }
 
