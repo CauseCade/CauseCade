@@ -10,8 +10,9 @@ import 'package:causecade/detail_component.dart';
 import 'package:causecade/edit_component.dart';
 import 'package:causecade/node_adder_component.dart';
 import 'package:causecade/welcome_modal_component.dart';
+import 'package:causecade/load_component.dart';
 
-import 'package:causecade/example_networks.dart';
+
 import 'dart:html';
 
 import 'node.dart';
@@ -23,6 +24,7 @@ import 'package:d3/d3.dart';
 import  'notification_service.dart';
 import 'network_style_service.dart';
 import 'network_selection_service.dart';
+import 'teach_service.dart';
 
 List networkInfo = new List();
 Network myNet;
@@ -32,11 +34,12 @@ BayesianDAG myDAG;
     selector: 'causecade',
     templateUrl: 'app_component.html',
     styleUrls: const ['app_component.css'],
-directives: const [NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent,OverviewComponent,DetailComponent,EditComponent],
-providers: const [materialProviders,NotificationService,NetworkStyleService,NetworkSelectionService]
+directives: const [NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent,OverviewComponent,DetailComponent,EditComponent,LoadComponent],
+providers: const [materialProviders,NotificationService,NetworkStyleService,NetworkSelectionService,TeachService]
 )
 class AppComponent implements OnInit {
 
+  TeachService teachService;
   NotificationService notifications;
   NetworkStyleService styleService;
   NetworkSelectionService selectionService;
@@ -64,15 +67,11 @@ class AppComponent implements OnInit {
   bool teachModeStatus;
   bool notificationModeStatus;
 
-  //user has teach mode on or off
-  String loadMessage;
-
-
-  //Holds the notification we wish to push
+    //Holds the notification we wish to push
   NetNotification newNotification= new NetNotification();
 
   //constructor
-  AppComponent(this.notifications,this.styleService,this.selectionService) {
+  AppComponent(this.notifications,this.styleService,this.selectionService,this.teachService) {
     print('Appcomponent created');
   }
 
@@ -98,31 +97,9 @@ class AppComponent implements OnInit {
   }
 
   void activateLoadMenu(){
+    print(openLoadMenu);
     openLoadMenu = true;
     notifications.addHiddenNotification(new NetNotification()..setLoadMenuStatus(openLoadMenu));
-  }
-
-  //when the ''LOAD'' button is clicked
-  loadData(String example_name) {
-    //This function will get improved functionality in the future
-    switch (example_name) {
-      case "Animals":
-        LoadExample_Animals();
-        loadMessage = 'Last Loaded: ' + example_name;
-        openLoadMenu = false;
-        refreshNetName();
-        notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.getName()));
-        break;
-      case "CarTest":
-        LoadExample_CarStart();
-        loadMessage = 'Last Loaded: ' + example_name;
-        openLoadMenu = false;
-        refreshNetName();
-        notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.getName()));
-        break;
-      default:
-        loadMessage = 'Sorry This is node a valid network';
-    }
   }
 
   void setScreenDimensions() {
@@ -153,33 +130,16 @@ class AppComponent implements OnInit {
     if (teachModeStatus) {
       teachModeStatus = false;
       print('Teach Mode Disabled');
-      updateColours('normal');
+      styleService.setUiColours('normal');
       //set notifications
       notifications.addNotification(new NetNotification()..setTeachModeOff());
     }
     else {
       teachModeStatus = true;
       print('Teach Mode Enabled');
-      updateColours('teach');
+      styleService.setUiColours('teach');
       //set notifications
       notifications.addNotification(new NetNotification()..setTeachMode());
-    }
-  }
-
-  void updateColours(String input){
-    switch (input) {
-      case 'normal':
-    querySelectorAll('.themeColour').style.backgroundColor =  '#E91E63'; //Pink.
-    querySelectorAll('.themeColourSecondary').style.backgroundColor = '#D81B60'; //darker pink;
-        print('Colours: normal');
-        break;
-      case 'teach':
-        querySelectorAll('.themeColour').style.backgroundColor = '#00BCD4'; //Blue
-
-        querySelectorAll('.themeColourSecondary').style.backgroundColor = '#00ACC1'; //darker blue;
-        print('Colours: teach');
-        break;
-
     }
   }
 

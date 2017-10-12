@@ -1,0 +1,53 @@
+<modal [visible]="isVisible"> <!---->
+    <material-dialog headered class="headered-dialog">
+
+        <div header>
+            <h3>Load an Example Network</h3>
+            <p>Click to load one of the networks into causecade.</p>
+        </div>
+        <div class="mdl-grid" id="network_types">
+            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+                <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
+                    <h2 class="mdl-card__title-text " >Animals</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <p>Network Description </p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <material-button clear-size (trigger)="loadData('Animals')">Load Network</material-button>
+                </div>
+            </div>
+
+            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+                <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
+                    <h2 class="mdl-card__title-text " >Car Test</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <p>Network Description </p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <material-button clear-size (trigger)="loadData('CarTest')">Load Network</material-button>
+                </div>
+            </div>
+
+            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+                <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
+                    <h2 class="mdl-card__title-text " >tester</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <p>Network Description </p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+
+                </div>
+            </div>
+
+        </div>
+
+
+        <div footer class="mdl-card__actions mdl-card--border">
+            <material-button autoFocus clear-size (trigger)="closeLoadMenu()">Cancel</material-button>
+        </div>
+
+    </material-dialog>
+</modal>
