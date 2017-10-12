@@ -83,5 +83,22 @@ class NetworkStyleService {
     return '#'+'svgNodeObject_'+nodeNameRaw.getName().replaceAll(new RegExp(r"\s+\b|\b\s"), "");
   }
 
+  /*Other Style Elements*/
+  void setUiColours(String input){
+    switch (input) {
+      case 'normal':
+        querySelectorAll('.themeColour').style.backgroundColor =  '#E91E63'; //Pink.
+        querySelectorAll('.themeColourSecondary').style.backgroundColor = '#D81B60'; //darker pink;
+        print('Colours: normal');
+        break;
+      case 'teach':
+        querySelectorAll('.themeColour').style.backgroundColor = '#00BCD4'; //Blue
+
+        querySelectorAll('.themeColourSecondary').style.backgroundColor = '#00ACC1'; //darker blue;
+        print('Colours: teach');
+        break;
+
+    }
+  }
 
 }

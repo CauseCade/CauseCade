@@ -13,26 +13,42 @@ class Lesson implements HasUIDisplayName{
   int CourseIndex;
 
   List<NetNotification> goalList;
+  List<bool> goalProgressList;
 
   Lesson(this.name,this.dateCreated);
 
+  // Getters
+
   String get lessonName => name;
+
+  int get goalCount => goalList.length;
+
+  List<bool> get goalProgress => goalProgressList;
 
   set lessonDescription(String newDescription){
     description = newDescription;}
 
   String get lessonDescription => description;
 
-  set lessonMarkdownPath(String newPath){
-    markdownPath = newPath;}
-
   String get lessonMarkdownPath => markdownPath;
-
-  set goals(List<NetNotification> newGoalList) => goalList=newGoalList;
 
   List<NetNotification> get goals => goalList;
 
-  void addGoal(NetNotification newGoal){
+  // Setters
+
+  set lessonMarkdownPath(String newPath){
+    markdownPath = newPath;}
+
+  set goals(List<NetNotification> newGoalList){
+    goalList=newGoalList;
+    goalProgressList=new List(newGoalList.length);
+  }
+
+  // Functions
+
+  void setGoalProgress(int goalIndex) => goalProgressList[goalIndex]=true;
+
+  void addGoal(NetNotification newGoal){ //will break preset goalProgress list. TODO: fix
     goalList.add(newGoal);
     print('added goal to lesson: ' + name);
   }

@@ -16,14 +16,14 @@ import 'package:causecade/notification_service.dart';
     templateUrl: 'course_navigator_component.html',
     styleUrls: const ['course_navigator_component.css'],
     directives: const [materialDirectives, CourseLessonComponent],
-    providers: const [materialProviders,AppComponent,TeachService])
+    providers: const [materialProviders])
 
 class CourseNavigatorComponent {
   @Input()
   bool isActive;
   bool lessonSelected;
 
-  final TeachService _teachService;
+  TeachService teachService;
   NotificationService notifications;
 
   int navigationRatio =12;  //What fraction of window should the navigation
@@ -32,14 +32,13 @@ class CourseNavigatorComponent {
   List<Course> CourseList;
   Course CourseSelect; //selected course
   List<Lesson> LessonList;
-  Lesson LessonSelect; //selected lesson
 
   //bool =true; //any lesson selected?
 
-  CourseNavigatorComponent(this._teachService,this.notifications){/*this._teachService*/
-    print('Course Navigator Component loaded...');
+  CourseNavigatorComponent(this.teachService,this.notifications){/*this._teachService*/
+    print('[Course Navigator Component] loaded...');
     navigationRatioComplement=100-navigationRatio;
-    CourseList = _teachService.getCourses();
+    CourseList = teachService.getCourses();
     LessonList = new List<Lesson>();
     configureCourses();
     print('Configured Courses');
@@ -122,31 +121,38 @@ class CourseNavigatorComponent {
 
   String get selectedLessonLabel {
     if(targetLessonSelection.selectedValues.length > 0){
-      LessonSelect=targetLessonSelection.selectedValues.first;
+      teachService.currentLesson=targetLessonSelection.selectedValues.first;
+      //print(_teachService.currentLesson.lessonName);
       //lessonSelected=true;
 
       return (targetLessonSelection.selectedValues.first.uiDisplayName);
     }
     else {
       //lessonSelected=false;
-      LessonSelect=null;
+      teachService.clearCurrentLesson();
       return 'Choose a lesson';
     }
   }
 
   void prevLesson(){
     //if we have a lesson selected and it is not the first in the list
-    if((LessonSelect!=null) && LessonList.indexOf(LessonSelect)!=0){
-      targetLessonSelection.select(LessonList[(LessonList.indexOf(LessonSelect)-1)]);
+    if((teachService.currentLesson!=null) && LessonList.indexOf(teachService.currentLesson)!=0){
+      targetLessonSelection.select(LessonList[(LessonList.indexOf(teachService.currentLesson)-1)]);
       print('Prev Lesson');
     }
   }
 
   void nextLesson(){
     //if we have a lesson selected and it is not the last in the list
-    if((LessonSelect!=null)  && LessonList.indexOf(LessonSelect)!=LessonList.length-1){
-      targetLessonSelection.select(LessonList[(LessonList.indexOf(LessonSelect)+1)]);
+    if((teachService.currentLesson!=null)  && LessonList.indexOf(teachService.currentLesson)!=LessonList.length-1){
+      targetLessonSelection.select(LessonList[(LessonList.indexOf(teachService.currentLesson)+1)]);
       print('Next Lesson');
     }
   }
+
+ /* testTutorial(){
+    teachService.selectTutorial();
+    print('testomg titproasd');
+    teachService.currentLesson=teachService.getCourses()[0].lessonList[0];
+  }*/
 }

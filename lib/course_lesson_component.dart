@@ -44,7 +44,8 @@ class CourseLessonComponent implements OnChanges{
   String lessonName;
 
    CourseLessonComponent(this._teachService,this.notifications)  {
-      print('Course Lesson Component loaded...');
+      print('[Lesson Component] loaded...');
+
    }
 
   void refreshLesson(){
@@ -59,9 +60,22 @@ class CourseLessonComponent implements OnChanges{
       ..onLoadEnd.listen((e){
         ///print(req.responseText);
         htmlFromMarkdown=md.markdownToHtml(req.responseText,inlineSyntaxes: [new md.InlineHtmlSyntax()]);
+        refreshGoals();
       })
       ..send('');
     goalList=currentLesson.goalList;
+
+     //load goal progress
+  }
+
+  void refreshGoals(){ //to ensure when lesson is reloaded the previous progress is displayed
+    for (int i =0;i<currentLesson.goalCount;i++){
+      if(currentLesson.goalProgress[i]){ //if this goal has been marked as completed before
+        print('[lesson] goal active at index: ' + i.toString());
+        htmlDart.querySelector('#goal_'+(i+1).toString()).style.backgroundColor='green';
+        htmlDart.querySelector('.goal_icon_'+(i+1).toString()).style.borderColor='green';
+      }
+    }
   }
 
   void checkGoals(){
@@ -70,6 +84,7 @@ class CourseLessonComponent implements OnChanges{
     //check if this netNotificaiton is in the list of goals (i.e. notifications)
     for (int i=0;i<goalList.length;i++){
       if(goalList[i].notificationText==newNotification.notificationText){
+        _teachService.setGoalProgress(i); //mark goal as completed
         htmlDart.querySelector('#goal_'+(i+1).toString()).style.backgroundColor='green';
         htmlDart.querySelector('.goal_icon_'+(i+1).toString()).style.borderColor='green';
         break; //to allow for the same command twice in a single lesson
@@ -80,16 +95,20 @@ class CourseLessonComponent implements OnChanges{
 
   void ngOnChanges(Map<String, SimpleChange> changes){
     //print('[lesson] change to: '+changes.keys.last);
-    if (changes.keys.last=='lastNotification'&&goalList!= null){
+    if ((changes.keys.last=='lastNotification'&&goalList!= null)&&currentLesson!=null){
+      //print('[lesson] checking for goal changes');
       checkGoals();
+
     }
     else if (changes.keys.last=='currentLesson'){
-      if (currentLesson != null) {
+      if (currentLesson != null) { //if null then we hide lesson card (implicitly)
+        print('[lesson]: changing lesson');
         refreshLesson();
       }
     }
     else{
       print('[lesson]: unknown change detected.');
+      print('[lesson]: ' + changes.keys.last);
     }
 
   }

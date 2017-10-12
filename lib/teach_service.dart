@@ -12,6 +12,8 @@ class TeachService{
   Lesson SelectedLesson;
   bool hasLessonSelected = true;
 
+  String tester='>';
+
  List<Course> getCourses()  => courseData ;
 
   //get a specific lesson (user enters the course name and lesson name)
@@ -24,16 +26,18 @@ class TeachService{
       (getCourses()).firstWhere((course) => course.courseName == courseName)
       .getLessonNames();
 
-/*  void clearCurrentLesson(){
+  void clearCurrentLesson(){
     SelectedLesson = null;
-    hasLessonSelected = false;
-    print('Cleared Current Lesson Selection...');
+    //hasLessonSelected = false;
+    //print('Cleared Current Lesson Selection...');
   }
 
-  set currentLesson(Lesson LessonIn){
-    SelectedLesson = LessonIn;
-    hasLessonSelected =true;
-    print('Entered a Current Lesson Selection...');
+  set currentLesson(Lesson lessonIn){
+    SelectedLesson = lessonIn;
+    //hasLessonSelected =true;
+    //print('Entered a Current Lesson Selection...');
+    //tester=tester+'*';
+    //print(tester  );
   }
 
   Lesson get currentLesson{
@@ -42,5 +46,14 @@ class TeachService{
 
   bool getSelectionStatus(){
     return hasLessonSelected;
-  }*/
+  }
+
+  void setGoalProgress(int indexOfGoal){
+    currentLesson.setGoalProgress(indexOfGoal); //set goal as achieved (in lesson Object)
+    print('[teachService] set goal progress');
+  }
+
+  void selectTutorial(){
+    SelectedLesson = courseData[0].courseLessons[0];
+  }
 }

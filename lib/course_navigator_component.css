@@ -28,3 +28,8 @@
 .courseNavigatorSkip{
     float:right;
 }
+
+.mdl-card{
+    float:left  ;
+    margin: 1em ;
+}

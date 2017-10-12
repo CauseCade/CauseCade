@@ -29,19 +29,22 @@
             </div>
             <div class="courseNavigatorSkip">
                 <div>
-                    <material-button [disabled]="!((LessonSelect!=null)  && LessonList.indexOf(LessonSelect)!=0)"(click)="prevLesson()">
+                  <!--  <material-button   (click)="testTutorial()">
+                        <i class="material-icons">navigate_next</i>
+                    </material-button>-->
+                    <material-button [disabled]="!((teachService.currentLesson!=null)  && LessonList.indexOf(teachService.currentLesson)!=0)"(click)="prevLesson()">
                         <i class="material-icons">navigate_before</i>
                     </material-button>
-                    <material-button [disabled]="!((LessonSelect!=null)  && LessonList.indexOf(LessonSelect)!=LessonList.length-1)"  (click)="nextLesson()">
-                        <i class="material-icons">navigate_next</i>
-                    </material-button>
+                    <material-button [disabled]="!((teachService.currentLesson!=null)  && LessonList.indexOf(teachService.currentLesson)!=LessonList.length-1)"  (click)="nextLesson()">
+                    <i class="material-icons">navigate_next</i>
+                </material-button>
                 </div>
                 <div style="text-align: center;font-family: Roboto, sans-serif">
                     Navigate Lessons
                 </div>
             </div>
         </div>
-        <course-lesson [currentLesson]="LessonSelect" [lastNotification]="notifications.hiddenNotifications.last" class="lesson" style="height:{{navigationRatioComplement}}%" ></course-lesson><!--style="height:{{navigationRatioComplement}}%;width: 100%"-->
+        <course-lesson [currentLesson]="teachService.currentLesson" [lastNotification]="!notifications.hiddenNotifications.isEmpty?notifications.hiddenNotifications.last:null" class="lesson" style="height:{{navigationRatioComplement}}%" ></course-lesson><!--style="height:{{navigationRatioComplement}}%;width: 100%"-->
 
     </div>
 

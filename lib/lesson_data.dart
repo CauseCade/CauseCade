@@ -5,13 +5,14 @@ import 'notification_service.dart'; //acces to class NetNotification
 
  List<Course> courseData = [
   new Course('Tutorial','01-07-2017'),
-  //new Course('Basics','22-07-2017'),
-  //new Course('Intermediate','22-07-2017')
+  new Course('Probability','11-10-2017'),
+  new Course('Bayes Intro','11-10-2017')
 ];
 
 void configureCourses(){
+ Lesson lesson;
 
-Lesson lesson1 = new Lesson('Tutorial - L1','26-09-2017')
+lesson = new Lesson('Tutorial - L1','26-09-2017')
 ..lessonDescription = 'Learning to navigate CauseCade'
 ..lessonMarkdownPath =  'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Tutorial_Pt_1.md'
 ..goals=([
@@ -20,9 +21,9 @@ Lesson lesson1 = new Lesson('Tutorial - L1','26-09-2017')
  new NetNotification()..setNodeDisplayMode("details"),
  new NetNotification()..setNewNetworkName()
 ]);
-courseData[0].addLesson(lesson1);
+courseData[0].addLesson(lesson);
 
-Lesson lesson2 = new Lesson('Tutorial - L2','26-09-2017')
+lesson = new Lesson('Tutorial - L2','26-09-2017')
 ..lessonDescription = 'Learning to load and manipulate a network'
 ..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Tutorial_Pt_2.md'
 ..goals=([
@@ -32,31 +33,46 @@ Lesson lesson2 = new Lesson('Tutorial - L2','26-09-2017')
  new NetNotification()..setNodeSelectedDetail('WarmBlooded'),
  new NetNotification()..setNodeSelectedDetail('WarmBlooded')
 ]);
-courseData[0].addLesson(lesson2);
+courseData[0].addLesson(lesson);
 
-Lesson lesson3 = new Lesson('Tutorial - L3','27-09-2017')
+lesson = new Lesson('Tutorial - L3','27-09-2017')
  ..lessonDescription = 'Learning to manipulate individual nodes'
  ..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Tutorial_Pt_3.md'
  ..goals=([
   new NetNotification()..setNodeAdderMenuStatus(true),
   new NetNotification()..setNewNode()
  ]);
-courseData[0].addLesson(lesson3);
+courseData[0].addLesson(lesson);
 
-/*Lesson lesson4 = new Lesson('Probability','20-07-2017')
+ /*Course 2 -> Probability*/
+
+ lesson = new Lesson('Probability - L1','11-10-2017')
 ..lessonDescription = 'Introduction to Probability'
-..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Probability.md';
-courseData[1].addLesson(lesson4);*/
+..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Probability_Pt_1.md';
+courseData[1].addLesson(lesson);
 
-/*Lesson lesson4 = new Lesson('x1','01-07-2017')
-..lessonDescription = 'dummy x1'
-..lessonMarkdownPath = '/not/selected/yet.md';
-courseData[2].addLesson(lesson4);
+ lesson = new Lesson('Probability - L2','11-10-2017')
+ ..lessonDescription = 'Understanding Conditional Probability'
+ ..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Probability_Pt_2.md';
+courseData[1].addLesson(lesson);
 
-Lesson lesson5 = new Lesson('x2','01-07-2017')
-..lessonDescription = 'dummy x2'
-..lessonMarkdownPath = '/not/selected/yet.md';
-courseData[2].addLesson(lesson5);*/
+/*Course 3 -> Bayes 1*/
+
+
+lesson = new Lesson('Basic Bayes','11-10-2017')
+..lessonDescription = 'understanding the use of bayes'
+..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Bayesian_Network_Pt_1.md';
+courseData[2].addLesson(lesson);
+
+lesson = new Lesson('Bayes & Independence','11-10-2017')
+..lessonDescription = 'When are nodes independent?'
+..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Bayesian_Network_Pt_2.md';
+courseData[2].addLesson(lesson);
+
+ lesson = new Lesson('Bayes & Causality','11-10-2017')
+  ..lessonDescription = 'Understanding Causality and directionality of a bayesnet'
+  ..lessonMarkdownPath = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Bayesian_Network_Pt_3.md';
+ courseData[2].addLesson(lesson);
 
 print('All Lessons configured in proper Courses');
 }
