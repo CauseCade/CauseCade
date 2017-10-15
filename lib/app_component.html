@@ -10,7 +10,9 @@
                 <material-button raised materialTooltip="View Interactive Courses"  (trigger)=toggleTeaching()>Learning Mode <i class="material-icons">explore</i> </material-button>
                 <br/>
 
-                <a class="mdl-navigation__link  mdl-color-text--white" id="button1" href="#" target="_blank">HELP</a>
+                <material-button materialTooltip="get some directions" (click)="openHelpMenu=true" >
+                    HELP
+                </material-button>
                 <!--<div id="about_ref" >-->
                 <a class="mdl-navigation__link  mdl-color-text--white" id="button2" href="https://nemoandrea.github.io/CauseCade-blog/" target="_blank">BLOG</a>
                    <!-- <div class="mdl-tooltip" for="about_ref">More information</div>-->
@@ -101,4 +103,5 @@
     <welcome-modal [(teachModeStatus)]="teachModeStatus"></welcome-modal>
 
 </div>
+<help_modal [(isVisible)]="openHelpMenu"></help_modal >
 <load_menu [(isVisible)]="openLoadMenu"></load_menu>

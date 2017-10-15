@@ -11,6 +11,7 @@ import 'package:causecade/edit_component.dart';
 import 'package:causecade/node_adder_component.dart';
 import 'package:causecade/welcome_modal_component.dart';
 import 'package:causecade/load_component.dart';
+import 'package:causecade/help_component.dart';
 
 
 import 'dart:html';
@@ -34,7 +35,7 @@ BayesianDAG myDAG;
     selector: 'causecade',
     templateUrl: 'app_component.html',
     styleUrls: const ['app_component.css'],
-directives: const [NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent,OverviewComponent,DetailComponent,EditComponent,LoadComponent],
+directives: const [NodeAdderComponent,materialDirectives,WelcomeComponent,CourseNavigatorComponent,OverviewComponent,DetailComponent,EditComponent,LoadComponent,HelpComponent],
 providers: const [materialProviders,NotificationService,NetworkStyleService,NetworkSelectionService,TeachService]
 )
 class AppComponent implements OnInit {
@@ -63,7 +64,8 @@ class AppComponent implements OnInit {
   //hold record of the nodes in the network
   String networkName;
 
-  bool openLoadMenu;
+  bool openLoadMenu; //tracks load menu open/closed
+  bool openHelpMenu; //tracks help menu open/closed
   bool teachModeStatus;
   bool notificationModeStatus;
 
@@ -97,7 +99,6 @@ class AppComponent implements OnInit {
   }
 
   void activateLoadMenu(){
-    print(openLoadMenu);
     openLoadMenu = true;
     notifications.addHiddenNotification(new NetNotification()..setLoadMenuStatus(openLoadMenu));
   }

@@ -1,0 +1,50 @@
+<modal [visible]="isVisible"> <!---->
+
+        <material-dialog
+                info
+                class="info-dialog"
+                [autoDismissable]="isVisible"
+                (dismiss)=" closeHelpMenu()"
+                style="width: 40%">
+
+
+            <div header>
+                <material-button icon autoFocus (trigger)="closeHelpMenu()">
+                    <i class="material-icons">close</i>
+                </material-button>
+
+                <h3>Help & About Page</h3>
+            </div>
+
+            <h5>About Page</h5>
+            <p>
+                CauseCade is an educational tool created to explain Bayesian Networks to users. It does not seek to
+                outperform existing Bayesian network tools. The difficulty of the course is undergraduate at worst,
+                but we hope to make it accessible to high school students by making continuous improvements and
+                thereby increasing accessibility.
+            </p>
+
+            <h5>Help</h5>
+            <p>
+                If you just got here and have no idea what to do, I recommend reading the blog or taking the tutorial.
+                The blog can be accessed by the corresponding button on the top right of this page. The Tutorial
+                can be accessed by going to: <i>Learning Mode > course:tutorial > lesson:tutorial L1</i>
+            </p>
+
+            <h5>The Creator</h5>
+            <p>
+                Hey, nice to meet you! I am a biophysics oriented individual who likes to do programming in my past time.
+                One of the results of such a past time project is what you are using right now. If you have any personal
+                or technical questions about CauseCade you can direct them at
+                <a href="mailto:causecade@gmail.com">causecade@gmail.com</a>.
+                If you wish to see more of what I do, I would would recommend
+                visiting <a target="_blank" href="https://nemoandrea.github.io/">my personal page</a>.
+            </p>
+
+            <h5>Made with</h5>
+            <!--reference the language and framework used to create CauseCade - open in new tab -->
+            <a target="_blank" href="https://www.dartlang.org/"><img height="50em" src="https://raw.githubusercontent.com/dart-lang/logos/master/logos_and_wordmarks/dart-logo-wordmark.png" style="padding-top: 1em"></a>
+            <a target="_blank" href="https://webdev.dartlang.org/angular/"><img height="80em" align="right" src="https://webdev.dartlang.org/assets/angulardart-5e7ebca88c5584b1da301f9f9e61d1e7d4f0688b6a9222991cde3bada950088c.svg"></a>
+        </material-dialog>
+
+</modal>
