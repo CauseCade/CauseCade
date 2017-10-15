@@ -90,3 +90,7 @@
     opacity:.55;
     filter: alpha(opacity=50);
 }
+
+material-button{
+    color: #fafafa;
+}
