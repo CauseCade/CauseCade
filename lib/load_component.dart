@@ -38,6 +38,34 @@ class LoadComponent {
         //refreshNetName();
         notifications.addNotification(new NetNotification()..setLoadStatus("CarTest"));
         break;
+      case "Bayes_1_2_3":
+        LoadExample_Lesson_Bayes_1_2_3();
+        //loadMessage = 'Last Loaded: ' + example_name;
+        closeLoadMenu();
+        //refreshNetName();
+        notifications.addNotification(new NetNotification()..setLoadStatus("Bayes_1_2_3"));
+        break;
+      case "Bayes_1_2_3_semantic":
+        LoadExample_Lesson_Bayes_1_2_3_semantic();
+        //loadMessage = 'Last Loaded: ' + example_name;
+        closeLoadMenu();
+        //refreshNetName();
+        notifications.addNotification(new NetNotification()..setLoadStatus("Bayes_1_2_3_semantic"));
+        break;
+      case "Bayes_4":
+        LoadExample_Lesson_Bayes_4();
+        //loadMessage = 'Last Loaded: ' + example_name;
+        closeLoadMenu();
+        //refreshNetName();
+        notifications.addNotification(new NetNotification()..setLoadStatus("Bayes_4"));
+        break;
+      case "Bayes_4_semantic":
+        LoadExample_Lesson_Bayes_4_semantic();
+        //loadMessage = 'Last Loaded: ' + example_name;
+        closeLoadMenu();
+        //refreshNetName();
+        notifications.addNotification(new NetNotification()..setLoadStatus("Bayes_4_Semantic"));
+        break;
       default:
         //loadMessage = 'Sorry This is node a valid network';
         closeLoadMenu();

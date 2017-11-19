@@ -737,3 +737,74 @@ import 'package:causecade/data_converter.dart';
     myDAG.updateNetwork();
     visualiseNetwork();
   }
+
+  LoadExample_Lesson_Bayes_1_2_3(){
+    int index=myDAG.getNodes().length;
+    print('currently ' + index.toString() + ' nodes in the network.');
+
+    myDAG.insertNode("A", 2); //0
+    myDAG.insertNode("B", 2); //1
+
+    myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+1]);
+
+    myDAG.getNodes()[index].setStateLabels(['A0','A1']);
+    myDAG.getNodes()[index+1].setStateLabels(['B0','B1']);
+
+    myDAG.setName('Bayes Example L[1,2,3]');
+    visualiseNetwork();
+
+
+  }
+
+  LoadExample_Lesson_Bayes_1_2_3_semantic(){
+    int index=myDAG.getNodes().length;
+    print('currently ' + index.toString() + ' nodes in the network.');
+
+    myDAG.insertNode("A (cause)", 2); //0
+    myDAG.insertNode("B (effect)", 2); //1
+
+    myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+1]);
+
+    myDAG.getNodes()[index].setStateLabels(['A0','A1']);
+    myDAG.getNodes()[index+1].setStateLabels(['B0','B1']);
+    myDAG.setName('Bayes Example (Semantic) L[1,2,3]');
+    visualiseNetwork();
+  }
+
+  LoadExample_Lesson_Bayes_4(){
+    int index=myDAG.getNodes().length;
+    print('currently ' + index.toString() + ' nodes in the network.');
+
+    myDAG.insertNode("Toss 1", 2); //0
+    myDAG.insertNode("Toss 2", 2); //1
+    myDAG.insertNode("Tosses Identical", 2); //1
+
+    myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+2]);
+    myDAG.insertLink(myDAG.getNodes()[index+1], myDAG.getNodes()[index+2]);
+
+    myDAG.getNodes()[index].setStateLabels(['Heads','Tails']);
+    myDAG.getNodes()[index+1].setStateLabels(['Heads','Tails']);
+    myDAG.getNodes()[index+2].setStateLabels(['True','False']);
+
+    myDAG.setName('Bayes Example L[4+]');
+    visualiseNetwork();
+  }
+
+  LoadExample_Lesson_Bayes_4_semantic(){
+    int index=myDAG.getNodes().length;
+    print('currently ' + index.toString() + ' nodes in the network.');
+
+    myDAG.insertNode("Chromoseome 11a", 2); //0
+    myDAG.insertNode("Chromosome 11b", 2); //1
+    myDAG.insertNode("Malaria Resistance", 2); //1
+
+    myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+2]);
+    myDAG.insertLink(myDAG.getNodes()[index+1], myDAG.getNodes()[index+2]);
+
+    myDAG.getNodes()[index].setStateLabels(['wild-type','mutated']);
+    myDAG.getNodes()[index+1].setStateLabels(['wild-type','mutated']);
+    myDAG.getNodes()[index+2].setStateLabels(['True','False']);
+
+    myDAG.setName('Bayes Example (semantic) L[4+]');
+    visualiseNetwork();
+  }
