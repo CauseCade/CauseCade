@@ -352,6 +352,12 @@ class BayesianDAG{
     });
   }
 
+  void clear(){ //reset the DAG
+    NodeList.clear();
+    LinkList.clear();
+    name=null;
+  }
+
   //String representation of the network (very basic, for debugging)
 
   String toString(){

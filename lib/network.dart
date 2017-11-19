@@ -14,9 +14,9 @@ var counter = 6; //not sure what this is //TODO
 
 class Network {
 
-
   var force = new Force();
   var zoom = new Zoom();
+  //var drag = new Drag();
   var color = new OrdinalScale.category20();
   JsArray links = new JsArray();
   JsArray nodes = new JsArray();
@@ -32,9 +32,35 @@ class Network {
   NetworkSelectionService selectionService;
 
   /*constructor*/
-  Network(svgIn,int width,int height, this.styleService,this.selectionService) {
+  Network(int width,int height, this.styleService,this.selectionService) {
 
-    svg = svgIn;
+    //define Body
+    var body = new Selection("#GraphHolder")
+      ..attr["tabindex"] = "1"
+      ..each((elem, _, __) => elem.focus());
+
+    //Manage Keyboard Shortcuts
+    body.on("keydown").listen((_) {
+      if (!event.metaKey) {
+        switch (event.keyCode) {
+          case 8:{// backspace
+            //remove current selection
+            styleService.clearNodeSelection();
+            selectionService.resetSelection();
+            break;
+          }
+          case 46: { // delete
+            //remove current selection
+            styleService.clearNodeSelection();
+            selectionService.resetSelection();
+            break;
+          }
+        }
+      }
+    });
+
+    //define an SVG html element on which we will draw
+    svg = body.append("svg");
 
     //set up arrow shape in svg
     svg.append('defs').append('marker')
@@ -46,6 +72,9 @@ class Network {
       ..attr['markerHeight']='8'
       ..attr['orient']='auto'
       ..append('path');
+/*
+      ..on('keydown').listen((d){print('key pressed');});//=>handleKeyPress()
+*/
 
 
     svg.selectAll('marker > path')
@@ -58,20 +87,14 @@ class Network {
       ..attr['id']='node_holder';
 
 
+    //Set up a force (physics behind the graph visualisation)
     force
     ..charge = -900
     ..linkDistance = 220
-    ..size = [width, height];
-
-    /*var kappa =new JsObject.jsify({"id":"InitialNode","group":1});
-    nodes.add(kappa);*/
-    /* nodes = input_data['nodes'];*/
-
-    /*set up a force*/
-     force
-       ..nodes = nodes
-       ..links = links
-       ..start();
+    ..size = [width, height]
+    ..nodes = nodes
+    ..links = links
+    ..start();
 
     /*set up a zoom*/
      zoom
@@ -87,6 +110,11 @@ class Network {
     /*when zoom or pan is detected, call rescale method*/
       zoom.onZoom.listen((_) => rescale());
 
+    /*drag
+      ..onDragStart.listen((_)=>dragstarted())
+      ..onDrag.listen((_)=>dragged())
+      ..onDragEnd.listen((_)=>dragended());
+*/
 
     refreshData();
     print('Network View is refreshing');
@@ -114,6 +142,7 @@ class Network {
 
   node_selection = g_node.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
         ..attr["class"]= "node";
+
     //node = g.selectAll(".node").data(nodes).exit(); //testing this
 
     node_selection.append("circle") //FIX
@@ -121,6 +150,7 @@ class Network {
       ..attr["id"]= (d){return ('svgNodeObject_'+(d['id']).replaceAll(new RegExp(r"\s+\b|\b\s"), ""));}
       ..attr["r"] = "16"
       ..styleFn["fill"] = ((d) => color(d['group']))
+      ..call((_) => force.drag())
       ..on('click').listen( (jsNode) {
         selectionService.setNodeSelectionString(jsNode.data['id']);
         styleService.setNodeSelection(selectionService.selectedNode);
@@ -134,8 +164,6 @@ class Network {
          svg.styleFn['cursor']="default";
        });
 
-
-      //..call((_) => force.drag());*/
 
     node_selection.append("text")
       ..attr["dx"] = "15"
@@ -173,8 +201,6 @@ class Network {
   }
 
   void addNewDataSet(InputDataSet){
-
-
     for(var i =0; i< InputDataSet["links"].length;i++){
       links.add(InputDataSet["links"][i]);
     }
@@ -186,46 +212,52 @@ class Network {
     force.nodes = nodes;
     force.links = links;
 
-    //print('addNewDataCalled');
     refreshData();
     force.start();
   }
 
   void reset(){ /*WIP*/
 
+    print('resetting D3 network visualisation');
+    links.clear();
     nodes.clear();
-    //nodes.add(new JsObject.jsify({"id":"NewNode","group":1}));
-    //links.clear();
-    window.console.debug("This isn't working at the moment - WIP");
-    /*g.selectAll(".link").size();*/
-    /*link.exit();*/
-    //print(node.data(nodes).exit().toString());
-    print(g.selectAll('node').runtimeType);
-    node_selection = g.selectAll(".node").exit().remove();
-
-
-
-    force.nodes = nodes;
-    force.links = links;
-
-    refreshData();
-    force.start();
-/*
-    var holder = new SvgElement.tag("g");
-    var kappa = holder.querySelectorAll("circle");
-    holder.remove();*/
+    force.nodes=nodes;
+    force.links=links;
+    //clear the SVG of residual elements
+    querySelector("#link_holder").children.clear();
+    querySelector("#node_holder").children.clear();
   }
 
-  void setSize(widthIn,heightIn){
-    force.size = [widthIn, heightIn];
+  void setSize(int widthIn,int heightIn){
+    /*force.size = [widthIn, heightIn];
     force.start();
-    /*zoom.size = [widthIn, heightIn];*/ /*im not sure if this is actually useful, will revisit this later FIX*/
+    *//*zoom.size = [widthIn, heightIn];*//* *//*im not sure if this is actually useful, will revisit this later FIX*/
+
+    svg
+      ..attr["width"] = widthIn.toString()
+      ..attr["height"] = heightIn.toString();
   }
 
   void rescale(){ /*handles the panning and zooming of the svg*/
     window.console.debug("zoomevent triggered");
     g.attr["transform"] = "translate(" + zoom.translate.elementAt(0).toString() + "," + zoom.translate.elementAt(1).toString() + ")" + "scale(" + zoom.scale.toString() + ")" ;
   }
+
+/*  void dragstarted(){
+   // d3
+   // d3.select(this).classed("dragging", true);
+    print('dragstarted');
+  }
+
+  void dragged(){
+    //d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+    print('dragiing');
+  }
+
+  void dragended(){
+    //d3.select(this).classed("dragging", false);
+    print('dragended');
+  }*/
 
   void fitNetwork(width, height){ /*centers network and scales it to fit on the screen*/ /*WIP*/
     g.attr["transform"] = "translate(0,0)" + "scale(1)" ;
@@ -259,6 +291,26 @@ class Network {
       }
     }
     window.console.debug("no match found");
+  }
+
+
+  nudge(Selection node, Selection link, num dx, num dy) {
+    print('nudging...');
+    node.filterFn((d) => d['selected'])
+      ..attrFn["cx"] = ((d) => d['x'] += dx)
+      ..attrFn["cy"] = ((d) => d['y'] += dy);
+
+    link.filterFn((d) => d['source']['selected'])
+      ..attrFn["x1"] = ((d) => d['source']['x'])
+      ..attrFn["y1"] = ((d) => d['source']['y']);
+
+    link.filterFn((d) => d['target']['selected'])
+      ..attrFn["x2"] = ((d) => d['target']['x'])
+      ..attrFn["y2"] = ((d) => d['target']['y']);
+
+    if (event is Event) {
+      event.preventDefault();
+    }
   }
 
 }

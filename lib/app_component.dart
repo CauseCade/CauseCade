@@ -81,10 +81,10 @@ class AppComponent implements OnInit {
     print('Appcomponent Initiated');
 
     networkHolder = querySelector('#GraphHolder');
-    svg = new Selection('#GraphHolder').append("svg"); // svg file we draw on
+    //svg = new Selection('#GraphHolder').append("svg"); // svg file we draw on
     //uses d3 import in order to load this
 
-    myNet = new Network(svg, width, height,styleService,selectionService);
+    myNet = new Network(width, height,styleService,selectionService);
     myDAG = new BayesianDAG();
 
     setScreenDimensions();
@@ -105,14 +105,14 @@ class AppComponent implements OnInit {
 
   void setScreenDimensions() {
     /*sets the SVG Dimensions*/
-    window.console.debug("set screen dimensions");
+    print("set screen dimensions");
 
     width = networkHolder.contentEdge.width;
     height = networkHolder.contentEdge.height;
 
-    svg
+    /*svg
       ..attr["width"] = width.toString()
-      ..attr["height"] = height.toString();
+      ..attr["height"] = height.toString();*/
 
     myNet.setSize(width, height);
   }
@@ -205,6 +205,12 @@ class AppComponent implements OnInit {
         detailActive=false;
         editActive=false;
     }
+  }
+
+  reset(){
+    //clear behind the scene network and clear canvas
+    myDAG.clear();
+    myNet.reset();
   }
 
 

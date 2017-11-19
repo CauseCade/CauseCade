@@ -65,7 +65,7 @@
                     <material-button (trigger)="activateLoadMenu()"
                                      materialTooltip="Choose from a list of networks to load" raised class="white">Load</material-button>
 
-                    <material-button raised disabled materialTooltip="remove all nodes and links" class="white">Reset</material-button>
+                    <material-button (trigger)="reset()" raised materialTooltip="remove all nodes and links" class="white">Reset</material-button>
                 </div>
 
                 <div *ngIf="NodeList.isNotEmpty==true" id="detail_button">
