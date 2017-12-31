@@ -13,20 +13,15 @@ Updates on the CauseCade project can be found on the [CauseCade blog](https://ne
 ## todo List for this Project ##
 
 * Develop an intuitive UI
-    * Allow Saving of Network
-    * Allow Network to be opened (from file explorer) (already functional from Json)
-    * Find a way to make the reset button clear the SVG
+    * Allow Saving of Network (to local disc)
+    * Allow Network to be opened (from file explorer) 
 * Optimise Bayesian Network 
    * Move away from doubles
    * Avoid pointless computations
    * Auto-redraw the network for improved performance
 * Allow for Self Learning from datasets (optional)
-* Visually represent the data in the algorithm
-   * Current network visualisation is a little hard to control - may move to entirely different directed graph library
-* Create a sort of 'teaching' mode, that will explain the functioning of the network
-   * Have Learning and Quick Use mode
-   * Teach Bayesian Networks in Chapters
-   * Create Exercises
-   * Write out separate documents (as backup)
-* Create Help screen (modal)
+* Visualise D-separation 
+* Create more example networks
+* Integrate with traditional learning material (slides, written notes, homework)
+* Complete the supplementary chapters (learning mode)
 * Develop Alternative Canvas Views (diagonal linkmatrix representation and histogram)     
