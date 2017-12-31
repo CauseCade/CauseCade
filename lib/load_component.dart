@@ -29,6 +29,7 @@ class LoadComponent {
 
   bool inSubMenu;
   String searchString;
+  int networkCount;
   List networkList;
 
   NotificationService notifications;
@@ -90,7 +91,7 @@ class LoadComponent {
 
   void JSONload(String URI){
     htmlDart.HttpRequest.getString(URI).then((myjson) {
-      print(myjson);
+      //print(myjson);
       var dson = new Dartson.JSON();
       myDAG = dson.decode(myjson, new BayesianDAG());
       //complete loading/setup of network
@@ -106,25 +107,22 @@ class LoadComponent {
     searchString=
         'https://raw.githubusercontent.com/CauseCade/CauseCade-networks/master/'
             + courseName + '_'; //ex: ./bayes_4
-    //fairly useless list, merely to use ngFor angular functionality.
-    networkList = new List(determineNetworkCount());
-  }
 
-  int determineNetworkCount(){
+    //recursively check if url is valid and update list to display items
+    determineNetworkCount(1);
+   }
 
-  }
-
-  //TODO: tester version of JSON loader
-  void loadBeta(){
-    htmlDart.HttpRequest.getString('https://raw.githubusercontent.com/CauseCade/CauseCade-networks/master/loadbeta.json').then((myjson) {
-      print(myjson);
-      var dson = new Dartson.JSON();
-      myDAG = dson.decode(myjson, new BayesianDAG());
-      //complete loading/setup of network
-      myDAG.setupLoadedNetwork();
-      visualiseNetwork(); //ensure the new network is loaded
-      closeLoadMenu();
-      notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.name));
+  void determineNetworkCount(int startingIndex){
+    //print(searchString+startingIndex.toString()+'.json');
+    htmlDart.HttpRequest.getString(searchString+startingIndex.toString()+'.json')
+        .then((myjson) {
+      //we found valid URL, check next one
+      determineNetworkCount(startingIndex+1);
+    })
+        .catchError((Error error) {
+      //404 error -> no more valid file
+      networkCount=(startingIndex-1);
+      networkList = new List(networkCount);
     });
   }
 

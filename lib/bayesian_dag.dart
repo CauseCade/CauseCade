@@ -369,7 +369,6 @@ class BayesianDAG{
       link.target.addIncoming(link.origin,link);
     });
   //setting up nodes
-    print('[DAG] nodes...');
     NodeList.forEach((node){
       //statement below has redundant arguments. Retain for now to maintain
       //backwards compatibility

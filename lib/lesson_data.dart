@@ -6,7 +6,7 @@ import 'notification_service.dart'; //acces to class NetNotification
  List<Course> courseData = [
   new Course('Tutorial','01-07-2017'),
   new Course('Probability','11-10-2017'),
-  new Course('Bayes Intro','11-10-2017'),
+  new Course('bayes','11-10-2017'),
   new Course('Compared to other Networks','03-12-2017'),
   new Course('Applications in biology','03-12-2017')
 ];

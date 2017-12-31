@@ -3,11 +3,24 @@
 
         <div header>
             <h3>Load an Example Network</h3>
-            <p>Click to load one of the networks into causecade.</p>
-            <material-button clear-size (trigger)="loadBeta()">JSON BETA LOAD</material-button> <!--TODO: find a new place-->
+            <p>Open one of the folders below to view the corresponding networks available for loading.</p>
        <!--     <material-button clear-size (trigger)="loadBetaComp()">JSON BETA 2</material-button> TODO: find a new place-->
         </div>
         <div  *ngIf='!inSubMenu' class="mdl-grid" id="network_types">
+
+            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+                <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
+                    <h2 class="mdl-card__title-text" style="color:#00BCD4" >miscellaneous</h2>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <p>Various networks not tied to any one course specifically. Generally larger networks than used
+                    in the course lessons. </p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <material-button clear-size (trigger)="viewCourseNetworks('miscellaneous')">View Networks</material-button>
+                </div>
+            </div>
+
             <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
                     <h2 class="mdl-card__title-text " >Animals</h2>
@@ -37,7 +50,7 @@
 
             <div *ngFor="let course of teachService.getCourses()" class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
-                    <h2 class="mdl-card__title-text " >{{course.name}}</h2>
+                    <h2 class="mdl-card__title-text " >(Course){{course.name}} </h2>
                 </div>
                 <div class="mdl-card__supporting-text">
                     <p>This section contains networks belonging to this course.</p>
@@ -50,13 +63,13 @@
         <div *ngIf='inSubMenu' class="mdl-grid" >
             <div *ngFor="let network of networkList; let i=index" class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
-                    <h2 class="mdl-card__title-text " > network {{i}}</h2>
+                    <h2 class="mdl-card__title-text " > network {{i+1}}</h2>
                 </div>
                 <div class="mdl-card__supporting-text">
                     <p>Click below to load the network. No preview available.</p>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    <material-button clear-size (trigger)="JSONload(searchString+i)">Load Network</material-button>
+                    <material-button clear-size (trigger)="JSONload(searchString+(i+1).toString()+'.json')">Load Network</material-button>
                 </div>
             </div>
         </div>
