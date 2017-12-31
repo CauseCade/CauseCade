@@ -90,3 +90,23 @@ material-input .spaceholder{
     background-color: red;
     white-space: nowrap;
 }
+
+/*styles the news section of causecades welcome component.
+cannot be put in the css style document for welcome component*/
+#welcome_news p{
+    font-size: 20px;
+    color: #fafafa;
+    font-family: Roboto;
+}
+
+#welcome_news_container{
+    border-top: 3px solid #fafafa;
+    display: block;
+}
+
+#welcome_news_title{
+    font-size: 18px;
+    font-family: Roboto;
+    color: #fafafa;
+    font-style: italic;
+}

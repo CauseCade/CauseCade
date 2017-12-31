@@ -4,12 +4,14 @@
     <div id="welcomeMessage">
         <div id=WelcomeFlankImage style="width: 30%; height: 100%;background:url(https://raw.githubusercontent.com/sandcrawler/CauseCade/master/Images/images/welcome_image_left.png);-webkit-clip-path: polygon(0 0, 0 100%, 70% 100%, 100% 0); display: inline-block"></div>
 
-        <div id="welcomeMessageContent" style="display: inline-block">
+        <div id="welcomeMessageContent"  style="display: inline-block">
             <img src="https://raw.githubusercontent.com/NemoAndrea/CauseCade/master/Images/CauseCadeLogoWhite_V1.svg?sanitize=true">
             <div id="welcomeTitle">Welcome to CauseCade!</div>
-            <div id="welcomeText"><p>So glad you could make it! The website is currently a bit of a hot mess, but I am doing as much as I can to keep improving the functionality and UI.</p>
-            <p>You can view the source code for the project on <a href="https://github.com/nemoandrea/CauseCade">GitHub</a>. To get Started, have a look at the
-            <a href="https://nemoandrea.github.io/CauseCade-blog/">CauseCade Blog</a>, as the tour in the application is not complete yet.</p> </div>
+            <div id="welcomeText"><p>So glad you could make it! The website is currently a work in progress, but I am doing as much as I can to keep improving the functionality and UI.</p>
+                <p>You can view the source code for the project on <a href="https://github.com/nemoandrea/CauseCade">GitHub</a>. To get Started, have a look at the
+                    <a href="https://nemoandrea.github.io/CauseCade-blog/">CauseCade Blog</a>, or click 'take a tour'.</p>
+            </div>
+            <div id="welcome_news" [innerHTML]="htmlFromMarkdown" ></div>
         </div>
         <div class=WelcomeFlankImage style="width: 30%; height: 100%;background:url(https://raw.githubusercontent.com/sandcrawler/CauseCade/master/Images/images/welcome_image_right.png    ); -webkit-clip-path: polygon(0 0, 30% 100%, 100% 100%, 100% 0);display: inline-block"></div>
     </div>
