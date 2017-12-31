@@ -1,15 +1,28 @@
 import 'dart:math';
+import 'package:dartson/dartson.dart'; //to convert to JSON
 //home brew solution for vector math
 //perhaps look for a more robust pre-existing library to handle this later
 //(for efficiency)
 
+@Entity()
 class Matrix2{
 
   List<List<double>> matrix;
   int rowCount;
   int columnCount;
 
-  Matrix2(int rows, int columns){
+  Matrix2(); //constructor - dont forget to call initialisematrix
+
+  int getRowCount(){return rowCount;}
+
+  int getColumnCount(){return columnCount;}
+
+  List<List<double>> get currentMatrix => matrix;
+
+  set currentMatrix(List<List<double>> matrixIn) => matrix;
+
+
+  void initialiseMatrix(int rows, int columns){
     rowCount= rows;
     columnCount = columns;
     this.matrix = new List<List<double>>(rows);
@@ -22,10 +35,6 @@ class Matrix2{
       matrix[i] = list;
     }
   }
-
-  int getRowCount(){return rowCount;}
-
-  int getColumnCount(){return columnCount;}
 
   List<double> operator [](int i){
     return matrix[i];

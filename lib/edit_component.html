@@ -48,7 +48,7 @@
                 </div>
                 <material-button (click)="pushNewLabels()" raised class="expansionPanelWide">Set Labels</material-button>
             </material-expansionpanel>
-            <material-expansionpanel name="Set LinkMatrix (buggy)">
+            <material-expansionpanel name="View/Edit CPT">
                 <material-button (trigger)="openMatrixEditor()"
                                  [disabled]="showMatrixEditor"
                                  raised
@@ -75,12 +75,13 @@
 
 </div>
 
+<!--linkmatrix=CPT (deprecated name for CPT)-->
 <modal [(visible)]="showMatrixEditor">
     <material-dialog headered class="headered-dialog">
 
         <div header>
-            <h3>Edit LinkMatrix</h3>
-            <p>This matrix is essential for evidence propagation. Columns should sum to one.</p>
+            <h3>Edit Conditional Probability Table (CPT)</h3>
+            <p>This table is essential for evidence propagation. Columns should sum to one.</p>
         </div>
 
         <form (ngSubmit)="onSubmit()" #heroForm="ngForm">

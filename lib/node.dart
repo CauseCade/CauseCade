@@ -2,56 +2,74 @@
 import 'link.dart';
 import 'package:causecade/vector_math.dart';
 import 'package:angular_components/angular_components.dart'; //for uiDisplay
+import 'package:dartson/dartson.dart'; //to convert to JSON
 
 
+
+@Entity()
 class node  implements HasUIDisplayName{
 
   String name;
   int stateCount; //keeps track of how many states this node has (e.g. 2 for a true/false node)
   List<String> stateLabels = ['not yet defined'];
   List<String> matrixLabels = ['not yet defined']; //hold matrix labels
+  @Property(ignore:true)
   List<Vector> matrixIndexes = [];
 
+  @Property(ignore:true)
   Map<node,link> outGoing = new Map();
+  @Property(ignore:true)
   Map<node,link> inComing = new Map();
 
+  @Property(ignore:true)
   Map<node,Vector> incomingLambda; //this keeps track of the individual lambda
   // messages that this node receives from its daughters
 
   // -------- Various State variables --------
-
   bool isInstantiated=false; //true = has hard evidence/observed state
   bool isRootNode=false;
 
   //(false= values in matrix needs updating, true = no updating required)
+  @Property(ignore:true) //this is purely a convenience feature, and should not be saved
   bool hasProperLinkMatrix;
 
   // this will tell the network if this node needs to be updated
   // (this will be triggered if new evidence is entered somewhere in the network)
+  @Property(ignore:true) //this is purely a convenience feature, and should not be saved
   bool flagged = false;
+  @Property(ignore:true) //this is purely a convenience feature, and should not be saved
   node flaggingNode; //this will hold the identifier of which node last flagged this one //FIX replace with node object
 
   // -------- Inference Related Items --------
-
+  @Property(name:"CPT")
   Matrix2 LinkMatrix; //2x2 matrix is default (this corresponds to no parents)
+  @Property(ignore:true)
   Vector Posterior; //This would be equal in dimension to the amount of states the node can have
 
   //gained from other nodes
+  @Property(ignore:true)
   Vector LambdaEvidence; //this should be set to 1 by default, which equates to no evidence
+  @Property(ignore:true)
   Vector PiEvidence; //this should be set to 1 by default, which equates to no evidence
 
   //sent out to other nodes
+  @Property(ignore:true)
   Vector LambdaMessage; //this should be set to 1 by default, which equates to no evidence
+  @Property(ignore:true)
   Vector PiMessage; //this should be set to 1 by default, which equates to no evidence*/
   /*List<Vector> LambdaMessageHolder; //this will hold the lambda messages received //TODO: consider
   //this is required to allow for adequate piMessage Generation.*/
 
   // ------------- CONSTRUCTOR --------------
 
+  node(); //constructor
 
   //TODO see which statement is redundant here
-  node(this.name, this.stateCount){ //constructor
-    LinkMatrix = new Matrix2(stateCount,_getIncomingStates());
+  void initialiseNode(nameIn, stateCountIn){
+    name=nameIn;
+    stateCount=stateCountIn;
+   LinkMatrix = new Matrix2();
+    LinkMatrix.initialiseMatrix(stateCount,_getIncomingStates());
     LinkMatrix.identity();
     hasProperLinkMatrix = true;
 
@@ -73,7 +91,29 @@ class node  implements HasUIDisplayName{
     //_ComputePiEvidence();
     ComputeLambdaEvidence();
     UpdatePosterior();
+  }
 
+  //when loading a network from JSON //TODO: merge with main function
+  void initialiseNodeSecondary(){
+    //we assume the loaded network has a proper matrix
+    hasProperLinkMatrix = true;
+
+    incomingLambda = new Map<node,Vector>(); //Initialise map;
+
+    //setting up vectors
+    Posterior = new Vector(stateCount);
+    PiMessage = new Vector(stateCount);
+    LambdaMessage = new Vector(stateCount);
+    LambdaEvidence = new Vector(stateCount);
+    PiEvidence = new Vector(stateCount);
+    //configuring vectors
+    Posterior.setAll(0.0);
+    for(int i=0; i< stateCount;i++){
+      PiMessage[i]=1.0; //this is the default and is equivalent to no evidence
+      LambdaMessage[i]=1.0; //this is the default and is equivalent to no evidence
+      PiEvidence[i]=1.0;
+      LambdaEvidence[i]=1.0;
+    }
   }
 
   // ------------- OTHER METHODS --------------
@@ -288,7 +328,8 @@ class node  implements HasUIDisplayName{
     }
     // this ensures the proper dimensions of the link matrix,
     // but the user will still have to manually enter the accurate probabilities
-    LinkMatrix = new Matrix2(stateCount, _getIncomingStates());
+    LinkMatrix = new Matrix2();
+    LinkMatrix.initialiseMatrix(stateCount, _getIncomingStates());
     // indicates the values need to be updated:
     // (false= needs updating, true = no updating required)
     _setLinkMatrixStatus(false);
@@ -298,7 +339,8 @@ class node  implements HasUIDisplayName{
     var map ={};
     map[parentNode]=connectingLink;
     inComing.addAll(map);
-    resetLinkMatrixStructure();
+    hasProperLinkMatrix = false; //the linkmatrix must be changed now (obviously)
+    //resetLinkMatrixStructure();
   }
 
   addOutgoing(node daughterNode, link connectingLink){

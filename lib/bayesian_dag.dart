@@ -2,26 +2,23 @@ import 'node.dart';
 import 'link.dart';
 import 'dart:collection';
 import 'package:causecade/vector_math.dart';
+import 'package:dartson/dartson.dart';
 
+@Entity()
 class BayesianDAG{
+
+  String name = 'unnamed network';
 
   List<node> NodeList = new List();
   List<link> LinkList = new List();
-  String name;
 
-  BayesianDAG(){
-    print("DAG Created!");
-    name="Unnamed Network";
-  }
+
+  BayesianDAG();
 
   //name setting and getting
-  void setName(String nameIn){
-    name = nameIn;
-  }
+  set hasName(String newName) => name = newName;
 
-  String getName(){
-    return name;
-  }
+  String get hasName => name;
 
   //basic network query
   int numNodes(){
@@ -83,14 +80,17 @@ class BayesianDAG{
   }
 
   //adding and removing nodes and links
-  insertNode(newName, stateCount){
-    node NewNode = new node(newName, stateCount);
+  void insertNode(String newName, int stateCount){
+    node NewNode = new node();
+    NewNode.initialiseNode(newName, stateCount);
     NodeList.add(NewNode);
   }
 
-  insertLink(node nodeOrigin, node nodeTarget){
+  void insertLink(node nodeOrigin, node nodeTarget){
     if (!isConnected(nodeOrigin,nodeTarget)){ /*!isConnected(node1, node2)*/
-      link newLink = new link(nodeOrigin,nodeTarget);
+      link newLink = new link();
+      newLink.origin=nodeOrigin;
+      newLink.target=nodeTarget;
 
       nodeOrigin.addOutgoing(nodeTarget,newLink);
       nodeTarget.addIncoming(nodeOrigin,newLink);
@@ -133,7 +133,7 @@ class BayesianDAG{
     return false;
   }
 
-  removeEdge(link linkIn){
+  void removeEdge(link linkIn){
     //this will remove the map value from the vertices' link map
     linkIn.getEndPoints()[0].getOutGoing().remove(linkIn.getEndPoints()[1]);
     linkIn.getEndPoints()[1].getInComing().remove(linkIn.getEndPoints()[0]);
@@ -144,7 +144,7 @@ class BayesianDAG{
 
   //searching the network (to see what is reachable) (depth first search)
 
-  DFS(node startNode,  Set<node> known,Map<node,link> forest ){
+  void DFS(node startNode,  Set<node> known,Map<node,link> forest ){
     known.add(startNode);
 
     startNode.getOutGoing().keys.forEach((connectedNode){
@@ -158,7 +158,7 @@ class BayesianDAG{
     });
   }
 
-  checkNodes(){
+  void checkNodes(){
     StringBuffer Buffer = new StringBuffer();
     Buffer.write('> Requested Node Status of the Network\n');
     int errorCount=0;
@@ -175,7 +175,7 @@ class BayesianDAG{
     print(Buffer.toString());
   }
 
-  checkFlags(){ //this could use some fancier print message
+  void checkFlags(){ //this could use some fancier print message
     print('flagged nodes are given below');
     NodeList.forEach((node){
       if(node.getFlaggedStatus()){
@@ -246,7 +246,7 @@ class BayesianDAG{
 
   }
 
-  reintroduceEdges(List<link> edgesToReadd){
+  void reintroduceEdges(List<link> edgesToReadd){
     edgesToReadd.forEach((link){
       insertLink(link.getEndPoints()[0],link.getEndPoints()[1]);
     });
@@ -255,7 +255,7 @@ class BayesianDAG{
   //MAIN FUNCTIONALITY (
 
 
-  updateNetwork(){ // This may be changed to a thing that loops over all nodes,
+  void updateNetwork(){ // This may be changed to a thing that loops over all nodes,
     // as this only updates max 1 nodes per call.
     // the only problem with that is that the order in which the
     // network is updated matters, as otherwise itll start finding
@@ -291,7 +291,7 @@ class BayesianDAG{
 
   //should only be called for debugging
   //forces single node to be updated
-  updateNode(node NodeIn){
+  void updateNode(node NodeIn){
     print('<<<<<<<<<<<<< Forced Update >>>>>>>>>>>>>>>>>>>>>>');
 
 
@@ -316,7 +316,7 @@ class BayesianDAG{
   //Enter Hard evidence for a node
   //Hard Evidence(instantiated) means the probability of the node cannot change]
   //Node can be both root node and instantiated
-  setEvidence(String nodeName,Vector EvidenceToSet){
+  void setEvidence(String nodeName,Vector EvidenceToSet){
     NodeList.forEach((node){
       //we choose to let the user give a name,
       //may change to referencing a node object later on (better performance)
@@ -332,7 +332,7 @@ class BayesianDAG{
   //node will have. This differs from instantiating a node, with the regard that
   //a root node can still change it's probability in the face of lambda evidence
   //This method should ONLY be called on root nodes (with no parent).
-  setPrior(String nodeName, Vector PiEvidenceToSet){
+  void setPrior(String nodeName, Vector PiEvidenceToSet){
     NodeList.forEach((node){
       //we choose to let the user give a name,
       //may change to referencing a node object later on (better performance)
@@ -352,6 +352,32 @@ class BayesianDAG{
     });
   }
 
+  //should be called after loading a new network from JSON
+  void setupLoadedNetwork(){
+    print('[DAG] setting up new network...');
+  //fixing links (we only have strings, we want references to node objects)
+    LinkList.forEach((link){
+      //ensures link now also have proper object reference
+      link.origin=findNode(link.stringEndpoints[0]);
+      link.target=findNode(link.stringEndpoints[1]);
+    });
+  //setting up links
+    LinkList.forEach((link){ //we assume we have a populated linklist (see JSON)
+      //populate the outgoing and incoming lists of each node object
+      //(this could be saved explicitly in json, but this would be duplicate information)
+      link.origin.addOutgoing(link.target,link);
+      link.target.addIncoming(link.origin,link);
+    });
+  //setting up nodes
+    print('[DAG] nodes...');
+    NodeList.forEach((node){
+      //statement below has redundant arguments. Retain for now to maintain
+      //backwards compatibility
+      //TODO: remove arguments initialiseNode function
+      node.initialiseNodeSecondary();
+    });
+  }
+
   void clear(){ //reset the DAG
     NodeList.clear();
     LinkList.clear();
@@ -362,7 +388,7 @@ class BayesianDAG{
 
   String toString(){
     var Buffer = new StringBuffer();
-    Buffer.write('> Network Representation - Nodes: ' +
+    Buffer.write('> Bayesian Network - Name: '+ name + ' Nodes: ' +
         NodeList.length.toString() + ' Links: ' +
         LinkList.length.toString() + '\n');
     for(var i =0; i<NodeList.length;i++){

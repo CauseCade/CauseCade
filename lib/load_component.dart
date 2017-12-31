@@ -1,9 +1,20 @@
 import 'package:angular2/core.dart';
 import 'package:angular_components/angular_components.dart';
 import 'notification_service.dart';
+import 'teach_service.dart';
+import 'app_component.dart';
+
+//JSOn handling
+import 'dart:html' as htmlDart;
+import 'package:causecade/bayesian_dag.dart';
+import  'data_converter.dart';
+
+
 
 //access to the lesson data
 import 'package:causecade/example_networks.dart';
+import 'package:dartson/dartson.dart';
+
 
 @Component(
     selector: 'load_menu',
@@ -16,9 +27,14 @@ class LoadComponent {
   bool isVisible;
   @Output() EventEmitter isVisibleChange = new EventEmitter();
 
-  NotificationService notifications;
+  bool inSubMenu;
+  String searchString;
+  List networkList;
 
-  LoadComponent(this.notifications);
+  NotificationService notifications;
+  TeachService teachService;
+
+  LoadComponent(this.notifications, this.teachService);
 
   //when the ''LOAD'' button is clicked
   void loadData(String exampleName) {
@@ -72,7 +88,48 @@ class LoadComponent {
     }
   }
 
+  void JSONload(String URI){
+    htmlDart.HttpRequest.getString(URI).then((myjson) {
+      print(myjson);
+      var dson = new Dartson.JSON();
+      myDAG = dson.decode(myjson, new BayesianDAG());
+      //complete loading/setup of network
+      myDAG.setupLoadedNetwork();
+      visualiseNetwork(); //ensure the new network is loaded
+      closeLoadMenu();
+      notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.name));
+    });
+  }
+
+  void viewCourseNetworks(String courseName){
+    inSubMenu=true; //enter submenu, hide overview of courses
+    searchString=
+        'https://raw.githubusercontent.com/CauseCade/CauseCade-networks/master/'
+            + courseName + '_'; //ex: ./bayes_4
+    //fairly useless list, merely to use ngFor angular functionality.
+    networkList = new List(determineNetworkCount());
+  }
+
+  int determineNetworkCount(){
+
+  }
+
+  //TODO: tester version of JSON loader
+  void loadBeta(){
+    htmlDart.HttpRequest.getString('https://raw.githubusercontent.com/CauseCade/CauseCade-networks/master/loadbeta.json').then((myjson) {
+      print(myjson);
+      var dson = new Dartson.JSON();
+      myDAG = dson.decode(myjson, new BayesianDAG());
+      //complete loading/setup of network
+      myDAG.setupLoadedNetwork();
+      visualiseNetwork(); //ensure the new network is loaded
+      closeLoadMenu();
+      notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.name));
+    });
+  }
+
   void closeLoadMenu(){
+    inSubMenu=false; //exit submenu
     isVisible=false;
     isVisibleChange.emit(false); //let appcomponent know we closed it
   }

@@ -1,18 +1,32 @@
 /*This dart file will contain the link class*/
 import 'package:causecade/node.dart';
+import 'package:dartson/dartson.dart';
 
-/// This class contains a reference to two nodes and has one method
+@Entity()
 class link{
 
-  List<node> endpoints;
+  @Property(ignore:true)
+  List<node> endpoints = new List<node>(2);
+  //ensures we obtain a compact JSON file, not used for anything computational
+  @Property(name:"endpointnames")
+  List<String> stringEndpoints = new List<String>(2);
 
-  link(node1, node2){
-    endpoints = new List<node>(2);
-    endpoints[0]=(node1);
-    endpoints[1]=(node2);
+  link(); //constructor
+
+  set origin(node nodeOne){
+    endpoints[0] = nodeOne;
+    stringEndpoints[0]=nodeOne.name;
   }
 
-  ///Returns a list<node> that contains the two nodes that this link links.
+  set target(node nodeTwo){
+    endpoints[1] = nodeTwo;
+    stringEndpoints[1]=nodeTwo.name;
+  }
+  node get origin => endpoints[0];
+
+  node get target => endpoints[1];
+
+    ///Returns a list<node> that contains the two nodes that this link links.
   List<node> getEndPoints(){
     return endpoints;
   }

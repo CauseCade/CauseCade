@@ -54,7 +54,7 @@ class WelcomeComponent {
     //ensure the tutorial is selected as the current lesson (tutorial=tour)
     teachService.selectTutorial();
     //print(teachService.currentLesson.lessonDescription); //debugging
-    print('[WelcomeComponent]: loaded tutorial');
+    print('[WelcomeComponent]: loaded tutorial') ;
     enterCauseCade(); //closes the modal
   }
 }

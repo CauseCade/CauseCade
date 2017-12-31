@@ -4,9 +4,11 @@ import 'package:angular2/common.dart';
 import 'package:angular_components/angular_components.dart';
 import 'network_selection_service.dart';
 
+
 import 'node.dart';
 import 'link.dart';
 import 'vector_math.dart';
+import 'data_converter.dart'; //to update SVG
 import 'package:causecade/app_component.dart';
 import 'notification_service.dart';
 
@@ -93,6 +95,8 @@ class EditComponent implements OnInit, OnChanges {
     if((newLinkParent.isNotEmpty)) {
       newLinkParent.forEach((node){
         myDAG.insertLink(node,selectedNode);
+        //ensure the SVG network draws new node
+        implementNewLink(node,selectedNode);
       });
       fetchLinks();
       parentLinkSelection.clear();
@@ -111,6 +115,8 @@ class EditComponent implements OnInit, OnChanges {
     if((newLinkDaughter.isNotEmpty)) {
       newLinkDaughter.forEach((node){
         myDAG.insertLink(selectedNode,node);
+        //ensure the SVG network draws new node
+        implementNewLink(selectedNode,node);
       });
       fetchLinks();
       daughterLinkSelection.clear();
@@ -118,14 +124,17 @@ class EditComponent implements OnInit, OnChanges {
       // to become disabled (not a huge problem,
       // but its good practice and prevents errors)
       notifications.addNotification(new NetNotification()..setUpdateNodeLinks());
+
     }
     else{
       print('DetailComponent: no node selected, no link formed.');
     }
   }
 
-  void removeLink(LinkIn){
+  void removeLink(link LinkIn){
     myDAG.removeEdge(LinkIn);
+    //remove from SVG
+    //implementLinkRemoval(LinkIn.endpoints[0],LinkIn.endpoints[1]); //Not functional yet.
     notifications.addNotification(new NetNotification()..setRemoveNodeLinks());
     fetchLinks();
   }

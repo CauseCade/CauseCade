@@ -2,13 +2,13 @@ import 'dart:js';
 import 'package:causecade/app_component.dart';
 import 'dart:html';
 
-Implement(InputData){
+void Implement(InputData){
   print(myNet);
   window.console.debug('inputdata: ');
   window.console.debug(InputData);
 
   //these can be cleared afterwards
-  var NewData = new List(2);
+  var newData = new List(2);
   var NewNode = new List(1);
   var NewLink = new List();
 
@@ -38,12 +38,12 @@ Implement(InputData){
     NewLink.add(LinkHolder);
   }
 
-  NewData[0]=(NewNode); //Storing In Other List
-  NewData[1]=(NewLink); //Storing In Other List
+  newData[0]=(NewNode); //Storing In Other List
+  newData[1]=(NewLink); //Storing In Other List
   //print(NewData);
 
 
-  networkInfo.add(NewData); //updating the (global) list of all information
+  networkInfo.add(newData); //updating the (global) list of all information
                             //in the visual part of the network. We need
                             //to call .addNewData() for this to have effect.
   //print("NetworkInfo: ");
@@ -71,6 +71,40 @@ Implement(InputData){
   //print(myDAG.toString());
   print('DataConverter: Task Complete.');
 
+}
+
+//takes node objects as input
+void implementNewLink(parentNodeIn,daughterNodeIn){
+  //adding new links (edges) in SVG
+    JsObject linkHolder = new JsObject.jsify({
+      "source":myNet.getNodeIndex(parentNodeIn.toString()),
+      "target":myNet.getNodeIndex(daughterNodeIn.toString()),
+      "value":40}); //finding values is hard right now
+
+    print(linkHolder['source']);
+    var newData = new List(2);
+    var newNode = new List(); //will remain empty
+    var newLink = new List(); //will hold new list
+
+    newLink.add(linkHolder);
+
+    newData[0]=newNode;
+    newData[1]=newLink;
+
+    networkInfo.add(newData); //updating the (global) list of all information
+    //in the visual part of the network. We need
+    //to call .addNewData() for this to have effect.
+
+    myNet.addNewData(); //actually adding the nodes to the network
+    networkInfo.clear(); //clearing networkinfo again
+}
+
+void implementLinkRemoval(parentNodeIn,daughterNodeIn){
+  JsObject linkHolder = new JsObject.jsify({
+    "source":myNet.getNodeIndex(parentNodeIn.toString()),
+    "target":myNet.getNodeIndex(daughterNodeIn.toString()),
+    "value":40});
+  myNet.removeLink(linkHolder);
 }
 
 

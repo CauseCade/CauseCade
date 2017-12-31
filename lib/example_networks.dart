@@ -11,6 +11,7 @@ import 'package:causecade/data_converter.dart';
       myDAG.insertNode("Animal", 5);
       // myDAG.getNodes()[0].enterUnconditionalProbability(0.99,0.01);
       //print(myDAG.numNodes());
+      print('bbirzonka');
       myDAG.insertNode("Environment", 3);
       //myDAG.getNodes()[1].enterUnconditionalProbability(0.8,0.2);
       // print(myDAG.numNodes());
@@ -63,7 +64,8 @@ import 'package:causecade/data_converter.dart';
       myDAG.getNodes()[index+7].setStateLabels(['Fast','Slow']);
 
 
-      Matrix2 TestMatrix = new Matrix2(3,5); //2^1=2
+      Matrix2 TestMatrix = new Matrix2(); //2^1=2
+      TestMatrix.initialiseMatrix(3,5);
       TestMatrix[0][0]=0.0;
       TestMatrix[0][1]=0.0;
       TestMatrix[0][2]=0.0;
@@ -85,7 +87,8 @@ import 'package:causecade/data_converter.dart';
 
 
 
-      Matrix2 TestMatrix2 = new Matrix2(3,10); //2^1=2
+      Matrix2 TestMatrix2 = new Matrix2();
+      TestMatrix2.initialiseMatrix(3,10);//2^1=2
       TestMatrix2[0][0]=0.0; //Monkey
       TestMatrix2[0][1]=0.0;
       TestMatrix2[0][2]=1.0; //Penguin
@@ -122,7 +125,8 @@ import 'package:causecade/data_converter.dart';
       print(TestMatrix2.toString());
 
 
-      Matrix2 TestMatrix3 = new Matrix2(2,5); //2^1=2
+      Matrix2 TestMatrix3 = new Matrix2();
+      TestMatrix3.initialiseMatrix(2,5);//2^1=2
       TestMatrix3[0][0]=0.0;
       TestMatrix3[0][1]=0.0;
       TestMatrix3[0][2]=0.0;
@@ -136,7 +140,8 @@ import 'package:causecade/data_converter.dart';
       TestMatrix3[1][4]=0.0;
       myDAG.getNodes()[index+3].enterLinkMatrix(TestMatrix3);
 
-      Matrix2 TestMatrix4 = new Matrix2(2,5); //2^1=2
+      Matrix2 TestMatrix4 = new Matrix2();
+      TestMatrix4.initialiseMatrix(2,5);//2^1=2
       TestMatrix4[0][0]=1.0;
       TestMatrix4[0][1]=0.0;
       TestMatrix4[0][2]=0.0;
@@ -150,7 +155,8 @@ import 'package:causecade/data_converter.dart';
       TestMatrix4[1][4]=1.0;
       myDAG.getNodes()[index+4].enterLinkMatrix(TestMatrix4);
 
-      Matrix2 TestMatrix5 = new Matrix2(2,3); //2^1=2
+      Matrix2 TestMatrix5 = new Matrix2();
+      TestMatrix5.initialiseMatrix(2,3);//2^1=2
       TestMatrix5[0][0]=1.0;
       TestMatrix5[0][1]=1.0;
       TestMatrix5[0][2]=0.0;
@@ -160,7 +166,8 @@ import 'package:causecade/data_converter.dart';
       TestMatrix5[1][2]=1.0;
       myDAG.getNodes()[index+5].enterLinkMatrix(TestMatrix5);
 
-      Matrix2 TestMatrix6 = new Matrix2(3,3); //2^1=2
+      Matrix2 TestMatrix6 = new Matrix2();
+      TestMatrix6.initialiseMatrix(3,3);//2^1=2
       TestMatrix6[0][0]=0.0; //true given input = true
       TestMatrix6[0][1]=1.0; //false given input = true
       TestMatrix6[0][2]=0.0; //true given input = false
@@ -239,7 +246,7 @@ import 'package:causecade/data_converter.dart';
     //  print(myDAG.getNodes()[2].getMatrixLabels());
       // print(myDAG.getNodes()[2].getMatrixIndexes());
      // print(myDAG.getNodes()[2].getLinkMatrixInfo());
-      myDAG.setName('Animals');
+      myDAG.hasName=('Animals');
       visualiseNetwork();
   }
 
@@ -733,7 +740,7 @@ import 'package:causecade/data_converter.dart';
     rootProb.setValues([0.97,0.03]);
     myDAG.setPrior('Gas filter',rootProb);
 
-    myDAG.setName('Car Test');
+    myDAG.hasName=('Car Test');
     myDAG.updateNetwork();
     visualiseNetwork();
   }
@@ -750,7 +757,7 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index].setStateLabels(['A0','A1']);
     myDAG.getNodes()[index+1].setStateLabels(['B0','B1']);
 
-    myDAG.setName('Bayes Example L[1,2,3]');
+    myDAG.hasName=('Bayes Example L[1,2,3]');
     visualiseNetwork();
 
 
@@ -767,7 +774,7 @@ import 'package:causecade/data_converter.dart';
 
     myDAG.getNodes()[index].setStateLabels(['A0','A1']);
     myDAG.getNodes()[index+1].setStateLabels(['B0','B1']);
-    myDAG.setName('Bayes Example (Semantic) L[1,2,3]');
+    myDAG.hasName=('Bayes Example (Semantic) L[1,2,3]');
     visualiseNetwork();
   }
 
@@ -786,7 +793,7 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+1].setStateLabels(['Heads','Tails']);
     myDAG.getNodes()[index+2].setStateLabels(['True','False']);
 
-    myDAG.setName('Bayes Example L[4+]');
+    myDAG.hasName=('Bayes Example L[4+]');
     visualiseNetwork();
   }
 
@@ -805,6 +812,6 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+1].setStateLabels(['wild-type','mutated']);
     myDAG.getNodes()[index+2].setStateLabels(['True','False']);
 
-    myDAG.setName('Bayes Example (semantic) L[4+]');
+    myDAG.hasName=('Bayes Example (semantic) L[4+]');
     visualiseNetwork();
   }

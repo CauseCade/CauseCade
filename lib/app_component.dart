@@ -18,6 +18,7 @@ import 'dart:html';
 
 import 'node.dart';
 import 'dart:async';
+import 'package:dartson/dartson.dart';
 
 import 'package:d3/d3.dart';
 
@@ -118,12 +119,12 @@ class AppComponent implements OnInit {
   }
 
   void setNetworkName(dynamic event) {
-    myDAG.setName(event.target.value);
+    myDAG.hasName=event.target.value;
     refreshNetName();
   }
 
   void refreshNetName() {
-    networkName = ('Net Name: ' +myDAG.getName());
+    networkName = ('Net Name: ' + myDAG.hasName);
     notifications.addHiddenNotification(new NetNotification()..setNewNetworkName());
   }
 
@@ -236,6 +237,13 @@ class AppComponent implements OnInit {
       currentNodeName=null;
       return 'Choose Node';
     }
+  }
+
+  void testJSON(){
+    print('testing JSON...');
+    var dson = new Dartson.JSON();
+    String jsonString = dson.encode(myDAG);
+    print(jsonString);
   }
 
 /* TODO: wait until angular components implements this

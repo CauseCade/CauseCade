@@ -16,6 +16,7 @@ class Network {
 
   var force = new Force();
   var zoom = new Zoom();
+
   //var drag = new Drag();
   var color = new OrdinalScale.category20();
   JsArray links = new JsArray();
@@ -32,8 +33,7 @@ class Network {
   NetworkSelectionService selectionService;
 
   /*constructor*/
-  Network(int width,int height, this.styleService,this.selectionService) {
-
+  Network(int width, int height, this.styleService, this.selectionService) {
     //define Body
     var body = new Selection("#GraphHolder")
       ..attr["tabindex"] = "1"
@@ -43,18 +43,22 @@ class Network {
     body.on("keydown").listen((_) {
       if (!event.metaKey) {
         switch (event.keyCode) {
-          case 8:{// backspace
-            //remove current selection
-            styleService.clearNodeSelection();
-            selectionService.resetSelection();
-            break;
-          }
-          case 46: { // delete
-            //remove current selection
-            styleService.clearNodeSelection();
-            selectionService.resetSelection();
-            break;
-          }
+          case 8:
+            {
+              // backspace
+              //remove current selection
+              styleService.clearNodeSelection();
+              selectionService.resetSelection();
+              break;
+            }
+          case 46:
+            {
+              // delete
+              //remove current selection
+              styleService.clearNodeSelection();
+              selectionService.resetSelection();
+              break;
+            }
         }
       }
     });
@@ -64,13 +68,13 @@ class Network {
 
     //set up arrow shape in svg
     svg.append('defs').append('marker')
-      ..attr['id']='arrowhead'
-      ..attr['refX']='6'
-      ..attr['refY']='2'
-      ..attr['markerUnits']='strokeWidth'
-      ..attr['markerWidth']='10'
-      ..attr['markerHeight']='8'
-      ..attr['orient']='auto'
+      ..attr['id'] = 'arrowhead'
+      ..attr['refX'] = '6'
+      ..attr['refY'] = '2'
+      ..attr['markerUnits'] = 'strokeWidth'
+      ..attr['markerWidth'] = '10'
+      ..attr['markerHeight'] = '8'
+      ..attr['orient'] = 'auto'
       ..append('path');
 /*
       ..on('keydown').listen((d){print('key pressed');});//=>handleKeyPress()
@@ -78,37 +82,37 @@ class Network {
 
 
     svg.selectAll('marker > path')
-          ..attr['d']='M 0 0 L 5 2 L 0 4 Z';
+      ..attr['d'] = 'M 0 0 L 5 2 L 0 4 Z';
 
     g = svg.append('g');
-    g_link=g.append('g')
-      ..attr['id']='link_holder';
-    g_node=g.append('g')
-      ..attr['id']='node_holder';
+    g_link = g.append('g')
+      ..attr['id'] = 'link_holder';
+    g_node = g.append('g')
+      ..attr['id'] = 'node_holder';
 
 
     //Set up a force (physics behind the graph visualisation)
     force
-    ..charge = -900
-    ..linkDistance = 220
-    ..size = [width, height]
-    ..nodes = nodes
-    ..links = links
-    ..start();
+      ..charge = -900
+      ..linkDistance = 220
+      ..size = [width, height]
+      ..nodes = nodes
+      ..links = links
+      ..start();
 
     /*set up a zoom*/
-     zoom
-       ..scaleExtent = [0.1, 10]
-       ..center = [width / 2, height / 2]
-       ..size = [width, height];
+    zoom
+      ..scaleExtent = [0.1, 10]
+      ..center = [width / 2, height / 2]
+      ..size = [width, height];
 
     /*set up interactable svg*/
-      svg
-        ..attr["pointer-events"] = 'all'
-        ..call(zoom);
+    svg
+      ..attr["pointer-events"] = 'all'
+      ..call(zoom);
 
     /*when zoom or pan is detected, call rescale method*/
-      zoom.onZoom.listen((_) => rescale());
+    zoom.onZoom.listen((_) => rescale());
 
     /*drag
       ..onDragStart.listen((_)=>dragstarted())
@@ -120,12 +124,11 @@ class Network {
     print('Network View is refreshing');
 
     /*this handles updating the network svg positions*/
-     force.onTick.listen((_) {
-
-
-       g_node.selectAll(".node")
-         ..attr["transform"] = ((d) => 'translate(' + d['x'].toString() + ',' + d['y'].toString() + ")");
-         /*..attrFn["cy"] = ((d) => d['y']);*/
+    force.onTick.listen((_) {
+      g_node.selectAll(".node")
+        ..attr["transform"] = ((d) => 'translate(' + d['x'].toString() + ',' +
+            d['y'].toString() + ")");
+      /*..attrFn["cy"] = ((d) => d['y']);*/
 
 
       g_link.selectAll(".link")
@@ -133,63 +136,68 @@ class Network {
         ..attrFn["y1"] = ((d) => d['source']['y'])
         ..attrFn["x2"] = ((d) => d['target']['x'])
         ..attrFn["y2"] = ((d) => d['target']['y']);
-
-     });
+    });
   }
 
-  void refreshData(){
+  void refreshData() {
     print('refreshData() called');
 
-  node_selection = g_node.selectAll(".node").data(nodes as List, (d) => d['id']).enter().append("g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
-        ..attr["class"]= "node";
+    node_selection =
+    g_node.selectAll(".node").data(nodes as List, (d) => d['id'])
+        .enter()
+        .append(
+        "g") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/ /**/
+      ..attr["class"] = "node";
 
     //node = g.selectAll(".node").data(nodes).exit(); //testing this
 
     node_selection.append("circle") //FIX
       ..attr["class"] = "circlesvg"
-      ..attr["id"]= (d){return ('svgNodeObject_'+(d['id']).replaceAll(new RegExp(r"\s+\b|\b\s"), ""));}
+      ..attr["id"] = (d) {
+        return ('svgNodeObject_' +
+            (d['id']).replaceAll(new RegExp(r"\s+\b|\b\s"), ""));
+      }
       ..attr["r"] = "16"
       ..styleFn["fill"] = ((d) => color(d['group']))
       ..call((_) => force.drag())
-      ..on('click').listen( (jsNode) {
+      ..on('click').listen((jsNode) {
         selectionService.setNodeSelectionString(jsNode.data['id']);
         styleService.setNodeSelection(selectionService.selectedNode);
-       })
+      })
       ..on("mouseover").listen((jsNode) {
         styleService.setNodeHover(jsNode.data);
-        svg.styleFn['cursor']="pointer";
+        svg.styleFn['cursor'] = "pointer";
       })
-       ..on("mouseout").listen((jsNode) {
-         styleService.clearNodeHover(jsNode.data);
-         svg.styleFn['cursor']="default";
-       });
+      ..on("mouseout").listen((jsNode) {
+        styleService.clearNodeHover(jsNode.data);
+        svg.styleFn['cursor'] = "default";
+      });
 
 
     node_selection.append("text")
       ..attr["dx"] = "15"
-      ..attr["dy"] =  ".35em"
+      ..attr["dy"] = ".35em"
       ..attr["class"] = "themeColourText"
       ..text = (d) => d['id'];
-      /*..on.click.add((Event e) => print('clicked'));
+    /*..on.click.add((Event e) => print('clicked'));
 */
     //add lines to links
-    link = g_link.selectAll(".link").data(links).enter().append("line") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
+    link = g_link.selectAll(".link").data(links).enter().append(
+        "line") /*tempfix mmethod is a rather duct-tape level fix*/ /*FIX*/
       ..attr["class"] = "link"
       ..attr["marker-end"] = "url(#arrowhead)"
       ..styleFn["stroke-width"] = ((d) => math.sqrt(d['value']));
-
-
   }
 
-  void addNewData(){
-
+  void addNewData() {
     //Adds the new links present in networkInfo
-    for (var j = 0; j < networkInfo[0][1].length; j++){
+    for (var j = 0; j < networkInfo[0][1].length; j++) {
+      print(networkInfo[0][1][j]);
       links.add(networkInfo[0][1][j]);
     }
 
     //Adds the new nodes present in networkInfo
-    for (var i =0; i < networkInfo[0][0].length; i++){
+    for (var i = 0; i < networkInfo[0][0].length; i++) {
       nodes.add(networkInfo[0][0][i]);
     }
 
@@ -200,12 +208,12 @@ class Network {
     force.start();
   }
 
-  void addNewDataSet(InputDataSet){
-    for(var i =0; i< InputDataSet["links"].length;i++){
+  void addNewDataSet(InputDataSet) {
+    for (var i = 0; i < InputDataSet["links"].length; i++) {
       links.add(InputDataSet["links"][i]);
     }
 
-    for(var i =0; i< InputDataSet["nodes"].length;i++){
+    for (var i = 0; i < InputDataSet["nodes"].length; i++) {
       nodes.add(InputDataSet["nodes"][i]);
     }
 
@@ -216,31 +224,48 @@ class Network {
     force.start();
   }
 
-  void reset(){ /*WIP*/
-
+  void reset() {
+    /*WIP*/
     print('resetting D3 network visualisation');
     links.clear();
     nodes.clear();
-    force.nodes=nodes;
-    force.links=links;
+    force.nodes = nodes;
+    force.links = links;
     //clear the SVG of residual elements
     querySelector("#link_holder").children.clear();
     querySelector("#node_holder").children.clear();
   }
 
-  void setSize(int widthIn,int heightIn){
+  //not functional atm 03-12-17
+  void removeLink(JsObject linkToRemove) {
+    print(linkToRemove);
+    print('[SVG] removing link from svg');
+    printLinks();
+    print(links.remove(links[0]));
+    print(links.indexOf(linkToRemove));
+    printLinks();
+    //var test=g_link.selectAll(".link").data(links).exit();
+    //print(test.toString());
+    //test.remove();
+  }
+
+  void setSize(int widthIn, int heightIn) {
     /*force.size = [widthIn, heightIn];
     force.start();
-    *//*zoom.size = [widthIn, heightIn];*//* *//*im not sure if this is actually useful, will revisit this later FIX*/
+    */ /*zoom.size = [widthIn, heightIn];*/ /* */ /*im not sure if this is actually useful, will revisit this later FIX*/
 
     svg
       ..attr["width"] = widthIn.toString()
       ..attr["height"] = heightIn.toString();
   }
 
-  void rescale(){ /*handles the panning and zooming of the svg*/
+  void rescale() {
+    /*handles the panning and zooming of the svg*/
     window.console.debug("zoomevent triggered");
-    g.attr["transform"] = "translate(" + zoom.translate.elementAt(0).toString() + "," + zoom.translate.elementAt(1).toString() + ")" + "scale(" + zoom.scale.toString() + ")" ;
+    g.attr["transform"] =
+        "translate(" + zoom.translate.elementAt(0).toString() + "," +
+            zoom.translate.elementAt(1).toString() + ")" + "scale(" +
+            zoom.scale.toString() + ")";
   }
 
 /*  void dragstarted(){
@@ -259,34 +284,36 @@ class Network {
     print('dragended');
   }*/
 
-  void fitNetwork(width, height){ /*centers network and scales it to fit on the screen*/ /*WIP*/
-    g.attr["transform"] = "translate(0,0)" + "scale(1)" ;
+  void fitNetwork(width, height) {
+    /*centers network and scales it to fit on the screen*/ /*WIP*/
+    g.attr["transform"] = "translate(0,0)" + "scale(1)";
     zoom.scale = 1;
-    zoom.translate = [0,0];
+    zoom.translate = [0, 0];
 
     var kappa = new SvgSvgElement();
 
-   /* var gDiv= new DivElement();
+    /* var gDiv= new DivElement();
     gDiv = querySelector(g);
     var kappa = gDiv.height;*/
     window.console.debug("g height");
     /*window.console.debug(kappa);*/
   }
 
-  int getNodesSize(){
+  int getNodesSize() {
     window.console.debug(nodes.length);
     return nodes.length;
   }
 
-  int getNodeIndex(stringIn){ /*returns the index of the node target, so the node can be appended to the proper targets (allows users to enter the node name rather than index*/
+  int getNodeIndex(stringIn) {
+    /*returns the index of the node target, so the node can be appended to the proper targets (allows users to enter the node name rather than index*/
 
     window.console.debug("getting node index...");
-    for (var i =0; i< nodes.length; i++){
-      if (nodes.elementAt(i)["id"]==stringIn){
+    for (var i = 0; i < nodes.length; i++) {
+      if (nodes.elementAt(i)["id"] == stringIn) {
         window.console.debug("found a match");
         return i;
       }
-      else{
+      else {
 
       }
     }
@@ -313,6 +340,17 @@ class Network {
     }
   }
 
+  //not functional atm 03-12-17
+  void printLinks() {
+    var buffer = new StringBuffer();
+    buffer.write('[SVG] > Overview of the:' + links.length.toString() + ' links' + '\n');
+    links.forEach((linkentry){ //for each JSObject
+      buffer.write('Parent: '+linkentry["source"].toString()+', Daughter: '
+          + linkentry.toString() + '\n');
+    });
+    buffer.write('> Finished printing link overview' + '\n');
+    print(buffer.toString());
+  }
 }
 
 

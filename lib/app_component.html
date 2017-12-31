@@ -60,7 +60,8 @@
                 Controls
                 <div id="button_holder">
 
-                    <material-button raised disabled materialTooltip="Saves the network as file" class="white">Save</material-button>
+                    <material-button (trigger)="testJSON()"
+                                     raised  materialTooltip="Saves the network as file" class="white">Save</material-button>
 
                     <material-button (trigger)="activateLoadMenu()"
                                      materialTooltip="Choose from a list of networks to load" raised class="white">Load</material-button>
@@ -85,6 +86,7 @@
 
                     <material-button raised materialTooltip="view this node in detail" (trigger)="viewOverview()" style="float: right"> View </material-button>
                 </div>
+                <!--currently broken-->
                 <div *ngIf="NodeList.isEmpty==true" id="detail_button_alt">
                     No network currently active &nbsp; <i class="material-icons">info</i>
                 </div>
