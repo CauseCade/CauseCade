@@ -11,6 +11,18 @@ var height = 300; //?
 //------------- THIS could be made more flexible -----------------------------
 
 Chart generateEmptyBarChart(){
+
+
+  //configure the axis of the barchart
+  TickOptions myTickOptions = new TickOptions();
+  myTickOptions.max=1;
+  myTickOptions.min=0;
+  List yAxes = []; //hold y axis information
+  ChartYAxe yAxe = new ChartYAxe();
+  yAxe.ticks=myTickOptions;
+  yAxes.add(yAxe);
+  ChartScales chartScales = new ChartScales(yAxes: yAxes);
+
   var data = new LinearChartData(labels: ['none'], datasets: <ChartDataSets>[
     new ChartDataSets(
         label: 'empty chart',
@@ -18,17 +30,17 @@ Chart generateEmptyBarChart(){
         data: [1.0])]);
 
   var config = new ChartConfiguration(
-      type: 'bar', data: data, options: new ChartOptions(responsive: true));
+      type: 'bar', data: data, options: new ChartOptions(responsive: true,scales: chartScales));
 
   Chart myChart = new Chart(querySelector('#BarChartHolderOverview') as CanvasElement, config);
   return myChart;
 }
 
-Chart GenerateBarchart(node NodeIn) {
-  node Node = NodeIn;
-  //var rnd = new math.Random();
-  //var months = <String>["January", "February", "March", "April", "May", "June"];
-  List ProbabilityHolderList = new List();
+//TODO: see if this class needs to be removed
+Chart GenerateBarchart(node NodeIn) {  node Node = NodeIn;
+
+
+   List ProbabilityHolderList = new List();
   for(int i=0;i<Node.getStateCount();i++){
     ProbabilityHolderList.add(Node.getProbability()[i]);
   }
@@ -55,6 +67,16 @@ Chart GenerateEvidenceBarChart(node NodeIn){
   /*Vector LambdaVector;
   Vector PiVector;*/
 
+  //configure the axis of the barchart
+  TickOptions myTickOptions = new TickOptions();
+  myTickOptions.max=1;
+  myTickOptions.min=0;
+  List yAxes = []; //hold y axis information
+  ChartYAxe yAxe = new ChartYAxe();
+  yAxe.ticks=myTickOptions;
+  yAxes.add(yAxe);
+  ChartScales chartScales = new ChartScales(yAxes: yAxes);
+
   for(int i=0;i<NodeIn.getStateCount();i++){
     LambdaHolderList.add(NodeIn.getLambdaEvidence()[i]);
     PiHolderList.add(NodeIn.getPiEvidence()[i]);
@@ -72,7 +94,7 @@ Chart GenerateEvidenceBarChart(node NodeIn){
   ]);
 
   var config = new ChartConfiguration(
-      type: 'bar', data: data, options: new ChartOptions(responsive: true));
+      type: 'bar', data: data, options: new ChartOptions(responsive: true,scales: chartScales));
 
   Chart myChart = new Chart(querySelector('#BarChartHolderDetail') as CanvasElement, config);
   return myChart;

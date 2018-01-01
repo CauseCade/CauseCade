@@ -163,7 +163,7 @@ class EditComponent implements OnInit, OnChanges {
     for(int i =0;i<selectedNode.getStateCount();i++){
       Probability.add(selectedNode.getProbability()[i]);
     }
-    print('[edit]: refreshed data ');
+    //print('[edit]: refreshed data ');
 
   }
 
@@ -178,8 +178,8 @@ class EditComponent implements OnInit, OnChanges {
       LabelOld[i]=selectedNode.getStateLabels()[i];
       LabelNew[i]=selectedNode.getStateLabels()[i];
     }
-    print(LabelOld.toString());
-    print(LabelNew.toString());
+    //print(LabelOld.toString());
+    //print(LabelNew.toString());
   }
 
   //TODO: less duct-tape

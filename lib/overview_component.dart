@@ -34,7 +34,6 @@ class OverviewComponent implements OnInit, OnChanges{
   NetworkSelectionService selectionService;
   NetworkStyleService styleService;
 
-
   Chart ChartHolder;
   bool ShouldBeHidden;
   bool IsRootNode; //holds information about the selected node
@@ -65,7 +64,7 @@ class OverviewComponent implements OnInit, OnChanges{
     configureStrings();
     configureChart();
 
-    print('[overview]: refreshed data ');
+    //print('[overview]: refreshed data ');
   }
 
   void configureStrings(){
@@ -97,7 +96,7 @@ class OverviewComponent implements OnInit, OnChanges{
           label: 'Probabilities per state',
           backgroundColor: "rgba(223,30,90,1.0)",
           data: ProbabilityHolderList)]);
-
+    //TODO: why does this not reset the chartoptions?
     ChartHolder.config = new ChartConfiguration(
         type: 'bar', data: data, options: new ChartOptions(responsive: true));
     ChartHolder.update();

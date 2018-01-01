@@ -354,6 +354,8 @@ class BayesianDAG{
 
   //should be called after loading a new network from JSON
   void setupLoadedNetwork(){
+    //print(NodeList.toString());
+    //print(LinkList.toString());
     print('[DAG] setting up new network...');
   //fixing links (we only have strings, we want references to node objects)
     LinkList.forEach((link){
@@ -362,6 +364,7 @@ class BayesianDAG{
       link.target=findNode(link.stringEndpoints[1]);
     });
   //setting up links
+
     LinkList.forEach((link){ //we assume we have a populated linklist (see JSON)
       //populate the outgoing and incoming lists of each node object
       //(this could be saved explicitly in json, but this would be duplicate information)
@@ -390,7 +393,9 @@ class BayesianDAG{
       }
     });
     //then we compute some of the probabilities and such for each node
-
+    NodeList.forEach((node) {
+      updateNode(node);
+    });
     //then, if any nodes are still flagged (order of nodes in nodeList
     //may not reflect network structure
     updateNetwork(); //should resolve any flagging issues.

@@ -23,7 +23,7 @@ class NotificationService {
     //avoid list from growing too far.
     if (notificationList.length>notificationCountLimit){
       notificationList.removeAt(0); //clear oldest item
-      print(notificationList.length.toString() + 'length visible'); //debugging
+      //print(notificationList.length.toString() + 'length visible'); //debugging
     }
   }
 
@@ -32,7 +32,7 @@ class NotificationService {
     //avoid list from growing too far.
     if (hiddenNotificationList.length>notificationCountLimit){
       hiddenNotificationList.removeAt(0); //clear oldest item
-      print(hiddenNotificationList.length.toString() + 'length hidden'); //debugging
+      //print(hiddenNotificationList.length.toString() + 'length hidden'); //debugging
     }
   }
 
@@ -137,7 +137,7 @@ class NetNotification { //holds all possible notifications;
   void setNodeDisplayMode([String mode]){
     mode!=null ? notificationText = "set node display:"+mode:
     notificationText = "set node display";
-    print(notificationText);
+    //print(notificationText);
   }
 
   void setNotificationDisplayStatus([bool active]){

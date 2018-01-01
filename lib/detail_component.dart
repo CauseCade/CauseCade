@@ -84,7 +84,7 @@ class DetailComponent implements OnInit,OnChanges {
         print('generating brand new chart');
     }
     else{ //already have a chart, just update its data
-        print('updating existing chart');
+        //print('updating existing chart');
       resetChart();
     }
   }
@@ -121,7 +121,7 @@ class DetailComponent implements OnInit,OnChanges {
     print('new chart requested for ' + nodeIn.getName());
     individualLambda.clear(); //we must clear this
     var lambdaVector = selectedNode.getIndividualLambda(nodeIn);
-    print(lambdaVector);
+    //print(lambdaVector);
     for(int i=0;i<selectedNode.getStateCount();i++){
       individualLambda.add(lambdaVector[i]);
     }
