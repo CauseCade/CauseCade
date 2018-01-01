@@ -36,7 +36,7 @@ packages:
       name: barback
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.2+12"
+    version: "0.15.2+13"
   browser:
     description:
       name: browser
@@ -66,7 +66,7 @@ packages:
       name: chartjs
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0"
+    version: "0.4.0+1"
   cli_util:
     description:
       name: cli_util
@@ -144,7 +144,7 @@ packages:
       name: func
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "1.0.0"
   glob:
     description:
       name: glob
@@ -156,13 +156,13 @@ packages:
       name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.2"
+    version: "0.13.2+1"
   http:
     description:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.3+14"
+    version: "0.11.3+16"
   http_parser:
     description:
       name: http_parser
@@ -174,7 +174,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.1"
+    version: "0.15.2"
   isolate:
     description:
       name: isolate
@@ -216,13 +216,13 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.1"
+    version: "1.1.2"
   observable:
     description:
       name: observable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.20.4+1"
+    version: "0.20.4+2"
   package_config:
     description:
       name: package_config
@@ -234,7 +234,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.2"
+    version: "1.5.1"
   perf_api:
     description:
       name: perf_api
@@ -246,7 +246,7 @@ packages:
       name: plugin
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0+1"
+    version: "0.2.0+2"
   pool:
     description:
       name: pool
@@ -288,7 +288,7 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.2"
+    version: "1.9.1"
   string_scanner:
     description:
       name: string_scanner
@@ -300,7 +300,7 @@ packages:
       name: typed_data
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.4"
+    version: "1.1.5"
   utf:
     description:
       name: utf
@@ -336,6 +336,6 @@ packages:
       name: yaml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.12"
+    version: "2.1.13"
 sdks:
   dart: ">=1.24.0 <2.0.0-dev.infinity"

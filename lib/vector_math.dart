@@ -61,8 +61,9 @@ class Matrix2{
   }
 
   Vector transform(Vector vectorIn){
-    if (vectorIn._size==columnCount) {
-      Vector newVector = new Vector(rowCount);
+    if (vectorIn.size==columnCount) {
+      Vector newVector = new Vector();
+      newVector.initialiseVector(rowCount);
 
       for(int i =0; i<rowCount;i++){
         newVector[i]=0.0;
@@ -107,44 +108,47 @@ class Matrix2{
 
 }
 
+@Entity()
 class Vector{
-  List<double> _vector; //holds the values of the vector
+  List<double> vector; //holds the values of the vector
 
   // dimensionality of the vector (not to be confused with the length
   // of the vector. I should maybe consider refactoring terminology here)
-  int _size;
+  int size;
 
-  Vector(int size){
-    this._vector = new List<double>(size);
-    this._size=size;
+  Vector(); // constructor
+
+  void initialiseVector(int size){
+    this.vector = new List<double>(size);
+    this.size=size;
   }
 
-  setValues(List<double> newValues){ //if you wish to change values later on
-    _vector = newValues;
+  void setValues(List<double> newValues){ //if you wish to change values later on
+    vector = newValues;
   }
 
   int getSize(){
-    return _size;
+    return size;
   }
 
-  setAll(double desiredValue){
-    _vector.fillRange(0,_vector.length,desiredValue);
+  void setAll(double desiredValue){
+    vector.fillRange(0,vector.length,desiredValue);
   }
 
   double getLength(){
     double squaredsum = 0.0;
-    for (int i=0; i< _size;i++){
-      squaredsum += _vector[i]*_vector[i];
+    for (int i=0; i< size;i++){
+      squaredsum += vector[i]*vector[i];
     }
     return sqrt(squaredsum);
   }
 
   double operator [](int i){
-    return _vector[i];
+    return vector[i];
   }
 
   void operator []=(int i, double v) {
-    _vector[i] = v;
+    vector[i] = v;
   }
 
   operator *(dynamic arg) {
@@ -157,52 +161,53 @@ class Vector{
     throw new ArgumentError(arg);
   }
 
-  scale(double scaleFactor){
-    for(int i; i<_size;i++){
-      _vector[i]=_vector[i]*scaleFactor;
+  void scale(double scaleFactor){
+    for(int i; i<size;i++){
+      vector[i]=vector[i]*scaleFactor;
     }
   }
 
   Vector multiplyPointswise(Vector vectorIn){
-    if(vectorIn.getSize()==_size) {
-      Vector newVector = new Vector(_size);
-      for(int i=0; i< _size;i++){
-        newVector[i]=_vector[i]*vectorIn[i];
+    if(vectorIn.getSize()==size) {
+      Vector newVector = new Vector();
+      newVector.initialiseVector(size);
+      for(int i=0; i< size;i++){
+        newVector[i]=vector[i]*vectorIn[i];
       }
       return newVector;
     }
     throw new ArgumentError(vectorIn);
   }
 
-  normalise(){
+  void normalise(){
     double squaredsum = 0.0;
-    for (int i=0; i< _size;i++){
-      squaredsum += _vector[i]*_vector[i];
+    for (int i=0; i< size;i++){
+      squaredsum += vector[i]*vector[i];
     }
     double factor = 1/sqrt(squaredsum);
-    for (int i=0; i< _size;i++){
-      _vector[i]=_vector[i]*factor;
+    for (int i=0; i< size;i++){
+      vector[i]=vector[i]*factor;
     }
   }
 
-  SumToOne(){
+  void SumToOne(){
     double totalSum=0.0;
     double factor;
-    for(var i=0;i<_size;i++ ){
-      totalSum += _vector[i];
+    for(var i=0;i<size;i++ ){
+      totalSum += vector[i];
     }
     factor=1/totalSum;
-    for(var i=0;i<_size;i++ ){
-      _vector[i]=_vector[i]*factor;
+    for(var i=0;i<size;i++ ){
+      vector[i]=vector[i]*factor;
     }
   }
 
   String toString(){
     StringBuffer Buffer = new StringBuffer();
     Buffer.write('[');
-    for (int i =0; i < _size;i++){
-      Buffer.write(_vector[i]);
-      if (i+1!=_size){
+    for (int i =0; i < size;i++){
+      Buffer.write(vector[i]);
+      if (i+1!=size){
         Buffer.write(' , ');
       }
     }

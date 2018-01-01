@@ -182,8 +182,10 @@ import 'package:causecade/data_converter.dart';
       myDAG.getNodes()[index+6].enterLinkMatrix(TestMatrix6);
 
 
-      Vector rootProb2 =new Vector(2);
-      Vector rootProb =new Vector(5);
+      Vector rootProb2 =new Vector();
+      rootProb2.initialiseVector(2);
+      Vector rootProb =new Vector();
+      rootProb.initialiseVector(5);
       rootProb2.setValues([1.0,0.0]);
       myDAG.setEvidence('Speed',rootProb2);
       rootProb.setValues([0.2,0.1,0.1,0.4,0.2]);
@@ -218,7 +220,8 @@ import 'package:causecade/data_converter.dart';
       //print('<--  updating network - TESTING UPSTREAM INFERENCE ->');
       rootProb2.setValues([1.0,0.0]); //RESET SPEED NODE
       myDAG.setEvidence('Speed',rootProb2);
-      Vector rootProb3 =new Vector(3);
+      Vector rootProb3 =new Vector();
+      rootProb3.initialiseVector(3);
       rootProb3.setValues([1.0,0.0,0.0]);
       myDAG.setEvidence('BodyCovering',rootProb3);
 
@@ -325,7 +328,8 @@ import 'package:causecade/data_converter.dart';
     }
 
     //battery voltage
-    Matrix2 TestMatrix = new Matrix2(3,6); //2^1=2
+    Matrix2 TestMatrix = new Matrix2();
+    TestMatrix.initialiseMatrix(3,6);//2^1=2
     TestMatrix[0][0]=0.95;
     TestMatrix[0][1]=0.008;
     TestMatrix[0][2]=0.8;
@@ -350,7 +354,8 @@ import 'package:causecade/data_converter.dart';
 
 
     //charging system
-    Matrix2 TestMatrix2 = new Matrix2(2,2); //2^1=2
+    Matrix2 TestMatrix2 = new Matrix2();
+    TestMatrix2.initialiseMatrix(2,2); //2^1=2
     TestMatrix2[0][0]=0.5;
     TestMatrix2[0][1]=0.0;
     TestMatrix2[1][0]=0.5;
@@ -358,7 +363,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+3].enterLinkMatrix(TestMatrix2);
 
     //headlights
-    Matrix2 TestMatrix3 = new Matrix2(3,3); //2^1=2
+    Matrix2 TestMatrix3 = new Matrix2();
+    TestMatrix3.initialiseMatrix(3,3);//2^1=2
     TestMatrix3[0][0]=0.94;
     TestMatrix3[0][1]=0.0;
     TestMatrix3[0][2]=0.0;
@@ -373,7 +379,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+4].enterLinkMatrix(TestMatrix3);
 
     //voltage at plugs
-    Matrix2 TestMatrix4 = new Matrix2(3,6); //2^1=2
+    Matrix2 TestMatrix4 = new Matrix2();
+    TestMatrix4.initialiseMatrix(3,6);//2^1=2
     TestMatrix4[0][0]=0.9;
     TestMatrix4[0][1]=0.0;
     TestMatrix4[0][2]=0.0;
@@ -397,7 +404,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+6].enterLinkMatrix(TestMatrix4);
 
     //spark timing
-    Matrix2 TestMatrix5 = new Matrix2(3,2); //2^1=2
+    Matrix2 TestMatrix5 = new Matrix2();
+    TestMatrix5.initialiseMatrix(3,2);//2^1=2
     TestMatrix5[0][0]=0.9;
     TestMatrix5[0][1]=0.2;
 
@@ -409,7 +417,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+9].enterLinkMatrix(TestMatrix5);
 
     //starter system
-    Matrix2 TestMatrix6 = new Matrix2(2,2); //2^1=2
+    Matrix2 TestMatrix6 = new Matrix2();
+    TestMatrix6.initialiseMatrix(2,2);//2^1=2
     TestMatrix6[0][0]=0.98;
     TestMatrix6[0][1]=0.02;
     TestMatrix6[1][0]=0.02;
@@ -417,7 +426,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+17].enterLinkMatrix(TestMatrix6);
 
     //car cranks
-    Matrix2 TestMatrix7 = new Matrix2(2,2); //2^1=2
+    Matrix2 TestMatrix7 = new Matrix2();
+    TestMatrix7.initialiseMatrix(2,2);//2^1=2
     TestMatrix7[0][0]=0.8;
     TestMatrix7[0][1]=0.05;
     TestMatrix7[1][0]=0.2;
@@ -425,7 +435,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+18].enterLinkMatrix(TestMatrix7);
 
     //Air system
-    Matrix2 TestMatrix8 = new Matrix2(2,2); //2^1=2
+    Matrix2 TestMatrix8 = new Matrix2();
+    TestMatrix8.initialiseMatrix(2,2);//2^1=2
     TestMatrix8[0][0]=0.9;
     TestMatrix8[0][1]=0.3;
     TestMatrix8[1][0]=0.1;
@@ -433,7 +444,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+15].enterLinkMatrix(TestMatrix8);
 
     //Air system
-    Matrix2 TestMatrix9 = new Matrix2(3,4); //2^1=2
+    Matrix2 TestMatrix9 = new Matrix2();
+    TestMatrix9.initialiseMatrix(3,4);//2^1=2
     TestMatrix9[0][0]=0.9;
     TestMatrix9[0][1]=0.0;
     TestMatrix9[0][2]=0.0;
@@ -451,7 +463,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+14].enterLinkMatrix(TestMatrix9);
 
     //ASpark Quality
-    Matrix2 TestMatrix10 = new Matrix2(3,9); //2^1=2
+    Matrix2 TestMatrix10 = new Matrix2();
+    TestMatrix10.initialiseMatrix(3,9);//2^1=2
     TestMatrix10[0][0]=1.0;
     TestMatrix10[0][1]=0.0;
     TestMatrix10[0][2]=0.0;
@@ -484,7 +497,8 @@ import 'package:causecade/data_converter.dart';
     myDAG.getNodes()[index+10].enterLinkMatrix(TestMatrix10);
 
     //Car Starts
-    Matrix2 TestMatrix11 = new Matrix2(2,108); //2^1=2
+    Matrix2 TestMatrix11 = new Matrix2();
+    TestMatrix11.initialiseMatrix(2,108);//2^1=2
     TestMatrix11[0][0]=0.0;
     TestMatrix11[0][1]=0.0;
     TestMatrix11[0][2]=0.0;
@@ -704,77 +718,53 @@ import 'package:causecade/data_converter.dart';
     TestMatrix11[1][107]=1.0;
     myDAG.getNodes()[index+19].enterLinkMatrix(TestMatrix11);
 
-    Vector rootProb = new Vector(2);
+    Vector rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.99,0.01]);
     myDAG.setPrior('Main fuse',rootProb);
 
-    rootProb = new Vector(3);
+    rootProb = new Vector();
+    rootProb.initialiseVector(3);
     rootProb.setValues([0.4,0.4,0.2]);
     myDAG.setPrior('Battery age',rootProb);
 
-    rootProb = new Vector(2);
+    rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.997,0.003]);
     myDAG.setPrior('Alternator',rootProb);
 
-    rootProb = new Vector(2);
+    rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.99,0.01]);
     myDAG.setPrior('Distributer',rootProb);
 
-    rootProb = new Vector(3);
+    rootProb = new Vector();
+    rootProb.initialiseVector(3);
     rootProb.setValues([0.7,0.1,0.2]);
     myDAG.setPrior('Spark plugs',rootProb);
 
-    rootProb = new Vector(2);
+    rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.995,0.005]);
     myDAG.setPrior('Starter motor',rootProb);
 
-    rootProb = new Vector(2);
+    rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.9,0.1]);
     myDAG.setPrior('Air filter',rootProb);
 
-    rootProb = new Vector(2);
+    rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.9,0.1]);
     myDAG.setPrior('Gas tank',rootProb);
 
-    rootProb = new Vector(2);
+    rootProb = new Vector();
+    rootProb.initialiseVector(2);
     rootProb.setValues([0.97,0.03]);
     myDAG.setPrior('Gas filter',rootProb);
 
     myDAG.hasName=('Car Test');
     myDAG.updateNetwork();
-    visualiseNetwork();
-  }
-
-  LoadExample_Lesson_Bayes_1_2_3(){
-    int index=myDAG.getNodes().length;
-    print('currently ' + index.toString() + ' nodes in the network.');
-
-    myDAG.insertNode("A", 2); //0
-    myDAG.insertNode("B", 2); //1
-
-    myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+1]);
-
-    myDAG.getNodes()[index].setStateLabels(['A0','A1']);
-    myDAG.getNodes()[index+1].setStateLabels(['B0','B1']);
-
-    myDAG.hasName=('Bayes Example L[1,2,3]');
-    visualiseNetwork();
-
-
-  }
-
-  LoadExample_Lesson_Bayes_1_2_3_semantic(){
-    int index=myDAG.getNodes().length;
-    print('currently ' + index.toString() + ' nodes in the network.');
-
-    myDAG.insertNode("A (cause)", 2); //0
-    myDAG.insertNode("B (effect)", 2); //1
-
-    myDAG.insertLink(myDAG.getNodes()[index], myDAG.getNodes()[index+1]);
-
-    myDAG.getNodes()[index].setStateLabels(['A0','A1']);
-    myDAG.getNodes()[index+1].setStateLabels(['B0','B1']);
-    myDAG.hasName=('Bayes Example (Semantic) L[1,2,3]');
     visualiseNetwork();
   }
 

@@ -153,9 +153,11 @@ class EditComponent implements OnInit, OnChanges {
    fetchLinks();
 
     ObservationList = new List(StateCount);
-    Observation = new Vector(StateCount);
+    Observation = new Vector();
+    Observation.initialiseVector(StateCount);
     PriorList = new List(StateCount);
-    Prior = new Vector(StateCount);
+    Prior = new Vector();
+    Prior.initialiseVector(StateCount);
 
     Probability = new List<double>();
     for(int i =0;i<selectedNode.getStateCount();i++){

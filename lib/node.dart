@@ -5,13 +5,15 @@ import 'package:angular_components/angular_components.dart'; //for uiDisplay
 import 'package:dartson/dartson.dart'; //to convert to JSON
 
 
-
+//TODO: This class and methods need some major reworking, perhaps from scratch
 @Entity()
 class node  implements HasUIDisplayName{
 
   String name;
   int stateCount; //keeps track of how many states this node has (e.g. 2 for a true/false node)
   List<String> stateLabels = ['not yet defined'];
+  //computed at runtime, and should not be saved
+  @Property(ignore:true)
   List<String> matrixLabels = ['not yet defined']; //hold matrix labels
   @Property(ignore:true)
   List<Vector> matrixIndexes = [];
@@ -43,13 +45,11 @@ class node  implements HasUIDisplayName{
   // -------- Inference Related Items --------
   @Property(name:"CPT")
   Matrix2 LinkMatrix; //2x2 matrix is default (this corresponds to no parents)
-  @Property(ignore:true)
   Vector Posterior; //This would be equal in dimension to the amount of states the node can have
 
   //gained from other nodes
-  @Property(ignore:true)
+  //the below two vectors multiplied produce the posterior
   Vector LambdaEvidence; //this should be set to 1 by default, which equates to no evidence
-  @Property(ignore:true)
   Vector PiEvidence; //this should be set to 1 by default, which equates to no evidence
 
   //sent out to other nodes
@@ -74,13 +74,18 @@ class node  implements HasUIDisplayName{
     hasProperLinkMatrix = true;
 
     incomingLambda = new Map<node,Vector>(); //Initialise map;
-    Posterior = new Vector(stateCount);
+    Posterior = new Vector();
+    Posterior.initialiseVector(stateCount);
     Posterior.setAll(0.0);
     print(Posterior.toString());
-    PiMessage = new Vector(stateCount);
-    LambdaMessage = new Vector(stateCount);
-    LambdaEvidence = new Vector(stateCount);
-    PiEvidence = new Vector(stateCount);
+    PiMessage = new Vector();
+    PiMessage.initialiseVector(stateCount);
+    LambdaMessage = new Vector();
+    LambdaMessage.initialiseVector(stateCount);
+    LambdaEvidence = new Vector();
+    LambdaEvidence.initialiseVector(stateCount);
+    PiEvidence = new Vector();
+    PiEvidence.initialiseVector(stateCount);
     for(int i=0; i< stateCount;i++){
       PiMessage[i]=1.0; //this is the default and is equivalent to no evidence
       LambdaMessage[i]=1.0; //this is the default and is equivalent to no evidence
@@ -101,18 +106,15 @@ class node  implements HasUIDisplayName{
     incomingLambda = new Map<node,Vector>(); //Initialise map;
 
     //setting up vectors
-    Posterior = new Vector(stateCount);
-    PiMessage = new Vector(stateCount);
-    LambdaMessage = new Vector(stateCount);
-    LambdaEvidence = new Vector(stateCount);
-    PiEvidence = new Vector(stateCount);
+    //we leave the messages as 1s for now. TODO: is this justified?
+    PiMessage = new Vector();
+    PiMessage.initialiseVector(stateCount);
+    LambdaMessage = new Vector();
+    LambdaMessage.initialiseVector(stateCount);
     //configuring vectors
-    Posterior.setAll(0.0);
     for(int i=0; i< stateCount;i++){
       PiMessage[i]=1.0; //this is the default and is equivalent to no evidence
       LambdaMessage[i]=1.0; //this is the default and is equivalent to no evidence
-      PiEvidence[i]=1.0;
-      LambdaEvidence[i]=1.0;
     }
   }
 
@@ -132,7 +134,7 @@ class node  implements HasUIDisplayName{
 
 //if you wish to alter the amount of states the node has,
 //it is required you also add the proper new labels
-  setStateCount(int stateCountIn, List<String> labels){
+  void setStateCount(int stateCountIn, List<String> labels){
     if (stateCount != stateCountIn) {
       stateCount = stateCountIn;
       resetLinkMatrixStructure(); //clearly, the link matrix must be altered
@@ -147,7 +149,7 @@ class node  implements HasUIDisplayName{
 
   //allows for user set labels for each state
   //(more easily to interpret for human being than linkmatrix[0] or something)
-  setStateLabels(List<String> labels){
+  void setStateLabels(List<String> labels){
     if(labels.length == stateCount){
       stateLabels = labels;
     }
@@ -159,7 +161,7 @@ class node  implements HasUIDisplayName{
     }
   }
 
-  setProbability(Vector observedProbability){
+  void setProbability(Vector observedProbability){
     //This method is called when hard evidence (observed state of variable)
     // is entered. This means other nodes can (logically) no longer affect it.
     Posterior=(observedProbability);
@@ -170,14 +172,17 @@ class node  implements HasUIDisplayName{
     flaggingNode=null; //We now have no more memory of what updated the node
     FlagOtherNodes();// Networks needs to be updated
   }
-  resetProbability(){ //creates brand new probability vectors
-    LambdaEvidence=new Vector(stateCount);
-    PiEvidence=new Vector(stateCount);
-    Posterior = new Vector(stateCount);
+  void resetProbability(){ //creates brand new probability vectors
+    LambdaEvidence=new Vector();
+    LambdaEvidence.initialiseVector(stateCount);
+    PiEvidence=new Vector();
+    PiEvidence.initialiseVector(stateCount);
+    Posterior = new Vector();
+    Posterior.initialiseVector(stateCount);
     print('node: reset probability');
   }
 
-  clearProbability(){
+  void clearProbability(){
     isInstantiated=false;
     LambdaEvidence.setAll(1.0); //express no Lambda Evidence
     PiEvidence.setAll(1.0); //express no Pi Evidence
@@ -187,7 +192,7 @@ class node  implements HasUIDisplayName{
 
   //false means the LinkMatrix has to be changed, true means the LinkMatrix
   //should be correct //FIX no longer make this a method
-  _setLinkMatrixStatus(bool boolIn){
+  void _setLinkMatrixStatus(bool boolIn){
     hasProperLinkMatrix = boolIn;
   } //FIX probably want to remove this method to improve performance
 
@@ -207,20 +212,21 @@ class node  implements HasUIDisplayName{
     return isRootNode;
   }
 
-  void setRootStatus(bool BoolIn){
-    isRootNode = BoolIn;
+  void setRootStatus(bool boolIn){
+    isRootNode = boolIn;
   }
 
   //Should be called only when setting prior probability.
-  void setPiEvidence(Vector ProbabilityIn){
-    PiEvidence=ProbabilityIn;
+  void setPiEvidence(Vector probabilityIn){
+    PiEvidence=probabilityIn;
     PiEvidence.SumToOne();
     FlagOtherNodes();
   }
 
   //when you wish to clear the set prior
   void clearPiEvidence(){
-    Vector defaultPiEvidence = new Vector(stateCount);
+    Vector defaultPiEvidence = new Vector();
+    defaultPiEvidence.initialiseVector(stateCount);
     defaultPiEvidence.setAll(1.0); //equal to no evidence
     PiEvidence=defaultPiEvidence;
     //setRootStatus(false); //this may also be done from somewhere else
@@ -320,8 +326,10 @@ class node  implements HasUIDisplayName{
   //is changed(so this would be a new state added to node,
   // or a new parent node being added)
   resetLinkMatrixStructure(){
-    PiEvidence = new Vector(stateCount);
-    LambdaEvidence = new Vector(stateCount);
+    PiEvidence = new Vector();
+    PiEvidence.initialiseVector(stateCount);
+    LambdaEvidence = new Vector();
+    LambdaEvidence.initialiseVector(stateCount);
     for(int i=0; i< stateCount;i++){
       PiEvidence[i]=1.0;//this is the default and is equivalent to no evidence
       LambdaEvidence[i]=1.0;//this is the default and is equivalent to no evidence
@@ -388,7 +396,8 @@ class node  implements HasUIDisplayName{
       else{
         //matrixIndexToAdd=matrixIndexToAdd+ '+' + i.toString();
         //print('matrix index to add: ' +matrixIndexToAdd);
-        Vector indexHolder  = new Vector(inComing.keys.length);
+        Vector indexHolder  = new Vector();
+        indexHolder.initialiseVector(inComing.keys.length);
         indexHolder.setValues([]);
         matrixIndexes.add(indexHolder);
         //print('matrixlabels right now' + matrixLabels.toString());
@@ -405,7 +414,7 @@ class node  implements HasUIDisplayName{
       generateMatrixLabels(0,inComing.keys.length,'');
       _generateMatrixIndexes(0,inComing.keys.length,'');
       _setLinkMatrixStatus(true); //this should trigger if the updated matrix is valid
-      print('New Matrix Set');
+      //print('New Matrix Set');
       flagged=true; //A change in matrix means this node's probabilities must
                     // be updated.
 
@@ -466,7 +475,8 @@ class node  implements HasUIDisplayName{
     //Imagine A->B. If B gets evidence it will change A. This change in A could
     //then influence B again etc
     //this is a special version of computeLambdaEvidence()
-    Vector PiProbability = new Vector(stateCount);
+    Vector PiProbability = new Vector();
+    PiProbability.initialiseVector(stateCount);
     PiProbability.setAll(1.0); //get a clean Vector
 
     outGoing.keys.forEach((node) {
@@ -485,10 +495,11 @@ class node  implements HasUIDisplayName{
   //and this one is flagged to be updated in light of the new evidence
   FetchPiMessage(){
     if(isRootNode){
-      print('This is a root node, no Pi evidence change required.');
+      //print('This is a root node, no Pi evidence change required.');
     }
     else{
-      PiMessage = new Vector(_getIncomingStates());
+      PiMessage = new Vector();
+      PiMessage.initialiseVector(_getIncomingStates());
       int ParentNodeCount = inComing.keys.length;
 
 
@@ -533,7 +544,8 @@ class node  implements HasUIDisplayName{
   //the lambda message for this node.
   Vector sendLambdaMessage(node NodeIn){
     // NodeIn = node requesting evidence, which must be a parent of this node
-    Vector lambdaToSend = new Vector(NodeIn.getStateCount());
+    Vector lambdaToSend = new Vector();
+    lambdaToSend.initialiseVector(NodeIn.getStateCount());
     //this lambdaToSend must have a probability for each state of the requesting
     //parent node. dimensionality=NodeIn.getStateCount();
     //print('Lambda Process: Generating Lambda Message by: ' + name);
@@ -542,8 +554,10 @@ class node  implements HasUIDisplayName{
     // P(0.1)|[0.3][0.5][0.5] -> [0.1*0.3+0.9*0.7][0.1*0.5+0.9*0.5][0.1*0.5+0.9*0.5]
     // P(0.9)|[0.7][0.5][0.5]
     //print('Lambda Process: Found ReducedMatrix: ' + LinkMatrix.toString());
-    Vector ReducedMatrix= new Vector(LinkMatrix.getColumnCount());
-        //print(LinkMatrix.getColumnCount());
+    Vector ReducedMatrix= new Vector();
+    //print(LinkMatrix.getColumnCount());
+    ReducedMatrix.initialiseVector(LinkMatrix.getColumnCount());
+
     for (int i=0; i<LinkMatrix.getColumnCount();i++){
       double sum=0.0;
       for(int j=0; j<LinkMatrix.getRowCount();j++){
@@ -571,7 +585,6 @@ class node  implements HasUIDisplayName{
       }
       //this generates a new lambdaToSend
     }
-
     //lambdaToSend.SumToOne(); //optional rescaling;
     //print('Lambda Process: final lambda message: ' + lambdaToSend.toString());
     return lambdaToSend;
@@ -599,12 +612,12 @@ class node  implements HasUIDisplayName{
       }
       else{
         probability=inComing.keys.elementAt(currentParent).getPiEvidence()[i]*probability; //TODO: risky move, check if correct
-       // print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
+        //print('new probability: ' + probability.toString() + 'in parent: ' + inComing.keys.elementAt(currentParent).getName());
       }
        //print('Start-------------------');
-      // print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
-      // print('our probability is '+probability.toString());
-      // print('our limit is '+Limit.toString());
+       //print('our parent is '+inComing.keys.elementAt(currentParent).getName().toString());
+       //print('our probability is '+probability.toString());
+       //print('our limit is '+Limit.toString());
 
       if(currentParent+1<Limit) {
         // print('is this broek?');
@@ -671,14 +684,16 @@ class node  implements HasUIDisplayName{
       //daughter nodes. we must multiply them together for this to work
       incomingLambda.clear(); //we must reset this before we update it
       outGoing.keys.forEach((node) {
+        print(node.name);
         //sendLambdaMessage calls the daughter nodes to send the lambda message
         //for this specific node. This then handles the multiplication.
         Vector incomingLambdaValue = node.sendLambdaMessage(this);
           //print('lambda message after clearing is: ' + LambdaMessage.toString());
         LambdaMessage = LambdaMessage*incomingLambdaValue;
-          //print('lambda message just before adding to map is: ' + LambdaMessage.toString());
+         // print('lambda message just before adding to map is: ' + LambdaMessage.toString());
         incomingLambda.addAll({node:incomingLambdaValue}); //update the map
-          //print('map is: ' + incomingLambda.values.toString());
+         // print('map is: ' + incomingLambda.values.toString());
+
       });
 
       //The lambda evidence then just setting it to this product

@@ -43,7 +43,7 @@ class WelcomeComponent {
   //closes the modal
   void enterCauseCade(){
     isVisible=false;
-    print('Closed Welcome Modal');
+    //print('Closed Welcome Modal');
   }
 
   void takeTour(){

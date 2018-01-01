@@ -375,6 +375,25 @@ class BayesianDAG{
       //TODO: remove arguments initialiseNode function
       node.initialiseNodeSecondary();
     });
+
+  //ensuring the implicit values are updated and network is fully operational
+    //we first update the matrix labels. I do not know why this is required.
+    //Will fix this once I do the big refactoring of the node class.
+    //TODO: avoid having to explictly determine labels first
+    NodeList.forEach((node){
+      if(!node.isRootNode) {
+        node.clearMatrixLabels();
+        node.generateMatrixLabels(0, node
+            .getInComing()
+            .keys
+            .length, '');
+      }
+    });
+    //then we compute some of the probabilities and such for each node
+
+    //then, if any nodes are still flagged (order of nodes in nodeList
+    //may not reflect network structure
+    updateNetwork(); //should resolve any flagging issues.
   }
 
   void clear(){ //reset the DAG

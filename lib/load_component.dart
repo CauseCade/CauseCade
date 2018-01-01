@@ -55,20 +55,6 @@ class LoadComponent {
         //refreshNetName();
         notifications.addNotification(new NetNotification()..setLoadStatus("CarTest"));
         break;
-      case "Bayes_1_2_3":
-        LoadExample_Lesson_Bayes_1_2_3();
-        //loadMessage = 'Last Loaded: ' + example_name;
-        closeLoadMenu();
-        //refreshNetName();
-        notifications.addNotification(new NetNotification()..setLoadStatus("Bayes_1_2_3"));
-        break;
-      case "Bayes_1_2_3_semantic":
-        LoadExample_Lesson_Bayes_1_2_3_semantic();
-        //loadMessage = 'Last Loaded: ' + example_name;
-        closeLoadMenu();
-        //refreshNetName();
-        notifications.addNotification(new NetNotification()..setLoadStatus("Bayes_1_2_3_semantic"));
-        break;
       case "Bayes_4":
         LoadExample_Lesson_Bayes_4();
         //loadMessage = 'Last Loaded: ' + example_name;
@@ -128,6 +114,7 @@ class LoadComponent {
 
   void closeLoadMenu(){
     inSubMenu=false; //exit submenu
+    networkList =  new List(); //not strictly needed, but good practice
     isVisible=false;
     isVisibleChange.emit(false); //let appcomponent know we closed it
   }

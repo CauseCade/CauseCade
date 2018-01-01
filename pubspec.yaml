@@ -20,7 +20,6 @@ dependencies:
   markdown: "^0.11.4"
   http: "^0.11.3+14"
 
-
 transformers:
 - dartson
 - angular2:
@@ -29,3 +28,4 @@ transformers:
 - dart_to_js_script_rewriter
 - $dart2js:
     minify: true
+
