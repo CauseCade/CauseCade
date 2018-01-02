@@ -301,7 +301,7 @@ class BayesianDAG{
 
         //This is currently not yet implemented
         // - the network can only propagate downwards
-        //  print('fetching lambda Messages...');
+          //print('fetching lambda Messages...');
      NodeIn.ComputeLambdaEvidence();
 
       NodeIn.UpdatePosterior();

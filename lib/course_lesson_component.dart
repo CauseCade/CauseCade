@@ -13,7 +13,12 @@ import 'dart:async';
 import 'package:http/browser_client.dart';
 import 'dart:html' as htmlDart;
 
-//import 'package:causecade/tester_markdown.md';
+//JSON handling
+import 'package:causecade/bayesian_dag.dart';
+import 'package:dartson/dartson.dart';
+import 'app_component.dart';
+import  'data_converter.dart';
+
 
 
 @Component(
@@ -42,10 +47,10 @@ class CourseLessonComponent implements OnChanges{
   var htmlFromMarkdown;
 
   String lessonName;
+  bool hasNetwork; //does lesson have a corresponding network?
 
    CourseLessonComponent(this._teachService,this.notifications)  {
       print('[Lesson Component] loaded...');
-
    }
 
   void refreshLesson(){
@@ -60,7 +65,9 @@ class CourseLessonComponent implements OnChanges{
       ..onLoadEnd.listen((e){
         ///print(req.responseText);
         htmlFromMarkdown=md.markdownToHtml(req.responseText,inlineSyntaxes: [new md.InlineHtmlSyntax()]);
-        refreshGoals();
+        if(goalList!= null) {
+          refreshGoals();
+        }
       })
       ..send('');
     goalList=currentLesson.goalList;
@@ -85,12 +92,27 @@ class CourseLessonComponent implements OnChanges{
     for (int i=0;i<goalList.length;i++){
       if(goalList[i].notificationText==newNotification.notificationText){
         _teachService.setGoalProgress(i); //mark goal as completed
-        htmlDart.querySelector('#goal_'+(i+1).toString()).style.backgroundColor='green';
+        htmlDart.querySelector('#goal_'+(i+1).toString()).style.borderBottom='5px solid green';
         htmlDart.querySelector('.goal_icon_'+(i+1).toString()).style.borderColor='green';
         break; //to allow for the same command twice in a single lesson
       }
     };
     // most of the time this will evaluate to false.
+  }
+
+  //loads the network that corresponds to this lesson
+  //this should not be called when no explicit network is specified in meta.json
+  void loadLessonNetwork(){
+    String URL = _teachService.currentCourse.networkUrlList[currentLesson.lessonNetworkIndices.first-1];
+    htmlDart.HttpRequest.getString(URL).then((myjson) {
+      //print(myjson);
+      var dson = new Dartson.JSON();
+      myDAG = dson.decode(myjson, new BayesianDAG());
+      //complete loading/setup of network
+      myDAG.setupLoadedNetwork();
+      visualiseNetwork(); //ensure the new network is loaded
+      notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.name));
+    });
   }
 
   void ngOnChanges(Map<String, SimpleChange> changes){
@@ -107,9 +129,19 @@ class CourseLessonComponent implements OnChanges{
       }
     }
     else{
-      print('[lesson]: unknown change detected.');
-      print('[lesson]: ' + changes.keys.last);
+      //print('[lesson]: unknown change detected.');
+      //print('[lesson]: ' + changes.keys.last);
     }
-
   }
+
+
+
+
+ /* printLessonJSON(){
+    print('testing JSON...');
+    var dson = new Dartson.JSON();
+    String jsonString = dson.encode(currentLesson);
+    print(jsonString);
+  }*/
+
 }

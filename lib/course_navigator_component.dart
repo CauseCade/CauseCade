@@ -29,7 +29,6 @@ class CourseNavigatorComponent {
   int navigationRatio =12;  //What fraction of window should the navigation
                             //header be? (percentage)
   int navigationRatioComplement;
-  List<Course> CourseList;
   Course CourseSelect; //selected course
   List<Lesson> LessonList;
 
@@ -38,11 +37,14 @@ class CourseNavigatorComponent {
   CourseNavigatorComponent(this.teachService,this.notifications){/*this._teachService*/
     print('[Course Navigator Component] loaded...');
     navigationRatioComplement=100-navigationRatio;
-    CourseList = teachService.getCourses();
+
     LessonList = new List<Lesson>();
+/*
     configureCourses();
+*/
     print('Configured Courses');
   }
+
 
   /*void hideCourseMenu(){
     isActive=false;
@@ -59,8 +61,6 @@ class CourseNavigatorComponent {
     LessonList=CourseSelect.courseLessons; //find lessons (only) of this course
   }
 
-
-
   /*void selectLesson(Lesson lessonIn){
     _teachService.currentLesson = lessonIn;
   }
@@ -75,10 +75,10 @@ class CourseNavigatorComponent {
 
   // Dropdowns (course)
 
-  final SelectionModel<Course> targetCourseSelection =
+  SelectionModel<Course> targetCourseSelection =
     new SelectionModel.withList();/*..selectionChanges.listen(updateCourse);*/
 
-  StringSelectionOptions<Course> get courseOptionsLong => new StringSelectionOptions<Course>(CourseList);
+  StringSelectionOptions<Course> get courseOptionsLong => new StringSelectionOptions<Course>(teachService.getCourses().courseList);
 
   static final ItemRenderer<Course> courseNameRenderer =
       (HasUIDisplayName course) => course.uiDisplayName;
@@ -106,7 +106,7 @@ class CourseNavigatorComponent {
   }
 // Dropdowns (Lesson)
 
-  final SelectionModel<Lesson> targetLessonSelection =
+  SelectionModel<Lesson> targetLessonSelection =
   new SelectionModel.withList();
 
   StringSelectionOptions<Lesson> get lessonOptionsLong => new StringSelectionOptions<Lesson>(LessonList);
@@ -122,6 +122,7 @@ class CourseNavigatorComponent {
   String get selectedLessonLabel {
     if(targetLessonSelection.selectedValues.length > 0){
       teachService.currentLesson=targetLessonSelection.selectedValues.first;
+      teachService.currentCourse=CourseSelect;
       //print(_teachService.currentLesson.lessonName);
       //lessonSelected=true;
 
@@ -130,6 +131,7 @@ class CourseNavigatorComponent {
     else {
       //lessonSelected=false;
       teachService.clearCurrentLesson();
+      teachService.clearCurrentCourse();
       return 'Choose a lesson';
     }
   }
@@ -138,7 +140,7 @@ class CourseNavigatorComponent {
     //if we have a lesson selected and it is not the first in the list
     if((teachService.currentLesson!=null) && LessonList.indexOf(teachService.currentLesson)!=0){
       targetLessonSelection.select(LessonList[(LessonList.indexOf(teachService.currentLesson)-1)]);
-      print('Prev Lesson');
+      //print('Prev Lesson');
     }
   }
 
@@ -146,13 +148,7 @@ class CourseNavigatorComponent {
     //if we have a lesson selected and it is not the last in the list
     if((teachService.currentLesson!=null)  && LessonList.indexOf(teachService.currentLesson)!=LessonList.length-1){
       targetLessonSelection.select(LessonList[(LessonList.indexOf(teachService.currentLesson)+1)]);
-      print('Next Lesson');
+      //print('Next Lesson');
     }
   }
-
- /* testTutorial(){
-    teachService.selectTutorial();
-    print('testomg titproasd');
-    teachService.currentLesson=teachService.getCourses()[0].lessonList[0];
-  }*/
 }

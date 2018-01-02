@@ -31,4 +31,6 @@ class link{
     return endpoints;
   }
 
+  @override
+  String toString() => '{'+ endpoints[0].toString()+'->'+endpoints[1].toString()+'}';
 }

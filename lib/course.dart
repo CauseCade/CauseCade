@@ -1,21 +1,32 @@
 // A course is a collection of Lessons, with a short description and version
 import 'package:causecade/lesson.dart';
 import 'package:angular_components/angular_components.dart'; //for uiDisplay
+import 'package:dartson/dartson.dart'; //to convert to JSON
 
+
+@Entity()
 class Course implements HasUIDisplayName{
 
-  final String name;
-  final String dateCreated;
+  String name;
+  String dateCreated;
   List<Lesson> lessonList = new List<Lesson>();
-  int lessonCount;
+  List<String> networkUrlList;
+  List<String> networkNameList;
   String description;
   String category; //Serves as a tag for this (type of) course
 
-  Course(this.name,this.dateCreated); /*constructor*/
+  Course(); /*constructor*/
+
+  void initialiseCourse(String nameIn, String dateIn){
+    this.name=nameIn;
+    this.dateCreated=dateIn;
+  }
 
   String get courseName => name;
 
   String get dateOfCreation => dateCreated;
+
+  List<String> get courseNetworkNameList => networkNameList;
 
   set courseDescription(String newDescription){
     description = newDescription;}
@@ -29,16 +40,18 @@ class Course implements HasUIDisplayName{
 
   List<Lesson> get courseLessons => lessonList;
 
+  List<String> getNetworkUrlList(){
+    return networkUrlList;
+  }
+
   void addLesson(Lesson lessonIn){
     lessonList.add(lessonIn);
     print('Added '+lessonIn.lessonName +' to course: ' + name);
-    _updateLessonCount();
   }
 
   void removeLesson(Lesson lessonIn){
     lessonList.remove(lessonIn);
     print('Removed '+lessonIn.lessonName +' from course: ' + name);
-    _updateLessonCount();
   }
 
   //make a list of the names of each lesson and return that list
@@ -50,13 +63,19 @@ class Course implements HasUIDisplayName{
     return listToSend;
   }
 
-  void _updateLessonCount(){
-    lessonCount = lessonList.length;
-  }
-
   @override
   String get uiDisplayName => name; //just return the name
 
   @override
   String toString() => uiDisplayName;
+}
+
+@Entity()
+class CourseHolder{
+  @Property(name:"courselist")
+  List<Course> courseListInternal;
+
+  set courseList(List<Course> newCourseList) => courseListInternal=newCourseList;
+
+  List<Course> get courseList => courseListInternal;
 }

@@ -2,7 +2,9 @@ import 'package:causecade/app_component.dart';
 import 'package:causecade/vector_math.dart';
 import 'package:causecade/data_converter.dart';
 
-
+/*
+* DEPECRATED - ALL DATA NOW FETCHED FROM JSON FILES REMOTELY
+*/
 
   LoadExample_Animals(){
       int index=myDAG.getNodes().length;

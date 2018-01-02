@@ -33,3 +33,7 @@
 div.mdl-card{
     margin: 0; /*override previous set margin*/
 }
+
+#networkLessonButton{
+    font-size: 2.2em;
+}

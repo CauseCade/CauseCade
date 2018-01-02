@@ -3,33 +3,56 @@ import 'package:angular2/core.dart';
 
 import 'course.dart';
 import 'lesson.dart';
+/*
 import 'lesson_data.dart';
+*/
+
+//access to the course data
+import 'dart:html' as htmlDart;
+import 'package:dartson/dartson.dart';
 
 @Injectable()
 
 class TeachService{
 
   Lesson SelectedLesson;
+  Course SelectedCourse;
   bool hasLessonSelected = true;
+  CourseHolder courseDataRemote;
+  String courseURL = 'https://raw.githubusercontent.com/CauseCade/CauseCade-lessons/master/meta.json';
 
   String tester='>';
 
- List<Course> getCourses()  => courseData ;
+ CourseHolder getCourses()  => courseDataRemote ;
+
+  //fetch the course info from the server JSON file
+  void fetchCourses(){
+    htmlDart.HttpRequest.getString(courseURL).then((myjson) {
+      //print(myjson);
+      var dson = new Dartson.JSON();
+      courseDataRemote = dson.decode(myjson, new CourseHolder());
+      print('[teachservice]: loaded meta info...');
+    });
+  }
 
   //get a specific lesson (user enters the course name and lesson name)
   Lesson getLesson(String courseName,String lessonName)  =>
-      ((getCourses()).firstWhere((course) => course.courseName == courseName)
+      ((getCourses().courseList).firstWhere((course) => course.courseName == courseName)
       .courseLessons.firstWhere((lesson)=>lesson.lessonName == lessonName));
 
   //Get a list of the lesson names
   List<String> getCourseLessonNames(String courseName)=>
-      (getCourses()).firstWhere((course) => course.courseName == courseName)
+      (getCourses().courseList).firstWhere((course) => course.courseName == courseName)
       .getLessonNames();
 
   void clearCurrentLesson(){
     SelectedLesson = null;
     //hasLessonSelected = false;
     //print('Cleared Current Lesson Selection...');
+  }
+
+  void clearCurrentCourse(){
+    SelectedCourse=null;
   }
 
   set currentLesson(Lesson lessonIn){
@@ -44,6 +67,13 @@ class TeachService{
     return SelectedLesson;
   }
 
+  set currentCourse(Course courseIn){
+    SelectedCourse = courseIn;
+  }
+
+  Course get currentCourse => SelectedCourse;
+
+
   bool getSelectionStatus(){
     return hasLessonSelected;
   }
@@ -54,6 +84,6 @@ class TeachService{
   }
 
   void selectTutorial(){
-    SelectedLesson = courseData[0].courseLessons[0];
+    SelectedLesson = courseDataRemote.courseList[0].courseLessons[0];
   }
 }

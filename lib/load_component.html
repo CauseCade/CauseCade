@@ -6,6 +6,7 @@
             <p>Open one of the folders below to view the corresponding networks available for loading.</p>
        <!--     <material-button clear-size (trigger)="loadBetaComp()">JSON BETA 2</material-button> TODO: find a new place-->
         </div>
+        <div *ngIf="teachService.getCourses()!=null">
         <div  *ngIf='!inSubMenu' class="mdl-grid" id="network_types">
 
             <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
@@ -17,11 +18,11 @@
                     in the course lessons. </p>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    <material-button clear-size (trigger)="viewCourseNetworks('miscellaneous')">View Networks</material-button>
+                    <material-button  disabled clear-size (trigger)="viewCourseNetworks('miscellaneous')">View Networks</material-button>
                 </div>
             </div>
 
-            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+            <!--<div class="mdl-cell mdl-cell&#45;&#45;4-col mdl-card mdl-shadow&#45;&#45;4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
                     <h2 class="mdl-card__title-text " >Animals</h2>
                 </div>
@@ -29,12 +30,12 @@
                     <p>A simple conceptual model that can be grasped by anyone. Displays all the independence concepts.</p>
                     <p>8 nodes, 7 links</p>
                 </div>
-                <div class="mdl-card__actions mdl-card--border">
+                <div class="mdl-card__actions mdl-card&#45;&#45;border">
                     <material-button clear-size (trigger)="loadData('Animals')">Load Network</material-button>
                 </div>
             </div>
 
-            <div class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+            <div class="mdl-cell mdl-cell&#45;&#45;4-col mdl-card mdl-shadow&#45;&#45;4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
                     <h2 class="mdl-card__title-text " >Car Test</h2>
                 </div>
@@ -43,12 +44,12 @@
                     the effects of different linkmatrix values.</p>
                     <p>20 nodes, 19 links</p>
                 </div>
-                <div class="mdl-card__actions mdl-card--border">
+                <div class="mdl-card__actions mdl-card&#45;&#45;border">
                     <material-button clear-size (trigger)="loadData('CarTest')">Load Network</material-button>
                 </div>
-            </div>
+            </div>-->
 
-            <div *ngFor="let course of teachService.getCourses()" class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+            <div  *ngFor="let course of teachService.getCourses().courseList" class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
                     <h2 class="mdl-card__title-text " >(Course){{course.name}} </h2>
                 </div>
@@ -56,20 +57,22 @@
                     <p>This section contains networks belonging to this course.</p>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    <material-button clear-size (trigger)="viewCourseNetworks(course.name)">View Networks</material-button>
+                    <material-button clear-size (trigger)="viewCourseNetworks(course)">View Networks</material-button>
                 </div>
             </div>
         </div>
+
+        </div>
         <div *ngIf='inSubMenu' class="mdl-grid" >
-            <div *ngFor="let network of networkList; let i=index" class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
+            <div *ngFor="let url of networkList; let i=index" class="mdl-cell mdl-cell--4-col mdl-card mdl-shadow--4dp">
                 <div class="mdl-card__title" style="color: rgba(0,0,0,0.87);">
-                    <h2 class="mdl-card__title-text " > network {{i+1}}</h2>
+                    <h2 class="mdl-card__title-text " > {{networkNameList[i]}}</h2>
                 </div>
                 <div class="mdl-card__supporting-text">
                     <p>Click below to load the network. No preview available.</p>
                 </div>
                 <div class="mdl-card__actions mdl-card--border">
-                    <material-button clear-size (trigger)="JSONload(searchString+(i+1).toString()+'.json')">Load Network</material-button>
+                    <material-button clear-size (trigger)="JSONload(url)">Load Network</material-button>
                 </div>
             </div>
         </div>

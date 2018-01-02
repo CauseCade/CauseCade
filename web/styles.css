@@ -87,7 +87,7 @@ material-input .spaceholder{
 
 /*for lesson text that represents a goal/target/activity*/
 .lessonGoal{
-    background-color: red;
+    border-bottom: 3px solid red;
     white-space: nowrap;
 }
 

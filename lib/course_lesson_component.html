@@ -9,7 +9,9 @@
     <div class="mdl-card__title compactPadding" style="width: 100%">
 
         <div><h2 class="mdl-card__title-text"><span style="color: #616161">Lesson</span>: {{lessonName}}</h2></div>
-
+        <material-button *ngIf="currentLesson.networkIndices!=null" materialTooltip="Load Network for this lesson" (click)="loadLessonNetwork()" >
+            <i id="networkLessonButton" class="material-icons">timeline</i>
+        </material-button>
         <div id='lessonDescription' style="margin-left: auto" [materialTooltip]="currentLesson.lessonDescription">view description</div>
     </div>
     <div *ngIf="goalList!=null" class="lessonProgress mdl-card__actions mdl-card--border compactPadding">
@@ -18,6 +20,9 @@
             <span>{{i+1}}</span>
         </div>
     </div>
+    <!--<material-button (trigger)="printLessonJSON()"
+                     raised  materialTooltip="Currently prints JSON as string to console" class="white">Lesson</material-button>-->
+
 
 
     <!--Load Markdown Lesson Text-->

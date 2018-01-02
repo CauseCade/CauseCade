@@ -96,6 +96,9 @@ class AppComponent implements OnInit {
     openLoadMenu = false;
 
     overviewActive=true; //set the default card info to 'overview'
+     //ensure we load all the lessons meta info from json
+    teachService.fetchCourses();
+
 
   }
 

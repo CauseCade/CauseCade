@@ -684,7 +684,7 @@ class node  implements HasUIDisplayName{
       //daughter nodes. we must multiply them together for this to work
       incomingLambda.clear(); //we must reset this before we update it
       outGoing.keys.forEach((node) {
-        print(node.name);
+        //print(node.name);
         //sendLambdaMessage calls the daughter nodes to send the lambda message
         //for this specific node. This then handles the multiplication.
         Vector incomingLambdaValue = node.sendLambdaMessage(this);
