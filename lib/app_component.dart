@@ -17,6 +17,7 @@ import 'package:causecade/help_component.dart';
 import 'dart:html';
 
 import 'node.dart';
+import 'link.dart';
 import 'dart:async';
 import 'package:dartson/dartson.dart';
 
@@ -60,15 +61,18 @@ class AppComponent implements OnInit {
 
   String currentNodeName; //required due to tab interface FIX
   node currentNode;
-  List<node> NodeList;
 
   //hold record of the nodes in the network
   String networkName;
 
   bool openLoadMenu; //tracks load menu open/closed
   bool openHelpMenu; //tracks help menu open/closed
+  bool loadedNetwork =false; //keeps track if a network is loaded
+                              //required due to nature of network loading
   bool teachModeStatus;
   bool notificationModeStatus;
+
+  BayesianDAG DAGreference; //testing
 
     //Holds the notification we wish to push
   NetNotification newNotification= new NetNotification();
@@ -92,10 +96,10 @@ class AppComponent implements OnInit {
     window.onResize.listen((_) => setScreenDimensions());
 
     networkName = 'Set Network Name';
-    NodeList = myDAG.NodeList; //fetch the current nodes in the network
     openLoadMenu = false;
+    DAGreference=myDAG;
 
-    overviewActive=true; //set the default card info to 'overview'
+  overviewActive=true; //set the default card info to 'overview'
      //ensure we load all the lessons meta info from json
     teachService.fetchCourses();
 
@@ -113,7 +117,6 @@ class AppComponent implements OnInit {
 
     width = networkHolder.contentEdge.width;
     height = networkHolder.contentEdge.height;
-
     /*svg
       ..attr["width"] = width.toString()
       ..attr["height"] = height.toString();*/
@@ -211,35 +214,18 @@ class AppComponent implements OnInit {
     }
   }
 
-  reset(){
+  void refreshDAG(){
+    DAGreference=myDAG;
+  }
+
+  void reset(){
     //clear behind the scene network and clear canvas
     myDAG.clear();
     myNet.reset();
-  }
-
-
-  // Dropdown (Node Search Dropdown)
-
-  static final ItemRenderer<node> NodeRenderer =
-      (HasUIDisplayName node) => node.uiDisplayName;
-
-  final SelectionModel<node> nodeSearchSelection =
-  new SelectionModel.withList();
-
-  StringSelectionOptions<node> get nodeSearchOptions =>
-      new StringSelectionOptions<node>(NodeList);
-
-  String get nodeSearchLabel {
-    if (nodeSearchSelection.selectedValues.length > 0) {
-      currentNode = nodeSearchSelection.selectedValues.first;
-      currentNodeName=currentNode.getName();
-      return (nodeSearchSelection.selectedValues.first.uiDisplayName);
-    }
-    else {
-      currentNode = null;
-      currentNodeName=null;
-      return 'Choose Node';
-    }
+    selectionService.resetSelection(); //ensure we have no more node selected
+    //add notification that we reset the network
+    notifications.addNotification(new NetNotification()..setResetStatus());
+    loadedNetwork=false; //we have no longer loaded a network
   }
 
   void testJSON(){

@@ -64,17 +64,9 @@
     /* color: black;*/
     font-weight: 600;
 }
-
-/*dropdown menu to select node from list*/
-#detail_button{
-    padding-top: 16px;
-    width:90%;
-}
-
-
 /*dropdown menu to select node from list*/
 /*alternate version (when network has no nodes)*/
-#detail_button_alt{
+.detail_button{
     padding-top: 16px;
     display: flex;
     width: 90%;

@@ -36,6 +36,7 @@ Chart generateEmptyBarChart(){
   return myChart;
 }
 
+
 //TODO: see if this class needs to be removed
 Chart GenerateBarchart(node NodeIn) {  node Node = NodeIn;
 

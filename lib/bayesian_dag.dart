@@ -12,6 +12,9 @@ class BayesianDAG{
   List<node> NodeList = new List();
   List<link> LinkList = new List();
 
+  @Property(ignore:true)
+  int observationCount = 0; //Number of nodes in network that are observed/measured
+                        //non essential value, only for display
 
   BayesianDAG();
 
@@ -35,6 +38,10 @@ class BayesianDAG{
 
   List<link> getLinks(){
     return LinkList;
+  }
+
+  int getObservationCount(){
+    return observationCount;
   }
 
   //detailed node query
@@ -97,6 +104,8 @@ class BayesianDAG{
 
       LinkList.add(newLink);
       print("created link");
+      nodeTarget.setRootStatus(false); //this can now no longer be a root node
+
     }
     else{
       print("these nodes are already connected");
@@ -140,6 +149,7 @@ class BayesianDAG{
     // this will remove the actual link instance
     LinkList.remove(linkIn);
     print('removed link');
+    checkRootStatus(); //one node may now be a root
   }
 
   //searching the network (to see what is reachable) (depth first search)
@@ -194,6 +204,29 @@ class BayesianDAG{
     };
 
     return false;
+  }
+
+  void checkObservationCount(){
+    observationCount=0;
+    NodeList.forEach((node){
+      if(node.isInstantiated){
+        observationCount++;
+      }
+    });
+  }
+
+  //goes over each node and checks if they are a root node
+  //updates the isRootNode property of node objects
+  //must be called in a state where the incoming and outgoing nodes are up to date
+  void checkRootStatus(){
+    NodeList.forEach((node){
+      if(node.getInComing().length==0){ //if node has no parents
+        node.setRootStatus(true);
+      }
+      else{ //node has at least 1 parent
+        node.setRootStatus(false);
+      }
+    });
   }
 
   bool checkCyclic(){
@@ -254,8 +287,47 @@ class BayesianDAG{
 
   //MAIN FUNCTIONALITY (
 
+  //forceStart will start the network on the first node. this is used
+  //when one wishes to have evidence propagated ina  newly loaded network
+  void updateNetwork([bool forceStart]){
+    //set the flag locks (they should all be false at the start)
+    NodeList.forEach((node){node.setFlagLock(false);});
+    if(forceStart==null) {
+      //first find a node that is flagged (ideally this would be just 1)
+      for (var i = 0; i < NodeList.length; i++) {
+        if (NodeList[i].getFlaggedStatus()) {
+          print('>>> Starting Update on: ' + NodeList[i].getName());
+          recursiveUpdate(NodeList[i]);
+          break;
+        }
+      }
+    }
+    else{
+      print('>>> Starting Update on: ' + NodeList.first.getName());
+      recursiveUpdate(NodeList.first);
+    }
 
-  void updateNetwork(){ // This may be changed to a thing that loops over all nodes,
+    //set all the flags to false. We take here that the network flagging
+    //status is simple. i.e. only 1 flagged at a time at the start of the
+    //updateNetworkNew() call.
+    NodeList.forEach((node){node.clearFlags();});
+  }
+
+  void recursiveUpdate(node flaggedNode){
+    //first we update this node
+    print('> recursive call on: '+ flaggedNode.getName());
+    updateNode(flaggedNode);
+    //this node will now (possibly) have flagged other nodes
+    NodeList.forEach((node){
+      //if node is flagged by this node AND has not been updated this cycle
+      if(node.getFlaggingNode()==flaggedNode&&node.getFlagLockStatus()==false){
+        //print('[update] node flagged by: '+flaggedNode.getName() + " is: "+ node.getName());
+        recursiveUpdate(node);
+      }
+    });
+  }
+
+  void updateNetworkOld(){ // This may be changed to a thing that loops over all nodes,
     // as this only updates max 1 nodes per call.
     // the only problem with that is that the order in which the
     // network is updated matters, as otherwise itll start finding
@@ -269,6 +341,7 @@ class BayesianDAG{
         if (NodeList[i].getFlaggedStatus()) {
           print('> Updating The Network - Propagating Evidence...');
           print('updating node: ' + NodeList[i].getName());
+          print('flaggin node was: ' + NodeList[i].getFlaggingNode().toString());
           // print('fetching Pi Messages...');
           NodeList[i].ComputePiEvidence();
 
@@ -285,13 +358,29 @@ class BayesianDAG{
         }
       }
       iterationTracker++;
-
+      //To avoid infinite loops in case of a bug we explicity set the maximum
+      //number of iterations here. I cannot easily see a scenario where
+      //more than 100 iterations are needed.
+      if(iterationTracker>=5){
+        break;
+      }
     };
+
+  }
+
+  void updateNode(node NodeIn){
+    //print('updating node: ' + NodeIn.getName());
+    NodeIn.ComputePiEvidence();
+    //print('fetching lambda Messages...');
+    NodeIn.ComputeLambdaEvidence();
+    NodeIn.UpdatePosterior();
+    NodeIn.setFlagLock(true); //lock this node (prevent updating again in cycle)
   }
 
   //should only be called for debugging
   //forces single node to be updated
-  void updateNode(node NodeIn){
+  //difference with updateNode() : this does not flaglock node + more printing
+  void forceUpdateNode(node NodeIn){
     print('<<<<<<<<<<<<< Forced Update >>>>>>>>>>>>>>>>>>>>>>');
 
 
@@ -310,7 +399,9 @@ class BayesianDAG{
         print('Single Update Cycle Complete.\n');
         //break; //enable this if you only want one node updating at a time (useful for debugging)
 
-
+      NodeIn.clearFlags(); //this needs to be done to prevent trouble
+                           //when the node is instantiated
+                           //todo: make this a little more consistent
   }
 
   //Enter Hard evidence for a node
@@ -352,19 +443,22 @@ class BayesianDAG{
     });
   }
 
+
   //should be called after loading a new network from JSON
   void setupLoadedNetwork(){
     //print(NodeList.toString());
     //print(LinkList.toString());
     print('[DAG] setting up new network...');
+
+
   //fixing links (we only have strings, we want references to node objects)
     LinkList.forEach((link){
       //ensures link now also have proper object reference
       link.origin=findNode(link.stringEndpoints[0]);
       link.target=findNode(link.stringEndpoints[1]);
     });
-  //setting up links
 
+  //setting up links
     LinkList.forEach((link){ //we assume we have a populated linklist (see JSON)
       //populate the outgoing and incoming lists of each node object
       //(this could be saved explicitly in json, but this would be duplicate information)
@@ -378,6 +472,8 @@ class BayesianDAG{
       //TODO: remove arguments initialiseNode function
       node.initialiseNodeSecondary();
     });
+
+    checkRootStatus(); //ensure the root status of the loaded nodes is correct
 
   //ensuring the implicit values are updated and network is fully operational
     //we first update the matrix labels. I do not know why this is required.
@@ -393,18 +489,33 @@ class BayesianDAG{
       }
     });
     //then we compute some of the probabilities and such for each node
-    NodeList.forEach((node) {
-      updateNode(node);
-    });
-    //then, if any nodes are still flagged (order of nodes in nodeList
-    //may not reflect network structure
-    updateNetwork(); //should resolve any flagging issues.
+    //as we may only have specified the CPTs but not the posteriors accurately
+    /*forceUpdateNode(NodeList.first); //ensure we have some flagged nodes*/
+    updateNetwork(true); //call special forced update procedure
+                    //which will ensure all the posteriors and lambdas are correct
+    checkObservationCount(); //ensure this number is correct.
   }
 
   void clear(){ //reset the DAG
     NodeList.clear();
     LinkList.clear();
     name=null;
+  }
+
+  // Overview of what the flags are in this network
+
+  String flagsToString(){
+    var buffer = new StringBuffer();
+    buffer.write('> Flag Status for network: '+ name + '\n');
+    NodeList.forEach((node){
+      buffer.write('Node: '+ node.getName() + ' is flagged: '+node.getFlaggedStatus().toString());
+      if(node.getFlaggedStatus()){
+        buffer.write(' by node: ' + node.getFlaggingNode().getName());
+      }
+      buffer.write(' and is locked: ' +node.getFlagLockStatus().toString());
+      buffer.write('\n');
+    });
+    return buffer.toString();
   }
 
   //String representation of the network (very basic, for debugging)
@@ -432,4 +543,6 @@ class BayesianDAG{
 */
     return Buffer.toString();
   }
+
+
 }

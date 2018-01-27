@@ -30,3 +30,13 @@ td.linkMatrixTD > div{
     float:left  ;
     margin: 1em ;
 }
+
+.button-div {
+    margin-top: 1em;
+    margin-bottom: 0.2em;
+}
+
+#editDiv{
+    min-height: 50px;
+    margin-top: 9.6em
+}

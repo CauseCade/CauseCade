@@ -1,19 +1,27 @@
-<div  *ngIf="selectionService.selectedNode!=null&&shouldBeLoaded" class="mdl-card mdl-shadow--4dp" style="min-height: 50px;margin-top: 12em">
+<div  *ngIf="selectionService.selectedNode!=null&&shouldBeLoaded" class="mdl-card mdl-shadow--4dp"  id="editDiv">
     <div>
         <material-expansionpanel-set>
             <material-expansionpanel name="Set Evidence/Observation">
                 <div>
-                    <material-input type="number" *ngFor="let value of Probability; let i=index" [(ngModel)]="ObservationList[i]" floatingLabel required label="Value {{i}}"></material-input>
+                <material-dropdown-select
+                        [buttonText]="observationSelectionLabel"
+                        [selection]="observationSelection"
+                        [options]="observationOptions">
+                </material-dropdown-select>
                 </div>
-                <material-button (click)="setObservation()" raised class="red">Set Observation</material-button>
-                <material-button (trigger)="clearObservation()" raised class="red">Clear Observation</material-button>
+                <div class="button-div">
+                <material-button (click)="setObservation()" raised class="red">Set</material-button>
+                <material-button (trigger)="clearObservation()" raised class="red">Clear</material-button>
+                </div>
             </material-expansionpanel>
             <material-expansionpanel name="Set Prior">
                 <div>
                     <material-input type="number" *ngFor="let value of Probability; let i=index" [(ngModel)]="PriorList[i]" floatingLabel required label="Value {{i}}"></material-input>
                 </div>
+                <div class="button-div">
                 <material-button (trigger)="setPrior()" raised class="red">Set Prior</material-button>
                 <material-button (trigger)="clearPrior()" raised class="red">Clear Prior</material-button>
+                </div>
             </material-expansionpanel>
             <material-expansionpanel name="Add Link (new Parent)">
 
@@ -46,15 +54,19 @@
                 <div>
                     <material-input *ngFor="let label of LabelOld; let i=index"  [(ngModel)]="LabelNew[i]" floatingLabel label="{{LabelOld[i]}}"></material-input>
                 </div>
+                <div class="button-div">
                 <material-button (click)="pushNewLabels()" raised class="expansionPanelWide">Set Labels</material-button>
+                </div>
             </material-expansionpanel>
             <material-expansionpanel name="View/Edit CPT">
+                <div class="button-div">
                 <material-button (trigger)="openMatrixEditor()"
                                  [disabled]="showMatrixEditor"
                                  raised
                                  class="expansionPanelWide">
                     Edit Matrix
                 </material-button>
+                </div>
             </material-expansionpanel>
             <material-expansionpanel name="Change Amount of States">
                 <material-dropdown-select
@@ -62,13 +74,19 @@
                         [selection]="nodeMultiplicitySelection"
                         [options]="nodeMultiplicityOptions">
                 </material-dropdown-select>
+                <div class="button-div">
                 <material-button (click)="setNewStateCount()" [disabled]="nodeMultiplicitySelection.selectedValues.length == 0" raised class="expansionPanelWide">Set New Amount</material-button>
+                </div>
             </material-expansionpanel>
             <material-expansionpanel name="Debugging + Manual Controls">
+                <div class="button-div">
                 <material-button (click)="updateMatrixLabels()" raised class="expansionPanelWide">Update MatrixLabels</material-button>
                 <material-button (click)="forceNodeUpdate()" raised class="expansionPanelWide">Force Node Update</material-button>
+                <material-button (click)="updateEditsOld()" raised class="expansionPanelWide">Update Network (OLD)</material-button>
                 <material-button (click)="updateEdits()" raised class="expansionPanelWide">Update Network</material-button>
+                <material-button (click)="printFlagsFull()" raised class="expansionPanelWide">Print all flags</material-button>
                 <material-button (click)="printNetworkToConsole()" raised class="expansionPanelWide">Print to Console</material-button>
+                </div>
             </material-expansionpanel>
         </material-expansionpanel-set>
     </div>

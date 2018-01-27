@@ -12,3 +12,8 @@ material-list.nodeListDisplay_small{
     float:left  ;
     margin: 1em ;
 }
+
+#overviewDiv{
+    min-height: 50px;
+    margin-top: 9.6em
+}

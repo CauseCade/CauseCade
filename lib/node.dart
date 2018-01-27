@@ -29,6 +29,7 @@ class node  implements HasUIDisplayName{
 
   // -------- Various State variables --------
   bool isInstantiated=false; //true = has hard evidence/observed state
+  @Property(ignore:true)
   bool isRootNode=false;
 
   //(false= values in matrix needs updating, true = no updating required)
@@ -39,6 +40,8 @@ class node  implements HasUIDisplayName{
   // (this will be triggered if new evidence is entered somewhere in the network)
   @Property(ignore:true) //this is purely a convenience feature, and should not be saved
   bool flagged = false;
+  @Property(ignore:true) //this is purely a convenience feature, and should not be saved
+  bool flaglock = false; //keeps track if this node has been updated this update cycle
   @Property(ignore:true) //this is purely a convenience feature, and should not be saved
   node flaggingNode; //this will hold the identifier of which node last flagged this one //FIX replace with node object
 
@@ -232,8 +235,9 @@ class node  implements HasUIDisplayName{
     //setRootStatus(false); //this may also be done from somewhere else
   }
 
-  void clearFlaggingNode(){
+  void clearFlags(){
     flaggingNode=null;
+    flagged=false;
   }
 
   List<String> getStateLabels(){
@@ -271,9 +275,13 @@ class node  implements HasUIDisplayName{
     return Buffer.toString();
   }
 
-  setFlagged(node FlaggingNodeIn){
+  void setFlagged(node FlaggingNodeIn){
     flagged = true;
     flaggingNode =FlaggingNodeIn;
+  }
+
+  void setFlagLock(bool lockStatus){
+    flaglock = lockStatus;
   }
 
   bool getFlaggedStatus(){
@@ -282,6 +290,10 @@ class node  implements HasUIDisplayName{
 
   node getFlaggingNode(){
     return flaggingNode;
+  }
+
+  bool getFlagLockStatus(){
+    return flaglock;
   }
 
   Vector getLambdaMessage(node NodeToBeUpdated){
@@ -504,7 +516,7 @@ class node  implements HasUIDisplayName{
 
 
       //the vector must have right dimensions
-      inComing.keys.forEach((node){print("incoming nodes(Pi)"+ node.getName());});
+      //inComing.keys.forEach((node){print("incoming nodes(Pi)"+ node.getName());});
       _RecursivePiMessage(1.0,0,ParentNodeCount,PiMessage);
 
       //print('our PiMessage is: ' + PiMessage.toString());

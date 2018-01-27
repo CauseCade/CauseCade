@@ -47,6 +47,9 @@ class NodeAdderComponent implements OnInit {
 
   void makeVisible(){
     Visible=true;
+    NodeList=myDAG.getNodes(); //ensure we have a proper reference of the
+                               //current nodelist. This isnt always true
+                               //due to the implementation of loading networks
     notifications.addHiddenNotification(new NetNotification()..setNodeAdderMenuStatus(true));
   }
 

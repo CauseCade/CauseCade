@@ -228,22 +228,30 @@ class EditComponent implements OnInit, OnChanges {
 
  //TODO: avoid making all these lists
   void setObservation(){
-    List<double> ObservationListExtra = new List(StateCount);
-    print(ObservationList);
-    for(int i=0;i<ObservationList.length;i++){
-      ObservationListExtra[i]=double.parse(ObservationList[i]);
+    //check for each string if this is the selected state
+    for(int i =0;i<selectedNode.stateCount;i++){
+      //if this is the correct state, set it as the probability for this node
+      if (selectedNode.getStateLabels()[i]==observationSelection.selectedValues.first){
+        Vector observation = new Vector();
+        observation.initialiseVector(selectedNode.getStateCount());
+        observation.setAll(0.0); //vector all zeroes
+        observation[i]=1.0; //vector all zeroes except for one value at 1.0
+        selectedNode.setProbability(observation);
+        break;
+      }
     }
-    print(ObservationListExtra);
-    Observation.setValues(ObservationListExtra);
-    selectedNode.setProbability(Observation); //sets observation
     notifications.addNotification(new NetNotification()..setNodeEvidence());
-    //node will now have Instantiated=true;
+    myDAG.checkObservationCount();//update this (as it will have increased)
+    updateEdits(); //automatically update the network
   }
 
   void clearObservation(){
     print('Cleared Observation.');
     selectedNode.clearProbability();
+    observationSelection.clear(); //ensure our dropdown is reset
     notifications.addNotification(new NetNotification()..clearNodeEvidence());
+    myDAG.checkObservationCount();//update this as it may have changed
+    updateEdits(); //automatically update the network
   }
 
 
@@ -263,7 +271,7 @@ class EditComponent implements OnInit, OnChanges {
   void pushNewMatrix(){
     selectedNode.enterLinkMatrix(LinkMatrix); //sets the (possibly changed)
     LinkMatrix=selectedNode.getLinkMatrix();
-    selectedNode.clearFlaggingNode();
+    selectedNode.clearFlags();
     selectedNode.FlagOtherNodes();
     fetchMatrixValues(); //we want to have the matrid values reflect the new matrix
     showMatrixEditor = false;
@@ -272,10 +280,15 @@ class EditComponent implements OnInit, OnChanges {
 
   }
 
-  updateMatrixLabels(){
+  void updateMatrixLabels(){
     print(selectedNode.getInComing().keys.length);
     selectedNode.clearMatrixLabels();
     selectedNode.generateMatrixLabels(0,selectedNode.getInComing().keys.length,'');
+  }
+
+  void updateEditsOld(){
+    myDAG.updateNetworkOld();
+    print('pushing user edits, and forcing network update [old method]');
   }
 
   void updateEdits(){
@@ -299,6 +312,10 @@ class EditComponent implements OnInit, OnChanges {
 
   void printNetworkToConsole(){
     print(myDAG.toString());
+  }
+
+  void printFlagsFull(){
+    print(myDAG.flagsToString());
   }
 
   //TODO give this some functionality
@@ -328,7 +345,7 @@ class EditComponent implements OnInit, OnChanges {
   }
 
   void forceNodeUpdate(){
-    myDAG.updateNode(selectedNode);
+    myDAG.forceUpdateNode(selectedNode);
   }
 
   void openMatrixEditor(){
@@ -346,6 +363,7 @@ class EditComponent implements OnInit, OnChanges {
 
     if( (changes.keys.last=='selectedNode')&&selectionService.selectedNode!=null){
       setupCard();
+      observationSelection.clear();
       notifications.addHiddenNotification(new NetNotification()..setNodeSelectedDetail(selectedNode.getName()));
     }
   }
@@ -358,6 +376,29 @@ class EditComponent implements OnInit, OnChanges {
   //for both parents and daughter nodes
   NewEditLinkSelectionOptions get LinkOptions
   => new NewEditLinkSelectionOptions<node>(NodeList,selectedNode);
+
+
+  // Dropdowns (observation)
+
+  final SelectionModel<String> observationSelection =
+  new SelectionModel.withList();
+
+  StringSelectionOptions<String> get observationOptions =>
+      new StringSelectionOptions<String>(selectedNode.getStateLabels());
+
+  String get observationSelectionLabel {
+    var observedState = observationSelection.selectedValues;
+    if (observedState.isEmpty) {
+      if(selectedNode.isInstantiated){
+        return 'Variable has been observed';
+      }
+      else {
+        return "Variable Unobserved";
+      }
+    } else {
+      return observationSelection.selectedValues.first;
+    }
+  }
 
   // Dropdowns (parent Link)
 

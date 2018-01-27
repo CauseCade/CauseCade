@@ -3,7 +3,7 @@
 
         <div class="mdl-layout__header-row ">
             <img class="mdl-layout-icon" src="https://raw.githubusercontent.com/NemoAndrea/CauseCade/master/Images/CauseCadeLogoWhite_V1.svg?sanitize=true">
-            <a style="text-decoration: none;" href="/CauseCade-deploy/"><span id="main_title" class="mdl-layout__title">CauseCade - Beta</span></a>
+            <a style="text-decoration: none;" href="/CauseCade-deploy/"><span id="main_title" class="mdl-layout__title">CauseCade</span></a>
 
             <div class="mdl-layout-spacer"></div>
             <nav class="mdl-navigation">
@@ -69,25 +69,11 @@
                     <material-button (trigger)="reset()" raised materialTooltip="remove all nodes and links" class="white">Reset</material-button>
                 </div>
 
-                <div *ngIf="NodeList.isNotEmpty==true" id="detail_button">
-                    Details for:&nbsp;
-                    <material-dropdown-select
-                            [buttonText]="nodeSearchLabel"
-                            [options]="nodeSearchOptions"
-                            [selection]="nodeSearchSelection"> <!--    (visibleChange)="onDropdownVisibleChange($event)"-->
-                        <!--<div header>
-                            <material-select-searchbox
-                                    label="Type Node..."
-                                    [filterable]="nodeSearchOptions">
-                            </material-select-searchbox>
-                        </div>-->
-
-                    </material-dropdown-select>
-
-                    <material-button raised materialTooltip="view this node in detail" (trigger)="viewOverview()" style="float: right"> View </material-button>
+                <div *ngIf="DAGreference.getNodes().isNotEmpty==true||loadedNetwork==true" class="detail_button">
+                    {{DAGreference.getNodes().length}} Nodes | {{DAGreference.getNodes().length}} Links | {{DAGreference.getObservationCount()}} observations
                 </div>
                 <!--currently broken-->
-                <div *ngIf="NodeList.isEmpty==true" id="detail_button_alt">
+                <div *ngIf="DAGreference.getNodes().isEmpty==true&&loadedNetwork==false" class="detail_button">
                     No network currently active &nbsp; <i class="material-icons">info</i>
                 </div>
             </div>
@@ -106,4 +92,4 @@
 
 </div>
 <help_modal [(isVisible)]="openHelpMenu"></help_modal >
-<load_menu [(isVisible)]="openLoadMenu"></load_menu>
+<load_menu [(isVisible)]="openLoadMenu" (loadEvent)="refreshDAG()"></load_menu>

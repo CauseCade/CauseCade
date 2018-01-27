@@ -10,8 +10,6 @@ import 'dart:html' as htmlDart;
 import 'package:causecade/bayesian_dag.dart';
 import  'data_converter.dart';
 
-
-
 //access to the lesson data
 import 'package:causecade/example_networks.dart';
 import 'package:dartson/dartson.dart';
@@ -26,7 +24,10 @@ import 'package:dartson/dartson.dart';
 class LoadComponent {
   @Input()
   bool isVisible;
-  @Output() EventEmitter isVisibleChange = new EventEmitter();
+  @Output()
+  EventEmitter loadEvent = new EventEmitter();
+  @Output()
+  EventEmitter isVisibleChange = new EventEmitter();
 
   bool inSubMenu;
   String searchString;
@@ -43,11 +44,13 @@ class LoadComponent {
     htmlDart.HttpRequest.getString(URL).then((myjson) {
       //print(myjson);
       var dson = new Dartson.JSON();
-      myDAG = dson.decode(myjson, new BayesianDAG());
+      BayesianDAG newDag = dson.decode(myjson, new BayesianDAG());
+      myDAG = newDag;
       //complete loading/setup of network
       myDAG.setupLoadedNetwork();
       visualiseNetwork(); //ensure the new network is loaded
       closeLoadMenu();
+      loadEvent.emit(true);
       notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.name));
     });
   }

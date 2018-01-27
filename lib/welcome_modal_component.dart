@@ -26,7 +26,6 @@ class WelcomeComponent {
   final String path = 'https://raw.githubusercontent.com/NemoAndrea/CauseCade-lessons/master/Welcome_Text.md';//welcome text url
   var htmlFromMarkdown;
 
-
   bool isVisible = true; //show by default;
 
   WelcomeComponent(this.teachService,this.styleService){

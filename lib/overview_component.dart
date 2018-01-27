@@ -9,6 +9,8 @@ import 'package:causecade/app_component.dart';
 import 'package:causecade/card_barchart.dart';
 import 'package:chartjs/chartjs.dart';
 
+import 'dart:html';
+
 
 
 @Component(
@@ -48,6 +50,8 @@ class OverviewComponent implements OnInit, OnChanges{
 
  void ngOnInit(){
    print('[overview component initialised]');
+   CanvasElement chartCanvas =querySelector('#BarChartHolderOverview');
+   chartCanvas.onClick.listen(test);
 
    //get a barchart loaded with no data in it
    //will be modified once a node is selected (this chart should never be visible)
@@ -113,5 +117,15 @@ class OverviewComponent implements OnInit, OnChanges{
     if( (changes.keys.last=='selectedNode')&&selectionService.selectedNode!=null){
       setupCard();
     }
+    if( (changes.keys.last=='shouldBeLoaded')&&selectionService.selectedNode!=null){
+      setupCard();
+    }
+  }
+
+  /*TODO: remove*/
+  test(Event e){
+ /*   print('click cluck clock');
+    var data = ChartHolder.getElementAtEvent(e)[0];
+    print(data.runtimeType);*/
   }
 }

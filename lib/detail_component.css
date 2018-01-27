@@ -10,3 +10,8 @@
     float:left  ;
     margin: 1em ;
 }
+
+#detailDiv{
+    min-height: 50px;
+    margin-top: 9.6em
+}
