@@ -55,6 +55,38 @@ class LoadComponent {
     });
   }
 
+  void localJSONload(htmlDart.Event e){
+    //load file
+    List fileInput = htmlDart.document.querySelector('#localnetworkinput').files;
+
+    if (fileInput.length > 1) {
+      // catch odd events
+      print('Multiple files detected...');
+    }
+    else if (fileInput.isEmpty) {
+      // catch odd events
+      print('Empty file list detected...');
+    }
+
+    htmlDart.FileReader reader = new htmlDart.FileReader();
+    reader.onLoad.listen((fileEvent) {
+      String myjson = reader.result;
+      // Code doing stuff with fileContent goes here!
+      //decoding JSON
+      var dson = new Dartson.JSON();
+      BayesianDAG newDag = dson.decode(myjson, new BayesianDAG());
+      myDAG = newDag;
+      //complete loading/setup of network
+      myDAG.setupLoadedNetwork();
+      visualiseNetwork(); //ensure the new network is loaded
+      closeLoadMenu();
+      loadEvent.emit(true);
+      notifications.addNotification(new NetNotification()..setLoadStatus(myDAG.name));
+
+    });
+    reader.readAsText(fileInput[0]);
+  }
+
   void viewCourseNetworks(Course selectedCourse){
     inSubMenu=true; //enter submenu, hide overview of courses
     if(selectedCourse.getNetworkUrlList()!=null) { //ensuring we keep at least an empty list

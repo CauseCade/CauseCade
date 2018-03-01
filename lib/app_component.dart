@@ -29,6 +29,14 @@ import 'network_style_service.dart';
 import 'network_selection_service.dart';
 import 'teach_service.dart';
 
+//File writing
+import 'dart:convert';
+import 'dart:typed_data';
+import 'dart:async';
+
+
+
+
 List networkInfo = new List();
 Network myNet;
 BayesianDAG myDAG;
@@ -228,11 +236,14 @@ class AppComponent implements OnInit {
     loadedNetwork=false; //we have no longer loaded a network
   }
 
-  void testJSON(){
-    print('testing JSON...');
+  void saveJSON(){
+    print('User requested JSON file download');
+    String filename=myDAG.name;
     var dson = new Dartson.JSON();
     String jsonString = dson.encode(myDAG);
-    print(jsonString);
+    new AnchorElement(href: "data:text/plain;charset=utf-8,$jsonString")
+      ..setAttribute("download", "$filename.json")
+      ..click();
   }
 
 /* TODO: wait until angular components implements this
