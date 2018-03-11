@@ -1,10 +1,10 @@
 <!--When the course menu is opened-->
-<div *ngIf="isActive" style="float: right; height: 100%;width: 30%;right: 20px"> <!---->
+<div [hidden]="!isActive" style="float: right; height: 100%;width: 30%;right: 20px"> <!---->
 
     <!--Main Compartment-->
     <div class="mdl-card mdl-shadow--4dp" style="height: 95%;width: 100%;margin-left: 0px;">
 
-        <div class="mdl-card__supporting-text mdl-card--border themeColourTeach"style="height: {{navigationRatio}}%;width:100%;">
+        <div class="mdl-card__supporting-text mdl-card--border" id="teachmenu" style="height: {{navigationRatio}}%">
 
             <div id="CourseNavigatorDropdowns">
                 <div>
@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <course-lesson [currentLesson]="teachService.currentLesson" [lastNotification]="!notifications.hiddenNotifications.isEmpty?notifications.hiddenNotifications.last:null" class="lesson" style="height:{{navigationRatioComplement}}%" ></course-lesson><!--style="height:{{navigationRatioComplement}}%;width: 100%"-->
+        <course-lesson [currentLesson]="teachService.currentLesson" [lastNotification]="!notifications.hiddenNotifications.isEmpty?notifications.hiddenNotifications.last:null" class="lesson" style="height:{{navigationRatioComplement}}%" ></course-lesson>
 
     </div>
 

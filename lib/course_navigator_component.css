@@ -1,11 +1,17 @@
 /*Course Components Styling*/
-.lesson{
+.lesson {
     width:100%;
     background-color: #E0E0E0;
 
 }
 
-.compactPadding{
+#teachmenu {
+    background-color: var(--primary-color);
+    transition: var(--primary-transition);
+    width:100%;
+}
+
+.compactPadding {
     padding: 8px;
 }
 

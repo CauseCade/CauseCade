@@ -5,14 +5,14 @@
     display: block;
     position: absolute;
     top: 20%;
-    background:#D81B60;
+    background:var(--primary-accent-color);
     z-index: 9999;
 
 }
 
 #welcomeMessage{
     height: 85%;
-    background: #E91E63;
+    background: var(--primary-color);
     box-shadow: 0px 1px 75px 0px rgba(0,0,0,0.4);
     font-size: 0;
 }

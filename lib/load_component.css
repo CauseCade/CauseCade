@@ -1,9 +1,6 @@
 .mdl-card__title-text{
-    color: #E91E63;
-}
-
-material-dialog{
-    width:60%;
+    color: var(--primary-color);
+    transition: var(--primary-transition);
 }
 
 #loadFolders{
@@ -11,5 +8,6 @@ material-dialog{
 
 #loadMenuMain{
    /* overflow: scroll; !important;*/
-
+   height: 80vh;
+   width:60vw;
 }

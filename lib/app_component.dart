@@ -77,7 +77,7 @@ class AppComponent implements OnInit {
   bool openHelpMenu; //tracks help menu open/closed
   bool loadedNetwork =false; //keeps track if a network is loaded
                               //required due to nature of network loading
-  bool teachModeStatus;
+  bool teachModeStatus = false;
   bool notificationModeStatus;
 
   BayesianDAG DAGreference; //testing

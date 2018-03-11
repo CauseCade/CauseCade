@@ -23,7 +23,9 @@ class TeachService{
 
   String tester='>';
 
- CourseHolder getCourses()  => courseDataRemote ;
+ CourseHolder getCourses(){
+   return courseDataRemote==null ? new CourseHolder() : courseDataRemote;
+ }
 
   //fetch the course info from the server JSON file
   void fetchCourses(){

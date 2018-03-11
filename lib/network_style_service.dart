@@ -87,15 +87,16 @@ class NetworkStyleService {
   void setUiColours(String input){
     switch (input) {
       case 'normal':
-        querySelectorAll('.themeColour').style.backgroundColor =  '#E91E63'; //Pink.
-        querySelectorAll('.themeColourSecondary').style.backgroundColor = '#D81B60'; //darker pink;
-        print('Colours: normal');
+        //set CSS variables
+        document.documentElement.style.cssText = "--primary-color: #E91E63; --primary-accent-color: #D81B60;"; //Pink and darker pink
+        /*querySelectorAll('.themeColour').style.backgroundColor =  '#E91E63';
+        querySelectorAll('.themeColourSecondary').style.backgroundColor = '#D81B60'; ;   */
         break;
       case 'teach':
-        querySelectorAll('.themeColour').style.backgroundColor = '#00BCD4'; //Blue
-
-        querySelectorAll('.themeColourSecondary').style.backgroundColor = '#00ACC1'; //darker blue;
-        print('Colours: teach');
+        //set CSS variables
+        document.documentElement.style.cssText = "--primary-color: #00BCD4; --primary-accent-color: #00ACC1; "; //Blue and darker blue
+        /*querySelectorAll('.themeColour').style.backgroundColor = '#00BCD4'; */
+        /*querySelectorAll('.themeColourSecondary').style.backgroundColor = '#00ACC1'; ;*/
         break;
 
     }

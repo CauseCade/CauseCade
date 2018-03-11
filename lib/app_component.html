@@ -1,5 +1,5 @@
 <div class="mdl-layout mdl-js-layout">
-    <header class="mdl-layout__header mdl-color-text--white mdl-shadow--4dp themeColour" >
+    <header class="mdl-layout__header mdl-color-text--white mdl-shadow--4dp" >
 
         <div class="mdl-layout__header-row ">
             <img class="mdl-layout-icon" src="https://raw.githubusercontent.com/NemoAndrea/CauseCade/master/Images/CauseCadeLogoWhite_V1.svg?sanitize=true">
@@ -14,7 +14,7 @@
                     HELP
                 </material-button>
                 <!--<div id="about_ref" >-->
-                <a class="mdl-navigation__link  mdl-color-text--white" id="button2" href="https://nemoandrea.github.io/CauseCade-blog/" target="_blank">BLOG</a>
+                <a class="mdl-navigation__link  mdl-color-text--white" id="button2" href="https://causecade.github.io/CauseCade-blog/" target="_blank">BLOG</a>
                    <!-- <div class="mdl-tooltip" for="about_ref">More information</div>-->
                <!-- </div>-->
                 <a class="mdl-navigation__link  mdl-color-text--white" id="button3" href="https://plus.google.com/communities/118385244039152342634/stream/4c822d21-5434-4dfa-b76f-109668f85b2b" target="_blank">REPORT BUG</a>
@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div [hidden]="!notificationModeStatus" id="notificationBar" class="themeColourSecondary">
+        <div [hidden]="!notificationModeStatus" id="notificationBar">
         <material-button (trigger)="notifications.clear()"  id="notificationBarSpan">clear</material-button>
         <material-chips id="notificationBarChips">
             <material-chip *ngFor="let notification of notifications.notifications">{{notification.text}}</material-chip>
@@ -56,7 +56,7 @@
     <main class="mdl-layout__content">
 
         <div class="mdl-card mdl-shadow--4dp" style="min-height: 50px" id="main_card">
-            <div class="mdl-card__supporting-text themeColour" id="controlmenu">
+            <div class="mdl-card__supporting-text" id="controlmenu">
                 Controls
                 <div id="button_holder">
 

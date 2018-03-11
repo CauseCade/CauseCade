@@ -1,4 +1,11 @@
 #node_adder{
     right: 2%;
     top: 91%;
+    background-color: var(--primary-color);
+    transition: var(--primary-transition);
+}
+
+#addercard{
+    background-color: var(--primary-color);
+    transition: var(--primary-transition);
 }

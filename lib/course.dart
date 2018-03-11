@@ -73,7 +73,7 @@ class Course implements HasUIDisplayName{
 @Entity()
 class CourseHolder{
   @Property(name:"courselist")
-  List<Course> courseListInternal;
+  List<Course> courseListInternal=new List<Course>();
 
   set courseList(List<Course> newCourseList) => courseListInternal=newCourseList;
 

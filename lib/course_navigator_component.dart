@@ -15,7 +15,7 @@ import 'package:causecade/notification_service.dart';
     selector: 'course-navigator',
     templateUrl: 'course_navigator_component.html',
     styleUrls: const ['course_navigator_component.css'],
-    directives: const [materialDirectives, CourseLessonComponent],
+    directives: const [materialDirectives,CourseLessonComponent ], //
     providers: const [materialProviders])
 
 class CourseNavigatorComponent {
@@ -37,19 +37,9 @@ class CourseNavigatorComponent {
   CourseNavigatorComponent(this.teachService,this.notifications){/*this._teachService*/
     print('[Course Navigator Component] loaded...');
     navigationRatioComplement=100-navigationRatio;
-
     LessonList = new List<Lesson>();
-/*
-    configureCourses();
-*/
-    print('Configured Courses');
   }
 
-
-  /*void hideCourseMenu(){
-    isActive=false;
-    print('User Closed Course Navigator');
-  }*/
 
   void openCourseMenu(){
     isActive=true;
@@ -105,6 +95,7 @@ class CourseNavigatorComponent {
     }
   }
 // Dropdowns (Lesson)
+
 
   SelectionModel<Lesson> targetLessonSelection =
   new SelectionModel.withList();

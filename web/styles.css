@@ -1,8 +1,13 @@
-/*Theme colour: #E91E63 (Material design pink:500)*/
+/* Variables*/
+:root {
+    --primary-color: #E91E63;
+    --primary-accent-color: #D81B60;
+    --primary-transition:  background-color 1s;
+}
 
 body{
     background-color: #fafafa;
-    height: 100%
+    height: 100%;
 }
 
 main{
@@ -11,6 +16,8 @@ main{
 
 }
 
+
+
 /*bar charts*/
 
 .bar{
@@ -18,7 +25,7 @@ main{
 }
 
 .bar:hover{
-    fill: #E91E63;
+    fill: var(--primary-color);
 }
 
 path.domain{
@@ -59,26 +66,26 @@ defs > marker > path{
     z-index:1002;
 }
 
-/*COLOURS*/
+/*!*COLOURS*!
 .themeColour{
-    background-color: #E91E63; /*to have some default colour*/
+    background-color: var(--primary-color); !*to have some default colour*!
 }
 
 .themeColourSecondary{
-    background-color: #D81B60; /*to have some default colour*/
-}
+    background-color: var(--primary-accent-color); !*to have some default colour*!
+}*/
 
 .themeColourText{
     font-family: 'Roboto', sans-serif;
     font-size: 26px;
     stroke: none;
-    fill:  #D81B60;
+    fill: #E91E63;
 }
 
-/*For items that always have teaching colour*/
+/*!*For items that always have teaching colour*!
 .themeColourTeach{
     background-color: #00BCD4;
-}
+}*/
 
 /*haeder search*/
 material-input .spaceholder{
